@@ -208,6 +208,8 @@
                     <li><a href="news.html">News</a></li>
                     <li><a href="resources.html">Resources</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="../admin/index.html">Admin</a></li>
                 </ul>
             </nav>
             <div class="search-container">
@@ -270,7 +272,7 @@
                         <p class="product-description">Premium sound quality with noise cancellation and 30-hour battery life.</p>
                         <div class="product-price">$89.99</div>
                         <div class="product-actions">
-                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-primary" onclick="addToCart('Wireless Bluetooth Headphones', 89.99, 'fas fa-headphones')">Add to Cart</button>
                             <button class="btn-secondary">Details</button>
                         </div>
                     </div>
@@ -286,7 +288,7 @@
                         <p class="product-description">15W fast wireless charging pad compatible with all Qi-enabled devices.</p>
                         <div class="product-price">$49.99</div>
                         <div class="product-actions">
-                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-primary" onclick="addToCart('Fast Wireless Charger', 49.99, 'fas fa-mobile-alt')">Add to Cart</button>
                             <button class="btn-secondary">Details</button>
                         </div>
                     </div>
@@ -302,7 +304,7 @@
                         <p class="product-description">Adjustable aluminum stand with built-in cooling fans for optimal performance.</p>
                         <div class="product-price">$79.99</div>
                         <div class="product-actions">
-                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-primary" onclick="addToCart('Laptop Stand & Cooling Pad', 79.99, 'fas fa-laptop')">Add to Cart</button>
                             <button class="btn-secondary">Details</button>
                         </div>
                     </div>
@@ -318,7 +320,7 @@
                         <p class="product-description">High-precision gaming mouse with customizable RGB lighting and programmable buttons.</p>
                         <div class="product-price">$69.99</div>
                         <div class="product-actions">
-                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-primary" onclick="addToCart('Gaming Mouse RGB', 69.99, 'fas fa-gamepad')">Add to Cart</button>
                             <button class="btn-secondary">Details</button>
                         </div>
                     </div>
@@ -334,7 +336,7 @@
                         <p class="product-description">Cherry MX switches with RGB backlighting and premium build quality.</p>
                         <div class="product-price">$129.99</div>
                         <div class="product-actions">
-                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-primary" onclick="addToCart('Mechanical Keyboard', 129.99, 'fas fa-keyboard')">Add to Cart</button>
                             <button class="btn-secondary">Details</button>
                         </div>
                     </div>
@@ -350,7 +352,7 @@
                         <p class="product-description">Multi-angle stand with protective case for tablets and iPads.</p>
                         <div class="product-price">$39.99</div>
                         <div class="product-actions">
-                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-primary" onclick="addToCart('Tablet Stand & Case', 39.99, 'fas fa-tablet-alt')">Add to Cart</button>
                             <button class="btn-secondary">Details</button>
                         </div>
                     </div>
@@ -411,5 +413,101 @@
     </footer>
 
     <script src="../assets/js/main.js"></script>
+    <script>
+        // Add to Cart functionality
+        function addToCart(productName, price, icon) {
+            // Create cart item object
+            const cartItem = {
+                id: Date.now(),
+                name: productName,
+                price: price,
+                icon: icon,
+                quantity: 1
+            };
+            
+            // Get existing cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('pedyCart')) || [];
+            
+            // Check if item already exists
+            const existingItem = cart.find(item => item.name === productName);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+                showNotification(`Updated ${productName} quantity in cart!`, 'success');
+            } else {
+                cart.push(cartItem);
+                showNotification(`${productName} added to cart!`, 'success');
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('pedyCart', JSON.stringify(cart));
+            
+            // Update cart badge (if exists)
+            updateCartBadge();
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : '#6366f1'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                z-index: 1000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('pedyCart')) || [];
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            // Update cart badge if it exists
+            const cartBadge = document.getElementById('cart-badge');
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+        }
+        
+        // Initialize cart badge on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartBadge();
+        });
+    </script>
 </body>
 </html> 

@@ -1,5 +1,75 @@
 // PEDY Academic Resource Hub JavaScript
 
+// Preloader functionality
+function showPreloader() {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.classList.remove('hidden');
+    }
+}
+
+function hidePreloader() {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.classList.add('hidden');
+        // Remove from DOM after animation completes
+        setTimeout(() => {
+            if (preloader.parentNode) {
+                preloader.parentNode.removeChild(preloader);
+            }
+        }, 500);
+    }
+}
+
+// Initialize preloader
+function initPreloader() {
+    // Create preloader element if it doesn't exist
+    if (!document.getElementById('preloader')) {
+        const preloader = document.createElement('div');
+        preloader.id = 'preloader';
+        preloader.className = 'preloader';
+        
+        preloader.innerHTML = `
+            <div style="text-align: center;">
+                <div class="wave-loader">
+                    <div class="wave-dot"></div>
+                    <div class="wave-dot"></div>
+                    <div class="wave-dot"></div>
+                    <div class="wave-dot"></div>
+                    <div class="wave-dot"></div>
+                    <div class="wave-dot"></div>
+                </div>
+                <div class="preloader-text">Loading PEDY...</div>
+            </div>
+        `;
+        
+        document.body.appendChild(preloader);
+    }
+}
+
+// Show preloader on page navigation
+function handlePageNavigation(url) {
+    showPreloader();
+    
+    // Simulate loading delay (remove in production)
+    setTimeout(() => {
+        window.location.href = url;
+    }, 500);
+}
+
+// Add loading state to buttons
+function addButtonLoading(button, text = 'Loading...') {
+    const originalText = button.innerHTML;
+    button.classList.add('btn-loading');
+    button.disabled = true;
+    
+    return function removeLoading() {
+        button.classList.remove('btn-loading');
+        button.disabled = false;
+        button.innerHTML = originalText;
+    };
+}
+
 // Get current date and display in footer
 function updateFooterDate() {
     const now = new Date();
@@ -34,6 +104,16 @@ function updateFooterDate() {
 
 // Call the function when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize preloader
+    initPreloader();
+    
+    // Hide preloader after page loads
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            hidePreloader();
+        }, 1000); // Show for at least 1 second for effect
+    });
+    
     updateFooterDate();
 
     // Smooth scrolling for navigation links
