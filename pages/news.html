@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - PEDY Tech Hub</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0 60px;
+            text-align: center;
+            color: white;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            padding: 4rem 0;
+        }
+        
+        .main-news {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .news-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #666;
+        }
+        
+        .news-content {
+            padding: 2rem;
+        }
+        
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .news-category {
+            background: #6366f1;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .news-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+            line-height: 1.3;
+        }
+        
+        .news-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .news-link {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .news-link:hover {
+            color: #4f46e5;
+            transform: translateX(5px);
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .sidebar-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 0.5rem;
+        }
+        
+        .trending-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .trending-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .trending-number {
+            background: #6366f1;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .trending-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .trending-content p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .newsletter-signup {
+            background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .newsletter-signup h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .newsletter-signup p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        .newsletter-form button {
+            background: white;
+            color: #6366f1;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-form button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .categories-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .category-filter {
+            background: white;
+            border: 2px solid #6366f1;
+            color: #6366f1;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .category-filter.active,
+        .category-filter:hover {
+            background: #6366f1;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .news-title {
+                font-size: 1.3rem;
+            }
+            
+            .categories-filter {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="../assets/images/logo.png" width="400" height="100" alt="PEDY Logo" class="logo-svg">
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="accessories.html">Accessories</a></li>
+                    <li><a href="news.html" class="active">News</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="search-container">
+                <input type="text" placeholder="Search news..." class="search-input">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Latest Tech News</h1>
+            <p class="page-subtitle">Stay updated with the latest technology trends, product launches, and industry insights</p>
+        </div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="filters">
+        <div class="container">
+            <div class="categories-filter">
+                <button class="category-filter active">All News</button>
+                <button class="category-filter">Product Launches</button>
+                <button class="category-filter">Tech Reviews</button>
+                <button class="category-filter">Industry Updates</button>
+                <button class="category-filter">Gaming</button>
+                <button class="category-filter">Mobile</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Content -->
+    <section class="news-content">
+        <div class="container">
+            <div class="news-grid">
+                <div class="main-news">
+                    <!-- Featured News -->
+                    <article class="news-card">
+                        <div class="news-image">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-meta">
+                                <span class="news-category">Product Launch</span>
+                                <span><i class="far fa-calendar"></i> December 15, 2024</span>
+                                <span><i class="far fa-clock"></i> 5 min read</span>
+                            </div>
+                            <h2 class="news-title">New Smartphone Series Launches with Revolutionary AI Features</h2>
+                            <p class="news-excerpt">The latest smartphone series introduces groundbreaking AI capabilities that transform how we interact with our devices. From advanced photography to intelligent productivity tools, these devices set a new standard for mobile technology.</p>
+                            <a href="#" class="news-link">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- News Article 2 -->
+                    <article class="news-card">
+                        <div class="news-image">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-meta">
+                                <span class="news-category">Tech Review</span>
+                                <span><i class="far fa-calendar"></i> December 14, 2024</span>
+                                <span><i class="far fa-clock"></i> 8 min read</span>
+                            </div>
+                            <h2 class="news-title">Ultimate Laptop Buying Guide 2024: What to Look For</h2>
+                            <p class="news-excerpt">With so many options available, choosing the right laptop can be overwhelming. Our comprehensive guide breaks down everything you need to know about processors, graphics, storage, and more to make an informed decision.</p>
+                            <a href="#" class="news-link">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- News Article 3 -->
+                    <article class="news-card">
+                        <div class="news-image">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-meta">
+                                <span class="news-category">Gaming</span>
+                                <span><i class="far fa-calendar"></i> December 13, 2024</span>
+                                <span><i class="far fa-clock"></i> 6 min read</span>
+                            </div>
+                            <h2 class="news-title">Gaming Industry Trends: What's Hot in 2024</h2>
+                            <p class="news-excerpt">From cloud gaming to virtual reality, the gaming industry is evolving rapidly. Discover the latest trends that are shaping the future of gaming and what gamers can expect in the coming year.</p>
+                            <a href="#" class="news-link">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- News Article 4 -->
+                    <article class="news-card">
+                        <div class="news-image">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-meta">
+                                <span class="news-category">Product Review</span>
+                                <span><i class="far fa-calendar"></i> December 12, 2024</span>
+                                <span><i class="far fa-clock"></i> 4 min read</span>
+                            </div>
+                            <h2 class="news-title">Best Wireless Headphones for 2024: Our Top Picks</h2>
+                            <p class="news-excerpt">We've tested dozens of wireless headphones to bring you the definitive list of the best options available. From budget-friendly to premium models, find the perfect pair for your needs.</p>
+                            <a href="#" class="news-link">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="sidebar">
+                    <!-- Trending News -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Trending Now</h3>
+                        <div class="trending-item">
+                            <div class="trending-number">1</div>
+                            <div class="trending-content">
+                                <h4>AI-Powered Smart Home Devices</h4>
+                                <p>How artificial intelligence is revolutionizing home automation</p>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-number">2</div>
+                            <div class="trending-content">
+                                <h4>5G Network Expansion</h4>
+                                <p>Latest updates on global 5G infrastructure development</p>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-number">3</div>
+                            <div class="trending-content">
+                                <h4>Cybersecurity Threats</h4>
+                                <p>Emerging security challenges in the digital age</p>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-number">4</div>
+                            <div class="trending-content">
+                                <h4>Electric Vehicle Technology</h4>
+                                <p>Breakthroughs in EV battery and charging technology</p>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-number">5</div>
+                            <div class="trending-content">
+                                <h4>Quantum Computing Progress</h4>
+                                <p>Recent developments in quantum computing research</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Signup -->
+                    <div class="sidebar-section newsletter-signup">
+                        <h3>Stay Updated</h3>
+                        <p>Get the latest tech news delivered to your inbox</p>
+                        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                            <input type="email" placeholder="Enter your email" required>
+                            <button type="submit">Subscribe</button>
+                        </form>
+                    </div>
+
+                    <!-- Popular Categories -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Popular Categories</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <a href="#" style="color: #6366f1; text-decoration: none; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">Mobile Technology (15)</a>
+                            <a href="#" style="color: #6366f1; text-decoration: none; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">Gaming & Entertainment (12)</a>
+                            <a href="#" style="color: #6366f1; text-decoration: none; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">Artificial Intelligence (8)</a>
+                            <a href="#" style="color: #6366f1; text-decoration: none; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">Cybersecurity (6)</a>
+                            <a href="#" style="color: #6366f1; text-decoration: none; padding: 0.5rem 0;">Product Reviews (10)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="../assets/images/logo.png" alt="PEDY Logo" class="logo-svg">
+                    </div>
+                    <p>PEDY - Your one-stop shop for info and tech gadgets. We got you covered with the best deals!</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="accessories.html">Products</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Stay Updated</h4>
+                    <p>Subscribe to our newsletter for the latest products and offers!</p>
+                    <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PEDY. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html> 

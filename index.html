@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PEDY - Your Info & Tech Gadget Hub</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <!-- Logo (Positioned Separately) -->
     <div class="logo-container">
-        <img src="logo.png" width="400" height="100" alt="PEDY Logo" class="logo-svg">
+        <img src="assets/images/logo.png" width="400" height="100" alt="PEDY Logo" class="logo-svg">
     </div>
 
     <!-- Header -->
@@ -19,11 +19,12 @@
         <div class="container">
             <nav class="nav">
                 <ul>
-                    <li><a href="#home" class="active">Home</a></li>
-                    <li><a href="#resources">Products</a></li>
-                    <li><a href="#jobs">Jobs</a></li>
-                    <li><a href="#community">Community</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="pages/accessories.html">Accessories</a></li>
+                    <li><a href="pages/news.html">News</a></li>
+                    <li><a href="pages/resources.html">Resources</a></li>
+                    <li><a href="pages/contact.html">Contact Us</a></li>
+                    <li><a href="admin/index.html">Admin</a></li>
                 </ul>
             </nav>
             <div class="search-container">
@@ -46,20 +47,18 @@
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title">What are you looking for ? Tutakusort</h1>
-                <p class="hero-subtitle">Tunauza habari na vitu vya tech kwa bei nafuu! Pata kila kitu unachohitaji hapa, bro!</p>
-                <p class="hero-subtitle-en">We sell info and tech gadgets at affordable prices! Get everything you need right here, fam!</p>
                 <div class="hero-features">
                     <div class="feature-item">
                         <i class="fas fa-mobile-alt"></i>
-                        <span>Latest Gadgets</span>
+                        <span>Accessories</span>
                     </div>
                     <div class="feature-item">
                         <i class="fas fa-graduation-cap"></i>
-                        <span>Study Materials</span>
+                        <span>Resources</span>
                     </div>
                     <div class="feature-item">
                         <i class="fas fa-users"></i>
-                        <span>Youth Community</span>
+                        <span>News</span>
                     </div>
                 </div>
                 <button class="cta-button" onclick="exploreNow()">
@@ -67,12 +66,6 @@
                     <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
-        </div>
-        <div class="floating-elements">
-            <div class="floating-icon">📱</div>
-            <div class="floating-icon">💻</div>
-            <div class="floating-icon">🎓</div>
-            <div class="floating-icon">🔥</div>
         </div>
     </section>
 
@@ -82,7 +75,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="logo.png" alt="PEDY Logo" class="logo-svg">
+                        <img src="assets/images/logo.png" alt="PEDY Logo" class="logo-svg">
                     </div>
                     <p>PEDY - Your one-stop shop for info and tech gadgets. We got you covered with the best deals!</p>
                     <div class="social-links">
@@ -127,6 +120,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html> 

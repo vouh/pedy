@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessories - PEDY Tech Hub</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0 60px;
+            text-align: center;
+            color: white;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #666;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 1rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #6366f1;
+            border: 2px solid #6366f1;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn-secondary:hover {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            background: white;
+            border: 2px solid #6366f1;
+            color: #6366f1;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .category-btn.active,
+        .category-btn:hover {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .filters {
+            background: #f8f9fa;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2rem 0;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="../assets/images/logo.png" width="400" height="100" alt="PEDY Logo" class="logo-svg">
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="accessories.html" class="active">Accessories</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="search-container">
+                <input type="text" placeholder="Search accessories..." class="search-input">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Tech Accessories</h1>
+            <p class="page-subtitle">Discover the latest gadgets and accessories to enhance your tech experience</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="filter-container">
+                <div class="categories">
+                    <button class="category-btn active">All</button>
+                    <button class="category-btn">Mobile</button>
+                    <button class="category-btn">Laptop</button>
+                    <button class="category-btn">Audio</button>
+                    <button class="category-btn">Gaming</button>
+                </div>
+                <div class="filter-group">
+                    <label>Sort by:</label>
+                    <select class="filter-select">
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Newest First</option>
+                        <option>Most Popular</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products">
+        <div class="container">
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Wireless Bluetooth Headphones</h3>
+                        <p class="product-description">Premium sound quality with noise cancellation and 30-hour battery life.</p>
+                        <div class="product-price">$89.99</div>
+                        <div class="product-actions">
+                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-secondary">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Fast Wireless Charger</h3>
+                        <p class="product-description">15W fast wireless charging pad compatible with all Qi-enabled devices.</p>
+                        <div class="product-price">$49.99</div>
+                        <div class="product-actions">
+                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-secondary">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Laptop Stand & Cooling Pad</h3>
+                        <p class="product-description">Adjustable aluminum stand with built-in cooling fans for optimal performance.</p>
+                        <div class="product-price">$79.99</div>
+                        <div class="product-actions">
+                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-secondary">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Gaming Mouse RGB</h3>
+                        <p class="product-description">High-precision gaming mouse with customizable RGB lighting and programmable buttons.</p>
+                        <div class="product-price">$69.99</div>
+                        <div class="product-actions">
+                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-secondary">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Mechanical Keyboard</h3>
+                        <p class="product-description">Cherry MX switches with RGB backlighting and premium build quality.</p>
+                        <div class="product-price">$129.99</div>
+                        <div class="product-actions">
+                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-secondary">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-tablet-alt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Tablet Stand & Case</h3>
+                        <p class="product-description">Multi-angle stand with protective case for tablets and iPads.</p>
+                        <div class="product-price">$39.99</div>
+                        <div class="product-actions">
+                            <button class="btn-primary">Add to Cart</button>
+                            <button class="btn-secondary">Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="../assets/images/logo.png" alt="PEDY Logo" class="logo-svg">
+                    </div>
+                    <p>PEDY - Your one-stop shop for info and tech gadgets. We got you covered with the best deals!</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="accessories.html">Products</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Stay Updated</h4>
+                    <p>Subscribe to our newsletter for the latest products and offers!</p>
+                    <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PEDY. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html> 
