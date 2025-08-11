@@ -1,6 +1,6 @@
-# PEDY Tech Hub - Academic Resource Hub
+# Pedy Tech Hub - Academic Resource Hub
 
-A modern, responsive website for PEDY, your one-stop shop for info and tech gadgets. Built with HTML, CSS, and JavaScript.
+A modern, responsive website for Pedy, your one-stop shop for info and tech gadgets. Built with HTML, CSS, and JavaScript.
 
 ## 🚀 Features
 
@@ -25,7 +25,7 @@ Peddy/
 │   ├── js/
 │   │   └── main.js          # Main JavaScript file
 │   └── images/
-│       └── logo.png         # PEDY logo
+│       └── logo.png         # Pedy logo
 ├── pages/                    # Website pages
 │   ├── accessories.html     # Products and accessories
 │   ├── news.html           # Latest tech news
@@ -169,7 +169,7 @@ For support or questions:
 
 ## 📄 License
 
-This project is created for PEDY Tech Hub. All rights reserved.
+This project is created for Pedy Tech Hub. All rights reserved.
 
 ## 🔄 Version History
 
@@ -177,4 +177,4 @@ See `CHANGELOG.md` for detailed version history and updates.
 
 ---
 
-**PEDY Tech Hub** - Your one-stop shop for info and tech gadgets! 🚀 
+**Pedy Tech Hub** - Your one-stop shop for info and tech gadgets! 🚀 

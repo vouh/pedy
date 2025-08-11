@@ -1,4 +1,4 @@
-// PEDY Academic Resource Hub JavaScript
+// Pedy Academic Resource Hub JavaScript
 
 // Preloader functionality
 function showPreloader() {
@@ -39,7 +39,7 @@ function initPreloader() {
                     <div class="wave-dot"></div>
                     <div class="wave-dot"></div>
                 </div>
-                <div class="preloader-text">Loading PEDY...</div>
+                <div class="preloader-text">Loading Pedy...</div>
             </div>
         `;
         
@@ -98,11 +98,10 @@ function updateFooterDate() {
     // Update footer copyright with current date
     const footerBottom = document.querySelector('.footer-bottom p');
     if (footerBottom) {
-        footerBottom.innerHTML = `&copy; ${year} PEDY. All rights reserved. | ${formattedDate}`;
+        footerBottom.innerHTML = `&copy; ${year} Pedy. All rights reserved. | ${formattedDate}`;
     }
 }
 
-// Call the function when page loads
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize preloader
     initPreloader();
@@ -116,9 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     updateFooterDate();
 
-    // Smooth scrolling for navigation links
-    const navLinks = document.querySelectorAll('nav a[href^="#"]');
-    navLinks.forEach(link => {
+
+    // Smooth scrolling for anchor links
+    const anchorLinks = document.querySelectorAll('nav a[href^="#"]');
+    anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Active navigation highlighting
+    // Active navigation highlighting on scroll
     const sections = document.querySelectorAll('section[id]');
     const navItems = document.querySelectorAll('nav a');
 
@@ -140,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let current = '';
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
             if (scrollY >= (sectionTop - 200)) {
                 current = section.getAttribute('id');
             }
@@ -159,32 +158,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.querySelector('.search-btn');
 
     function performSearch() {
-        const query = searchInput.value.toLowerCase().trim();
+        const query = searchInput.value.trim();
         if (query) {
-            // Highlight search results (simple implementation)
-            const allText = document.querySelectorAll('h1, h2, h3, h4, p, span');
-            allText.forEach(element => {
-                const text = element.textContent.toLowerCase();
-                if (text.includes(query)) {
-                    element.style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
-                    setTimeout(() => {
-                        element.style.backgroundColor = '';
-                    }, 2000);
-                }
-            });
+            alert(`You searched for: "${query}"`);
+            console.log('Searching for:', query);
         }
     }
 
-    searchBtn.addEventListener('click', performSearch);
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            performSearch();
-        }
-    });
+    if (searchBtn) {
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    }
 
     // Confetti animation function
     function createConfetti() {
-        const colors = ['#6366f1', '#818cf8', '#4f46e5', '#6366f1', '#818cf8'];
+        const colors = ['#6366f1', '#818cf8', '#4f46e5'];
         const confettiCount = 100;
         
         for (let i = 0; i < confettiCount; i++) {
@@ -213,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const logoContainer = document.querySelector('.logo-container');
         if (!logoContainer) return;
         
-        const colors = ['#6366f1', '#818cf8', '#4f46e5', '#6366f1', '#818cf8'];
+        const colors = ['#6366f1', '#818cf8', '#4f46e5'];
         const sparkleCount = 15;
         
         for (let i = 0; i < sparkleCount; i++) {
@@ -226,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
             sparkle.style.pointerEvents = 'none';
             sparkle.style.zIndex = '9998';
             
-            // Position around the logo container
             const logoRect = logoContainer.getBoundingClientRect();
             const angle = (Math.PI * 2 * i) / sparkleCount;
             const radius = 80 + Math.random() * 40;
@@ -239,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             document.body.appendChild(sparkle);
             
-            // Animate sparkle
             setTimeout(() => {
                 sparkle.style.transition = 'all 1.5s ease-out';
                 sparkle.style.opacity = '1';
@@ -257,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const logoContainer = document.querySelector('.logo-container');
         if (!logoContainer) return;
         
-        const colors = ['#6366f1', '#818cf8', '#4f46e5', '#6366f1', '#818cf8'];
+        const colors = ['#6366f1', '#818cf8', '#4f46e5'];
         const dropCount = 8;
         
         for (let i = 0; i < dropCount; i++) {
@@ -270,7 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
             drop.style.pointerEvents = 'none';
             drop.style.zIndex = '9998';
             
-            // Position around the logo container
             const logoRect = logoContainer.getBoundingClientRect();
             const x = logoRect.left + Math.random() * logoRect.width;
             const y = logoRect.top + logoRect.height;
@@ -281,7 +270,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             document.body.appendChild(drop);
             
-            // Animate drop
             setTimeout(() => {
                 drop.style.transition = 'all 2s ease-out';
                 drop.style.opacity = '1';
@@ -296,27 +284,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Continuous logo animations
     function startLogoAnimations() {
-        // Initial sparkle burst
-        createLogoSparkles();
-        
-        // Continuous sparkle animations - every 2 seconds
-        setInterval(() => {
+        if (document.querySelector('.logo-container')) {
             createLogoSparkles();
-        }, 2000);
-        
-        // Continuous drop animations - every 3 seconds
-        setInterval(() => {
-            createLogoDrops();
-        }, 3000);
+            setInterval(createLogoSparkles, 2000);
+            setInterval(createLogoDrops, 3000);
+        }
     }
 
-    // Start logo animations
     startLogoAnimations();
 
     // Explore Now button functionality
     window.exploreNow = function() {
         createConfetti();
-        // Scroll to top for now since we removed other sections
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -326,28 +305,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Newsletter subscription
     window.subscribeNewsletter = function(event) {
         event.preventDefault();
-        const email = event.target.querySelector('input[type="email"]').value;
-        
-        if (email) {
-            // Show success message
+        const emailInput = event.target.querySelector('input[type="email"]');
+        if (emailInput && emailInput.value) {
             const button = event.target.querySelector('button');
-            const originalText = button.innerHTML;
+            const originalContent = button.innerHTML;
             button.innerHTML = '<i class="fas fa-check"></i> Subscribed!';
             button.style.background = '#10b981';
-            
             createConfetti();
-            
             setTimeout(() => {
-                button.innerHTML = originalText;
+                button.innerHTML = originalContent;
                 button.style.background = '';
-                event.target.reset();
+                emailInput.value = '';
             }, 3000);
         }
     };
 
-    // Add some fun micro-interactions
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => {
+    // Micro-interactions for buttons
+    const allButtons = document.querySelectorAll('button');
+    allButtons.forEach(button => {
         button.addEventListener('click', function() {
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
@@ -357,42 +332,41 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Search input focus effect
-    searchInput.addEventListener('focus', function() {
-        this.parentElement.style.transform = 'scale(1.05)';
-    });
-
-    searchInput.addEventListener('blur', function() {
-        this.parentElement.style.transform = 'scale(1)';
-    });
+    if (searchInput) {
+        searchInput.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.05)';
+        });
+        searchInput.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    }
 
     // Mobile menu toggle functionality
     window.toggleMobileMenu = function() {
         const nav = document.querySelector('.nav');
         const toggle = document.querySelector('.mobile-menu-toggle');
-        
-        nav.classList.toggle('active');
-        toggle.classList.toggle('active');
-        
-        // Close menu when clicking on a link
-        const navLinks = document.querySelectorAll('.nav a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('active');
-                toggle.classList.remove('active');
+        if (nav && toggle) {
+            nav.classList.toggle('active');
+            toggle.classList.toggle('active');
+            const navLinks = nav.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('active');
+                    toggle.classList.remove('active');
+                });
             });
-        });
+        }
     };
 
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(event) {
         const nav = document.querySelector('.nav');
         const toggle = document.querySelector('.mobile-menu-toggle');
-        
-        if (!nav.contains(event.target) && !toggle.contains(event.target)) {
+        if (nav && toggle && !nav.contains(event.target) && !toggle.contains(event.target)) {
             nav.classList.remove('active');
             toggle.classList.remove('active');
         }
     });
 
-    console.log('PEDY Academic Resource Hub loaded successfully! 🎓');
+    console.log('Pedy Academic Resource Hub loaded successfully! ');
 });

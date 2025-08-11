@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEDY - Your Info & Tech Gadget Hub</title>
+    <title>Pedy - Your Info & Tech Gadget Hub</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,20 +11,20 @@
 <body>
     <!-- Logo (Positioned Separately) -->
     <div class="logo-container">
-        <img src="assets/images/logo.png" width="400" height="100" alt="PEDY Logo" class="logo-svg">
+        <img src="assets/images/logo.png" width="400" height="100" alt="Pedy Logo" class="logo-svg">
     </div>
 
     <!-- Header -->
     <header class="header">
-        <div class="container">
+        <div class="header-content">
             <nav class="nav">
                 <ul>
                     <li><a href="index.html" class="active">Home</a></li>
                     <li><a href="pages/accessories.html">Accessories</a></li>
                     <li><a href="pages/news.html">News</a></li>
                     <li><a href="pages/resources.html">Resources</a></li>
-                    <li><a href="pages/contact.html">Contact Us</a></li>
-                    <li><a href="pages/cart.html">Cart</a></li>
+                    <li><a href="pages/contact.html">Contacts</a></li>
+                    <li class="mobile-cart-icon"><a href="pages/cart.html" class="cart-icon-link"><i class="fas fa-shopping-cart"></i></a></li>
                     <li><a href="admin/index.html">Admin</a></li>
                 </ul>
             </nav>
@@ -34,6 +34,7 @@
                     <i class="fas fa-search"></i>
                 </button>
             </div>
+            <a href="pages/cart.html" class="cart-icon-link"><i class="fas fa-shopping-cart"></i></a>
             <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
@@ -47,19 +48,19 @@
         <div class="hero-background"></div>
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">What are you looking for ? Tutakusort</h1>
+                <h1 class="hero-title">Your Hub for Products & Info</h1>
                 <div class="hero-features">
                     <div class="feature-item">
                         <i class="fas fa-mobile-alt"></i>
-                        <span>Accessories</span>
+                        <span>Shop Top Products</span>
                     </div>
                     <div class="feature-item">
                         <i class="fas fa-graduation-cap"></i>
-                        <span>Resources</span>
+                        <span>Explore Learning Resources</span>
                     </div>
                     <div class="feature-item">
                         <i class="fas fa-users"></i>
-                        <span>News</span>
+                        <span>Read News & Updates</span>
                     </div>
                 </div>
                 <button class="cta-button" onclick="exploreNow()">
@@ -76,9 +77,9 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="assets/images/logo.png" alt="PEDY Logo" class="logo-svg">
+                        <img src="assets/images/logo.png" alt="Pedy Logo" class="logo-svg">
                     </div>
-                    <p>PEDY - Your one-stop shop for info and tech gadgets. We got you covered with the best deals!</p>
+                    <p>Pedy - Your one-stop shop for info and tech gadgets. We got you covered with the best deals!</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -116,11 +117,11 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 PEDY. All rights reserved.</p>
+                <p>&copy; 2024 Pedy. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="assets/js/main.js"></script>
 </body>
-</html> 
+</html>

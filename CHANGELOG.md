@@ -1,6 +1,6 @@
-# PEDY Website Changelog
+# Pedy Website Changelog
 
-All notable changes to the PEDY Info & Tech Gadget Hub website will be documented in this file.
+All notable changes to the Pedy Info & Tech Gadget Hub website will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -84,7 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial website structure
-- PEDY logo and branding
+- Pedy logo and branding
 - Navigation menu with 5 links
 - Hero section with bilingual content
 - Search functionality
@@ -113,7 +113,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Basic website structure
-- PEDY branding elements
+- Pedy branding elements
 - Initial responsive design
 - Core functionality
 
@@ -207,9 +207,9 @@ When making changes to the website, please:
 
 For questions about this changelog or the website:
 - **Email**: support@pedy.co.ke
-- **Project**: PEDY Info & Tech Gadget Hub
-- **Maintainer**: PEDY Development Team
+- **Project**: Pedy Info & Tech Gadget Hub
+- **Maintainer**: Pedy Development Team
 
 ---
 
-*This changelog is maintained by the PEDY development team.* 
+*This changelog is maintained by the Pedy development team.* 
