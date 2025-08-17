@@ -874,10 +874,52 @@ h1, h2, h3, h4, h5, h6 {
         margin-left: auto; /* Push toggle to the right */
     }
 
-    /* Hide search and original cart icon from the header */
-    .search-container,
-    .cart-icon-link {
+    /* Hide elements on mobile */
+    .cart-icon-link,
+    .search-container:not(.mobile-search) {
         display: none;
+    }
+    
+    /* Show mobile search container */
+    .search-container.mobile-search {
+        display: flex;
+        position: fixed;
+        top: 75px; /* Slightly below the header */
+        left: 15px;
+        right: 15px;
+        padding: 0;
+        background: transparent;
+        z-index: 999;
+        width: calc(100% - 30px);
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+    
+    .search-container.mobile-search .search-input {
+        flex: 1;
+        border: none;
+        border-radius: 30px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        background: var(--white);
+    }
+    
+    .search-container.mobile-search .search-btn {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        padding: 0 15px;
+        color: var(--primary-color);
+        font-size: 1.1rem;
+    }
+    
+    .search-container.mobile-search .search-btn:hover {
+        background: transparent;
+        color: var(--primary-dark);
     }
 
     /* Position the nav menu off-screen for the toggle to work */
@@ -972,26 +1014,40 @@ h1, h2, h3, h4, h5, h6 {
         color: var(--white);
     }
 
+    /* Desktop search container */
     .search-container {
-        position: fixed;
-        top: 80px;
-        left: 20px;
-        right: 20px;
-        width: calc(100% - 40px);
-        z-index: 1000;
-        background: var(--white);
-        box-shadow: var(--shadow-md);
+        position: relative;
+        width: 400px;
+        margin: 0 20px;
     }
 
     .search-input {
         width: 100%;
         font-size: 1rem;
-        padding: 0.8rem;
+        padding: 0.8rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px 0 0 4px;
+        outline: none;
+        transition: border-color 0.2s ease;
+    }
+    
+    .search-input:focus {
+        border-color: var(--primary-color);
     }
 
     .search-btn {
         font-size: 1rem;
-        padding: 0.8rem 1.2rem;
+        padding: 0 1.2rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .search-btn:hover {
+        background: var(--primary-dark);
     }
 
     .hero {
