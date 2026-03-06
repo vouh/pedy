@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PEDY - Global Service Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eb4c4c",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211111",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">diamond</span>
+<h2 class="text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">PEDY</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Find Services</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Categories</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">About Us</a>
+<a class="text-sm font-bold text-primary hover:opacity-80 transition-opacity" href="#">Become a Provider</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex h-10 items-center justify-center rounded-lg px-4 text-sm font-bold text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                        Login
+                    </button>
+<button class="flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+                        Sign Up
+                    </button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-xl">public</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="relative overflow-hidden py-16 lg:py-24">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
+<div class="flex flex-col gap-8">
+<div class="space-y-4">
+<span class="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-bold tracking-wide text-primary uppercase">
+                                    Global &amp; Local Marketplace
+                                </span>
+<h1 class="text-5xl font-black leading-[1.1] tracking-tight text-slate-900 dark:text-slate-100 sm:text-6xl">
+                                    Find the services you need, <span class="text-primary">locally or globally.</span>
+</h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
+                                    Connect with top-rated professionals for any task. From barbers in your neighborhood to developers across the ocean.
+                                </p>
+</div>
+<!-- Search Bar -->
+<div class="relative max-w-2xl">
+<div class="flex flex-col sm:flex-row gap-3 rounded-2xl bg-white dark:bg-slate-900 p-2 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
+<div class="flex flex-1 items-center gap-3 px-4 py-2">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="w-full border-none bg-transparent p-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:ring-0" placeholder="What service are you looking for?" type="text"/>
+</div>
+<div class="h-px w-full bg-slate-100 dark:bg-slate-800 sm:h-10 sm:w-px"></div>
+<div class="flex flex-1 items-center gap-3 px-4 py-2">
+<span class="material-symbols-outlined text-slate-400">location_on</span>
+<input class="w-full border-none bg-transparent p-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:ring-0" placeholder="Location" type="text"/>
+</div>
+<button class="rounded-xl bg-primary px-8 py-3 text-base font-bold text-white transition-all hover:bg-primary/90">
+                                        Search
+                                    </button>
+</div>
+<div class="mt-4 flex flex-wrap gap-2">
+<span class="text-sm text-slate-500 font-medium">Popular:</span>
+<a class="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary" href="#">Cleaning</a>
+<a class="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary" href="#">Logo Design</a>
+<a class="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary" href="#">Handyman</a>
+</div>
+</div>
+</div>
+<div class="relative hidden lg:block">
+<div class="aspect-square rounded-3xl bg-primary/5 p-8 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
+<img alt="People collaborating globally" class="h-full w-full rounded-2xl object-cover shadow-2xl" data-alt="Modern office setting with people collaborating" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMTRmofNr5qmfRlgki0gBzDIlmE2BDVjp0k1LmVvoyYWiK2TO5BPP-NRNuylAtj1sO0T0HwUELh890bxRK8fQNI9Xrjg2JPKI4dmIn9K4lgkfcqen71rahxaum68VSt3XuB-F06Kr5Ido086i8PPTsQeLHXJoNLBxUuX-6DPQIT1BUkuUj5NwbjmxM_IEqCbW2u6Z7v6WhOTAtwlzpGsWJzm99vULB17SWnstFotYtZtLKyjRUyLOGg34pdhkCPefpO9JVFPPkWtBh"/>
+<div class="absolute bottom-12 left-0 translate-x-[-10%] rounded-2xl bg-white dark:bg-slate-800 p-4 shadow-xl border border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase">Verified Task</p>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">House Cleaning Done</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Bar -->
+<section class="border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<div class="mx-auto max-w-7xl px-4 py-8">
+<div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+<div class="text-center md:text-left">
+<p class="text-3xl font-black text-slate-900 dark:text-slate-100">50k+</p>
+<p class="text-sm font-medium text-slate-500">Active Users</p>
+</div>
+<div class="text-center md:text-left">
+<p class="text-3xl font-black text-slate-900 dark:text-slate-100">10k+</p>
+<p class="text-sm font-medium text-slate-500">Service Providers</p>
+</div>
+<div class="text-center md:text-left">
+<p class="text-3xl font-black text-slate-900 dark:text-slate-100">15+</p>
+<p class="text-sm font-medium text-slate-500">Countries Covered</p>
+</div>
+<div class="text-center md:text-left">
+<p class="text-3xl font-black text-slate-900 dark:text-slate-100">4.9/5</p>
+<p class="text-sm font-medium text-slate-500">Average Rating</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-20 lg:py-32">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mb-16 max-w-2xl">
+<h2 class="text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl">
+                            Services for every need
+                        </h2>
+<p class="mt-4 text-lg text-slate-600 dark:text-slate-400">
+                            From your doorstep to the digital world, PEDY connects you with the best professionals across all industries.
+                        </p>
+</div>
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+<!-- Physical Services -->
+<div class="group flex flex-col gap-5 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="aspect-[4/3] overflow-hidden rounded-xl">
+<img alt="Barber working" class="h-full w-full object-cover transition-transform group-hover:scale-105" data-alt="Professional barber cutting hair in shop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1Ju9O-kRloHgFYRVPPoZ0yBH8s7b9ZuCsWo1maiwLk8xgDBfs6d6V7b0ETJAiPU3R3u0geerSg01nC4uzLwfYGeN8g-vySpze1lllYK6tipIz0WFqiZeyrBRXBKEZoEtnJTJoDXyboR8uRjUUUjfkW0CRYF6cuLmEhSiM1_R1BgoClbZ_g7RTdXw47hxKTctyI6sQkKYr0UjbyVo8o3O495Fbx5Dbvrubn_-e7p4xrgEGlMoMqEB76Fv13V52CbEV0FkjT5Hqpllh"/>
+</div>
+<div class="px-3 pb-4">
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-xl">home_repair_service</span>
+<span class="text-xs font-bold uppercase tracking-wider">On-Site</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Physical Services</h3>
+<p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Book trusted barbers, expert cleaners, and skilled handy workers in your local neighborhood.</p>
+</div>
+</div>
+<!-- Digital Services -->
+<div class="group flex flex-col gap-5 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="aspect-[4/3] overflow-hidden rounded-xl">
+<img alt="Designer at desk" class="h-full w-full object-cover transition-transform group-hover:scale-105" data-alt="Graphic designer working on digital project" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQUwXjBGVqrJltjd5J7xXyKJDbuXEjxBBK4oyTtrzdRZ-QXkEil_peMJO_cwG4DDL7Fm57wTnGNwhZE3Ow1dAm4kG3E2ihSjRUOE_0Iovxar4Dw9PCFORhuQhd3l1ZoIP1VAKiUJc1i5eM-XbkHPKHumX5VL-5llOpc-M_G58vD6TPWIjKQ0avZ-o5ms_dcFoIF5fmqm_NQxf7BoDl0CvJ6PMtdbmIHtX-F-mOB6Md6qugderxSp0C-pb8hBUYyeE0uM5VPwpRs7ld"/>
+</div>
+<div class="px-3 pb-4">
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-xl">computer</span>
+<span class="text-xs font-bold uppercase tracking-wider">Remote</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Digital Services</h3>
+<p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Hire top-tier UI designers, full-stack coders, and creative writers from anywhere on the planet.</p>
+</div>
+</div>
+<!-- Local Experts -->
+<div class="group flex flex-col gap-5 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="aspect-[4/3] overflow-hidden rounded-xl">
+<img alt="Local professional" class="h-full w-full object-cover transition-transform group-hover:scale-105" data-alt="Trusted local professional fixing appliance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj_9mDMgHYoHfHIgBFwJswG1hok5oLtuNKrp-TJFKnEbS6bPiS315okuq1QnCgoznSvl_X4WW4RGgeTrPeTxHfCnvBREmTbYT19ZNkfr5aFK5kpGYn_braKeVCeSK6kwZEJV1i8dEEse88Qy7OvruJOyDMWRPDiR9mDEnZ7gTi_rfVNDs8leO_5l3fvPY7xn_GPeTVhC_wIFgebFn8zbDzNBxjbCg_XMM3jlLeFGx_739NWD0GsyB0tgpLxXzriIrd_4Ig_8KOZkcc"/>
+</div>
+<div class="px-3 pb-4">
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-xl">person_pin_circle</span>
+<span class="text-xs font-bold uppercase tracking-wider">Community</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Local Experts</h3>
+<p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Verified professionals in your immediate area ready to help with tasks today.</p>
+</div>
+</div>
+<!-- Global Talent -->
+<div class="group flex flex-col gap-5 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="aspect-[4/3] overflow-hidden rounded-xl">
+<img alt="Global team" class="h-full w-full object-cover transition-transform group-hover:scale-105" data-alt="International team of professionals collaborating" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_X6avVFlrdjyULqfPhzt9tX3wnM2Ne4ViughPWQ37xoNY9Rd0vseuN7yT-MxAJBufGNQoIUCjHawM8TZb_0yTr5nuoycPvb0QoHMmmompwTll4Kjvwmb823Nh6q5i9_uHJZqD1pNopeA4SuS1jb82LcRbeEw-IuUv7IlRuWTsOLT_HtSolb-4OEVdOHrtDLFg0zfGT0Ph9lsTRhU5l1TcPfbi8cEtwMpq4Je9b-pZ1cbbIGm1IPTKLdpIal6T-EKRZ8ShMbYZ8ImZ"/>
+</div>
+<div class="px-3 pb-4">
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-xl">language</span>
+<span class="text-xs font-bold uppercase tracking-wider">Worldwide</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Global Talent</h3>
+<p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Access world-class skills and diverse perspectives from every corner of the globe.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Section -->
+<section class="bg-primary/5 py-24">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="text-center">
+<h2 class="text-3xl font-black text-slate-900 dark:text-slate-100 sm:text-4xl">
+                            Trusted by thousands in Kenya and beyond.
+                        </h2>
+<p class="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+                            Join a growing community of satisfied customers and successful service providers.
+                        </p>
+</div>
+<div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+<div class="rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-sm">
+<div class="flex gap-1 text-yellow-400 mb-4">
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<p class="italic text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                                "Found an amazing web developer through PEDY for my startup in Nairobi. The process was seamless and the results were world-class."
+                            </p>
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200" data-alt="User avatar"></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-slate-100">David M.</p>
+<p class="text-xs text-slate-500">Tech Entrepreneur</p>
+</div>
+</div>
+</div>
+<div class="rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-sm border-2 border-primary/20 scale-105">
+<div class="flex gap-1 text-yellow-400 mb-4">
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<p class="italic text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                                "I use PEDY to find reliable cleaning services for my Airbnb properties. Every provider I've hired has been professional and thorough."
+                            </p>
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200" data-alt="User avatar"></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-slate-100">Sarah W.</p>
+<p class="text-xs text-slate-500">Property Manager</p>
+</div>
+</div>
+</div>
+<div class="rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-sm">
+<div class="flex gap-1 text-yellow-400 mb-4">
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<p class="italic text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                                "The variety of services is incredible. I've hired both a plumber and a logo designer in the same week! Highly recommended platform."
+                            </p>
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200" data-alt="User avatar"></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-slate-100">James K.</p>
+<p class="text-xs text-slate-500">Home Owner</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-20">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center text-white shadow-2xl">
+<div class="relative z-10">
+<h2 class="text-4xl font-black mb-6">Ready to get things done?</h2>
+<p class="mx-auto mb-10 max-w-xl text-lg text-white/90">
+                                Join thousands of others who are finding and offering services on the world's most versatile marketplace.
+                            </p>
+<div class="flex flex-col sm:flex-row justify-center gap-4">
+<button class="rounded-xl bg-white px-8 py-4 text-lg font-bold text-primary shadow-lg transition-transform hover:scale-105 active:scale-95">
+                                    Find a Service
+                                </button>
+<button class="rounded-xl bg-primary/20 border-2 border-white/30 px-8 py-4 text-lg font-bold text-white shadow-lg backdrop-blur-sm transition-transform hover:scale-105 active:scale-95">
+                                    Become a Provider
+                                </button>
+</div>
+</div>
+<!-- Abstract Background Detail -->
+<div class="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-l from-white/10 to-transparent"></div>
+<div class="absolute bottom-0 left-0 h-1/2 w-1/4 bg-white/5 rounded-full blur-3xl translate-y-1/2 translate-x-[-20%]"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-5">
+<div class="col-span-2">
+<div class="flex items-center gap-2 text-primary mb-6">
+<span class="material-symbols-outlined text-2xl font-bold">diamond</span>
+<h2 class="text-lg font-black tracking-tight text-slate-900 dark:text-slate-100">PEDY</h2>
+</div>
+<p class="max-w-xs text-sm text-slate-500 leading-relaxed">
+                            The bridge between local needs and global talent. Transforming how services are discovered and delivered.
+                        </p>
+<div class="mt-6 flex gap-4">
+<a class="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">social_leaderboard</span>
+</a>
+<a class="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">language</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-6 uppercase tracking-wider">Services</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary" href="#">Cleaning</a></li>
+<li><a class="hover:text-primary" href="#">Design</a></li>
+<li><a class="hover:text-primary" href="#">Coding</a></li>
+<li><a class="hover:text-primary" href="#">Maintenance</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-6 uppercase tracking-wider">Company</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary" href="#">About Us</a></li>
+<li><a class="hover:text-primary" href="#">Careers</a></li>
+<li><a class="hover:text-primary" href="#">Press</a></li>
+<li><a class="hover:text-primary" href="#">Trust &amp; Safety</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-6 uppercase tracking-wider">Support</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary" href="#">Help Center</a></li>
+<li><a class="hover:text-primary" href="#">Contact Us</a></li>
+<li><a class="hover:text-primary" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-12 border-t border-slate-100 dark:border-slate-800 pt-8 text-center text-sm text-slate-500">
+                    © 2024 PEDY Technologies. All rights reserved.
+                </div>
+</div>
+</footer>
+</div>
+</body></html>

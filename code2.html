@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PEDY - Service Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eb4c4c",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211111",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-primary/10 bg-white/80 backdrop-blur-md dark:bg-background-dark/80 px-4 md:px-10 py-3">
+<div class="max-w-[1280px] mx-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-8 flex-1">
+<!-- Logo -->
+<div class="flex items-center gap-2 text-primary">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined !text-2xl">diamond</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight">PEDY</h2>
+</div>
+<!-- Desktop Search -->
+<div class="hidden md:flex flex-1 max-w-xl">
+<label class="relative w-full">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search for services (e.g. Web Design, Plumbing)..." type="text"/>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 text-slate-700 dark:text-slate-300 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined !text-lg">account_circle</span>
+<span class="hidden sm:inline">Sign In</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto w-full px-4 md:px-10 py-6">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- Sidebar Filters -->
+<aside class="w-full lg:w-64 shrink-0 space-y-8">
+<div>
+<h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">tune</span>
+                        Filters
+                    </h3>
+<!-- Service Category -->
+<div class="space-y-3">
+<p class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Service Type</p>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors">Physical Services</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors">Digital Services</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Price Range -->
+<div class="space-y-4">
+<p class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Price Range</p>
+<div class="px-2">
+<div class="relative h-1.5 w-full rounded-full bg-slate-200 dark:bg-slate-700">
+<div class="absolute left-[20%] right-[30%] h-full bg-primary rounded-full"></div>
+<div class="absolute left-[20%] top-1/2 -translate-y-1/2 size-4 bg-white border-2 border-primary rounded-full cursor-pointer shadow-md"></div>
+<div class="absolute right-[30%] top-1/2 -translate-y-1/2 size-4 bg-white border-2 border-primary rounded-full cursor-pointer shadow-md"></div>
+</div>
+<div class="flex justify-between mt-4 text-xs font-medium">
+<span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">$10</span>
+<span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">$500+</span>
+</div>
+</div>
+</div>
+<!-- Location -->
+<div class="space-y-3">
+<p class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Location</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 !text-lg">location_on</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary" placeholder="Enter city..." type="text"/>
+</div>
+<div class="h-32 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Stylized map showing city grid" data-location="New York City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCndeab0FFu6z41pd14Sc4HsWdwql6rtptloOZ1u4_vPdsQPskY6HTYWh5ZT65qL0hJ3nlo_RRH9vFbvhL3-Pfnoe8lVL7vEXcL01Uf7jSJ1Xl26tL9UmR73xs_eqMxYTtQBiYvSre9Va3vVdGQ5TTIkmAn0yK_uPfz9QH3rulQtMRVG68GHl5JUGW605bKWGl-VIqkKTqAtKwCEsQwukFSGFCv5hCNXop87sp3XQaANeXwwOUuCFd014yLdS9v4nq626WfUHzAuH9m"/>
+<div class="absolute inset-0 bg-primary/10"></div>
+</div>
+</div>
+<!-- Rating Filter -->
+<div class="space-y-3">
+<p class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Minimum Rating</p>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="text-primary focus:ring-primary" name="rating" type="radio"/>
+<span class="text-sm flex items-center gap-1">4.5+ <span class="material-symbols-outlined text-yellow-500 filled !text-sm">star</span></span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="text-primary focus:ring-primary" name="rating" type="radio"/>
+<span class="text-sm flex items-center gap-1">4.0+ <span class="material-symbols-outlined text-yellow-500 filled !text-sm">star</span></span>
+</label>
+</div>
+</div>
+</aside>
+<!-- Search Results Content -->
+<div class="flex-1">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+<div>
+<h1 class="text-2xl font-bold">124 Services Found</h1>
+<p class="text-slate-500 text-sm">Showing results for "All Categories" in "New York"</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm text-slate-500 whitespace-nowrap">Sort by:</span>
+<select class="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm py-1.5 focus:ring-primary focus:border-primary">
+<option>Most Relevant</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Newest Arrivals</option>
+</select>
+</div>
+</div>
+<!-- Grid of Service Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Laptop screen showing web design tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEtt2m70nufuoGlr2A-p0VGmqzKJqVOJ2Skq7FUOuHrK36DTT5Q2EGdzdqzvzLOZOaw5hr4y8igqqaKi2NyaWRoW6-T3dYLQ1-xhOcW-rN7vXGoizWZhV5y76nyucptLq97zPRwNWouVTxJyPJqd3B3r7GtgW9fULc2lJ7-KEF7VZN3Vwaj2RhLhks_prC3hzYI1syiwUfUU1IYEEiSvyjyHv_QRX5hSctuVVghsK9RXddf5G0rFoIVj0zOz-8rBItJB_TLQQP5Hks"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Digital</div>
+<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg">favorite</span>
+</button>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-2 mb-2">
+<img class="size-6 rounded-full object-cover" data-alt="Professional man headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEsryVab8QbhCpd4wefziMZ_VkVI5sq-ua0FP3sy3699GPN9TJhVzpOypW3zf3TcF7i-yt1aggFHOtJC-idCz5PXqLDRxT8BCxsRAtDZKFqOti2V5y3mYSJ_aq1iz5UPjnLpzcCrU5EGoBMeddxSS77ysUeAb0g3hm662TsIFhWrN_SaW5fmAP6BwEjbM13_BXsEG45Ss2DCrldhyQ3AHi4h0nhB_45GZyFAhsVCJl0YLlDhF1_Qdq1iXUI_3UyCZZrXkyNHgnSrop"/>
+<span class="text-xs font-medium text-slate-500">Alex Rivera</span>
+<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
+<span class="material-symbols-outlined filled !text-sm">star</span>
+                                    4.9
+                                </div>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Modern Web Development</h3>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">React, Tailwind CSS, and full-stack solutions for your business.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
+<span class="text-lg font-bold text-primary">$199</span>
+</div>
+<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Clean modern kitchen interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQMIDbITHMzy7oTF5uDyyINdwB7At8_q4UKBKt-o_Lwg7AtNo1fJvNwYGSdCWodpfYvKt6KdRFh7PmHU55DG0rN76sccTORIf-1AiKBFuZhiZzoSI72KHjk58XDf-CkSgq0JK58giwC9oufM3SFRC6I0NPORa-diMAehOZkqLpF4QrWaW4Ch1i0Ru7Z8JmjBmQHmqtQZ0bg5RLaJfNQCfkTxQDYg5xgp91tAy3ay1Rpm5CLrmPHWJj8GBQDDkkTl6V9VCBDcblSITu"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Physical</div>
+<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg">favorite</span>
+</button>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-2 mb-2">
+<img class="size-6 rounded-full object-cover" data-alt="Professional woman headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuQWy8tTw9pg1d1gqLi1-e_LWNXhg8LFlrfx4DwndGAEaCpKJqbs6OHzBd5_l2WwHuJncmQhClcN_CXhCUqJQK9qYYUVdPk1Fdjrlc81lnyMBZ70MBpKt1uh0q2C2tKA1W-L226mgJ6IqcEoODlTYf1lA-lhL4rZduKp_m_oRfhiUz-GtG_ipvsEil-ZqSJ2Aj5Nb3LC_VY34MIpNrp9CCKUL8qvVF3FYFqXadfTsdT7qMDAtxfB6wA3w8ujJxB1BWJinY4YBjJm1P"/>
+<span class="text-xs font-medium text-slate-500">Sarah Jenkins</span>
+<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
+<span class="material-symbols-outlined filled !text-sm">star</span>
+                                    4.8
+                                </div>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Professional Home Cleaning</h3>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">Eco-friendly deep cleaning for apartments and family homes.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
+<span class="text-lg font-bold text-primary">$45</span>
+</div>
+<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Camera lens and creative workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8RePlPJr9faQpCkkRY0lVma2BC-qefdcvlESwxY3z3ZvA8cAhtFHGKnj80E81Num54uWOKO7JBpUFPKeFTLSLbCOlRZWJeVjfueKDcHVr3jheIaQTlW0tqGsqeFMgG3qaY4PXKoB8Ifjg4iOCUNZq_r8qBHxfxGws3CGwvveQKw0DsE7gXlUhapQJIKFB0b7QJQj1raLwmFqGF1n4ZKffeBdC1-_ktHFh7LiADHZRTbng80fHrJYq1NjziPXJlUVV71mhiZsxiWT7"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Physical</div>
+<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg">favorite</span>
+</button>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-2 mb-2">
+<img class="size-6 rounded-full object-cover" data-alt="Creative professional headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0PZtPs1xqWaJ7l0cBT3Bwd7ZdZwbSqRsM7Vaqf9mJ-KutDaUI-hP1uCsrB0ZqztzFgRqCEG9Uzgcdtg2p44Dk8Jx4tkxGFmeluSjOUsgcCKs5yzGYiT0a4MG9BagCX5UKnFerVZyzBfDNlRD7PaRAXNjgGOE-AzMNCroG3q05QeeOPrOGshfsonijj8QZHX7qXZdlIB3Ogpa7hd2xl1PJZ0h60T6uaH7AtzrzFjIL85my88zTf4W9nV-29yDTf634fp0QquxPwCl8"/>
+<span class="text-xs font-medium text-slate-500">Marcus Thorne</span>
+<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
+<span class="material-symbols-outlined filled !text-sm">star</span>
+                                    5.0
+                                </div>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Brand Photography</h3>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">High-end product and portrait photography for growing brands.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
+<span class="text-lg font-bold text-primary">$120</span>
+</div>
+<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Code on a monitor with neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ3VH2vSrOmZjU3abRKe9XnumsliDeUxrjJpBNYXDIx6wdhg2abGPM5U_RPDoRYclmah01W7j9TRmsfxtUXtRErJte49XZY2d6Kz-EM-aa24CeI-LFcYUdVDgp_FNsYD9vdGx_hw4GgpKD-XzBc3W_ROmw_JZCMpgiQK-1qDoxUDBySiYGigHNal7YKW-fJ4rl-vl5uweFvkLLrVipflAHsycMbDypxbsdTI5jqcE7lI2XvtxBezJWzKuF03dq_bTcf2eJcWVjXLOc"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Digital</div>
+<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg">favorite</span>
+</button>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-2 mb-2">
+<img class="size-6 rounded-full object-cover" data-alt="Smiling developer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA71UBbDQVUIMMjt6WAnSyMun8hloNmU46I6wPewojEhGUKau1HogJZT9FVOeL_ZK-773WhzcEz45UXs-lSr-f7AZeVSGPpNEAflUGr9_f96RDsOkIf2ajpEjoRmmT6-rb8wjxwXhO4ZszgX4TkbOePUwBYJaAR2U5VmhgjXzjbsrH_SuoHTa18UNzhY4XMU-SpsCUrROvvsX4MoNYUIYtaSqVCnN2mkOgc3EWIHexVN5T-Tbo2LokCsp91rhU2NVoZ5koXb6Shfqwo"/>
+<span class="text-xs font-medium text-slate-500">David Kim</span>
+<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
+<span class="material-symbols-outlined filled !text-sm">star</span>
+                                    4.7
+                                </div>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Cybersecurity Audit</h3>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">Complete security assessment for your web applications and APIs.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
+<span class="text-lg font-bold text-primary">$350</span>
+</div>
+<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Personal trainer in a gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqoxrtP8f6dgQC971aDmJjJwU-7y0cjZ3YUsRTqSHm8ovUldYa-cm5peAmRsUEJqAYm74sUMLxyLai_9MPvhQ-vbSqn1BHdIRsiyCQGjYWaD8hrln_HUPW_y-3f54nJrnQpnMFGrHnE0C3YQQJaNmcAL5SsoIYQph_zdzYtkWrv9mZn8pG_0sOmnzTzpUjzqUqibYWtmQdYlk0ubwEfLMUFWVOS13sXT4Pw2u2gSVWsiHzy2MUZoLws9qgCkW1oHJAS39iEm6Ll9sZ"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Physical</div>
+<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg">favorite</span>
+</button>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-2 mb-2">
+<img class="size-6 rounded-full object-cover" data-alt="Athletic trainer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA54YXa7KUdutpZ6DOoSTTcCx7KvHlPWiurN1Nw4SGKlk5eSpkTV8by7XMQBoH6yKyt8AQ6NgkUlvkStV-WFRIiYMoBFjMwLdbTuK7EoKloPHPFAmygrlByFFBYDJ3aHdGSt9ggJ-Z21vkfxRqO3xA46Eo5FO_9Rc0Qa7I3BIti54A9LqsLnWFATVZZzKRhf6CSX3YRqBko6WVfeQvAYSQZVpajCGojWLo7RnpTbiFMDzhiWuZ8KVtBXT0hEV6BfaKOpNfhoDRBbKAW"/>
+<span class="text-xs font-medium text-slate-500">Chris Evans</span>
+<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
+<span class="material-symbols-outlined filled !text-sm">star</span>
+                                    4.9
+                                </div>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Personal Training</h3>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">1-on-1 sessions tailored to your fitness goals and health history.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
+<span class="text-lg font-bold text-primary">$60</span>
+</div>
+<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Interior designer sketching" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAobA-lVavfwpiwRPUiRZofAgHR_zVthXsnj050wCGvjH9uUxEOoBkSbvP2sNBQqNz9LMskvgnInXOHv8HwYrnen7J8V_mdmnG4KnzvRij-kXwgt_yhQqj4wnyudVmetDPIgwak3k75PeHdebf2B6RXwhVbdTiJk7MZteT99hboOBqAK9PC85KbmIkJ8pZoe6b1raTiVHZFg6jcsKXxjvCKfa-vVrts0FWsOAJfcZKxm76Zxu9VF-t-R1nWb2sARxWMqX8-KucXnLlg"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Digital</div>
+<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg">favorite</span>
+</button>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-2 mb-2">
+<img class="size-6 rounded-full object-cover" data-alt="Smiling designer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvlB3H4DTaAnriybEm5xsEayTEBjaaZcbBqJuicVv50MEagA2IAVDEvxjpsTJdwO_H9Juaga9dv2X5HkW41NEyV0CKHzGZyowzwnpekLLwVrwrlfkyP4bLNBQebonEJC_bG0aun9QuBVaS7PqP1ESpZeGsEpVUYcY-RJPVRGu6mvoDIdHSTKvWvveG696bX4dj6QkYFdWrgTVbe03yju9QjgFmpFL5jFIC-svpmAlyvT3rSTIHoPdTy3Z4Ft7oqI4-VrwvJNKNTukg"/>
+<span class="text-xs font-medium text-slate-500">Eliza Grant</span>
+<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
+<span class="material-symbols-outlined filled !text-sm">star</span>
+                                    4.6
+                                </div>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Virtual Interior Design</h3>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">Complete 3D room layouts and furniture shopping lists delivered online.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
+<span class="text-lg font-bold text-primary">$150</span>
+</div>
+<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-12 flex justify-center">
+<nav class="flex items-center gap-1">
+<button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
+<button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">2</button>
+<button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">8</button>
+<button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-20 border-t border-slate-200 dark:border-slate-800 py-12 bg-white dark:bg-background-dark">
+<div class="max-w-[1280px] mx-auto px-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 text-primary mb-4">
+<div class="size-6 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined !text-lg">diamond</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">PEDY</h2>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed">The ultimate marketplace for physical and digital services. Find professional providers in seconds.</p>
+</div>
+<div>
+<h4 class="font-bold mb-4">Marketplace</h4>
+<ul class="text-sm text-slate-500 space-y-2">
+<li class="hover:text-primary cursor-pointer transition-colors">Physical Services</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Digital Services</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Featured Providers</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Recent Bookings</li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Support</h4>
+<ul class="text-sm text-slate-500 space-y-2">
+<li class="hover:text-primary cursor-pointer transition-colors">Help Center</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Safety Guidelines</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Provider Dashboard</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Contact Us</li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Subscribe</h4>
+<p class="text-sm text-slate-500 mb-4">Get the latest deals and services in your inbox.</p>
+<div class="flex gap-2">
+<input class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 px-3 text-sm flex-1 focus:ring-1 focus:ring-primary" placeholder="your@email.com" type="email"/>
+<button class="bg-primary text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 pt-12 mt-12 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+<p>© 2024 PEDY Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<span class="hover:text-slate-900 cursor-pointer">Privacy Policy</span>
+<span class="hover:text-slate-900 cursor-pointer">Terms of Service</span>
+<span class="hover:text-slate-900 cursor-pointer">Cookie Policy</span>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

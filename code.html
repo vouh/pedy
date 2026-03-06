@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alex Rivera | Professional Web Developer - PEDY Marketplace</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#eb4c4c',
+            'primary-light': '#FF7070',
+            brand: {
+              DEFAULT: '#eb4c4c',
+              light: '#FF7070',
+              dark: '#c13b3b'
+            }
+          },
+          borderRadius: {
+            'custom': '8px',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-overrides">
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+    }
+    .rounded-theme {
+      border-radius: 8px;
+    }
+    .sticky-sidebar {
+      position: sticky;
+      top: 2rem;
+    }
+  </style>
+</head>
+<body class="text-slate-900">
+<!-- BEGIN: MainHeader -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<a class="text-2xl font-bold text-brand italic" href="#">PEDY</a>
+<nav class="hidden md:flex gap-6 font-medium text-slate-600">
+<a class="hover:text-brand transition-colors" href="#">Find Talent</a>
+<a class="hover:text-brand transition-colors" href="#">Find Work</a>
+<a class="hover:text-brand transition-colors" href="#">Marketplace</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 text-slate-600 font-medium">Log In</button>
+<button class="px-5 py-2 bg-brand text-white rounded-theme font-medium hover:bg-brand-dark transition-all">Sign Up</button>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Content -->
+<div class="lg:col-span-8 space-y-8">
+<!-- BEGIN: ProfileHeader -->
+<section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="profile-header">
+<div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+<div class="relative">
+<img alt="Alex Rivera Profile" class="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFJKU3cgaGtSnvmZeFzF7FDNFUe3NwPl1bxHEB_fjqDq0GK1v8q-RxHuR_zE59ugnKJRBuUywPfy7he5z4wCO2gy3lv-pVYx4Mru8n1QPGOLC4BzG4Ps5oAR2CXCt5mDyDLDxmTJb1o9DozQq3C0FcivWkYSqba1ymsKova9HWXQFFQiR2XNV6kHIG0AA4m2OtQ0n5kVGec3DaYWXJVOhjXEMyHu6GKbWAo9C7-e1wlU0iX1Q6MyFTvBPgAKVNZ49lJgStdt4ZFTCx"/>
+<div class="absolute bottom-1 right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-white" title="Online Now"></div>
+</div>
+<div class="text-center md:text-left flex-1">
+<div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+<h1 class="text-3xl font-bold text-slate-900">Alex Rivera</h1>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+<svg class="w-3 h-3 mr-1" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.64.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                  Verified
+                </span>
+</div>
+<p class="text-lg text-slate-600 mt-1 font-medium">Senior Full-Stack Web Developer &amp; UI Designer</p>
+<div class="flex items-center justify-center md:justify-start mt-3 gap-2">
+<div class="flex text-yellow-400">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+</div>
+<span class="text-slate-900 font-bold">4.9</span>
+<span class="text-slate-500 text-sm">(128 reviews)</span>
+<span class="text-slate-300 mx-2">|</span>
+<span class="text-slate-600 text-sm">Miami, FL</span>
+</div>
+</div>
+<div class="flex md:flex-col gap-2">
+<button class="bg-brand hover:bg-brand-dark text-white font-semibold py-2 px-6 rounded-theme shadow-sm transition-all">Hire Now</button>
+<button class="border border-brand text-brand hover:bg-red-50 font-semibold py-2 px-6 rounded-theme transition-all">Save Profile</button>
+</div>
+</div>
+</section>
+<!-- END: ProfileHeader -->
+<!-- BEGIN: AboutMe -->
+<section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="about-me">
+<h2 class="text-xl font-bold text-slate-900 mb-4">About Me</h2>
+<div class="prose prose-slate max-w-none text-slate-600 leading-relaxed">
+<p>
+              I am a dedicated Full-stack Web Developer with over 8 years of experience in crafting high-performance, responsive web applications. I specialize in the modern MERN stack, Tailwind CSS, and headless architectures. 
+            </p>
+<p class="mt-4">
+              My philosophy is simple: build clean, maintainable code that delivers an exceptional user experience. I bridge the gap between complex backend logic and intuitive frontend design to help businesses scale their digital presence.
+            </p>
+</div>
+<div class="mt-6 flex flex-wrap gap-2">
+<!-- Skill Tags -->
+<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">React.js</span>
+<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">Next.js</span>
+<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">Node.js</span>
+<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">TypeScript</span>
+<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">Tailwind CSS</span>
+<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">PostgreSQL</span>
+</div>
+</section>
+<!-- END: AboutMe -->
+<!-- BEGIN: Services -->
+<section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="services">
+<h2 class="text-xl font-bold text-slate-900 mb-6">Services</h2>
+<div class="space-y-4">
+<!-- Service Item 1 -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-slate-100 rounded-theme hover:border-brand-light transition-all cursor-pointer group">
+<div>
+<h3 class="font-bold text-lg group-hover:text-brand">Full-stack Web App Development</h3>
+<p class="text-slate-500 text-sm mt-1">Complete custom solution from design to deployment.</p>
+</div>
+<div class="mt-3 sm:mt-0 text-right">
+<span class="text-xl font-bold text-slate-900">Starts at $500</span>
+<p class="text-xs text-brand font-semibold">Delivery in 14 days</p>
+</div>
+</div>
+<!-- Service Item 2 -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-slate-100 rounded-theme hover:border-brand-light transition-all cursor-pointer group">
+<div>
+<h3 class="font-bold text-lg group-hover:text-brand">UI/UX Design Consultation</h3>
+<p class="text-slate-500 text-sm mt-1">Reviewing your current UI and providing high-fidelity mockups.</p>
+</div>
+<div class="mt-3 sm:mt-0 text-right">
+<span class="text-xl font-bold text-slate-900">$50/hr</span>
+<p class="text-xs text-slate-400 font-semibold">Flexible schedule</p>
+</div>
+</div>
+<!-- Service Item 3 -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-slate-100 rounded-theme hover:border-brand-light transition-all cursor-pointer group">
+<div>
+<h3 class="font-bold text-lg group-hover:text-brand">Landing Page Optimization</h3>
+<p class="text-slate-500 text-sm mt-1">Improve conversions with high-speed, SEO-ready code.</p>
+</div>
+<div class="mt-3 sm:mt-0 text-right">
+<span class="text-xl font-bold text-slate-900">$200</span>
+<p class="text-xs text-brand font-semibold">Delivery in 3 days</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Services -->
+<!-- BEGIN: Portfolio -->
+<section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="portfolio">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold text-slate-900">Portfolio</h2>
+<a class="text-brand font-semibold text-sm hover:underline" href="#">View all</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="group relative overflow-hidden rounded-theme">
+<img alt="SaaS Dashboard Project" class="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6vVEFUI4cL-3mxEu7QQC2QR7YF0vgkBWlNnTpJ3FrcaiL7ri0HRCRDZW4yqkb8_YZbxo2UhLB5tYfpxt43xJ69ViMFJIROuqINU-n7UnXrM8H5NytfELWuWRY5-Eit4HgZnl1y03Z9ttFNF6iAsIot1R4uoF3T3G4IoJ1CuE9H4US4ajeIbC0PcsWL7Z3VUOMeiFJSbzMYq-g7wNr8jmFUD6NAyeXcSv83Qx7nCQVcmKS9Ma45cxxnqPwch7tCa8DmgxaRNtYBuov"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-white font-medium">Fintech SaaS Dashboard</p>
+</div>
+</div>
+<div class="group relative overflow-hidden rounded-theme">
+<img alt="E-commerce Experience" class="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWFhAgwDjAsUDOcJP8gTcMd_02ep0s4T5mq9J6dWw3b3SYUdRnAB38cqxN0XF_dUtvBT9eGj3PpmfMo4hLQvrvSNCo_xuqlvBZ6mOHWNJsOwtPlVurkBx246-KBcFvL2peDj5rm6JE-ucPf1FRgQ_Kyqjr7kw7XP__1icwNudmk7ZET1PXMVeCU-7XdT5xdS30uP6E_OyngR8Fi7vc5RcgGnCz0KfGuLjdl6MmKdhnWFTvzULQPdsNObcyQsIETYommAcL_oMajx2c"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-white font-medium">Modern E-commerce Store</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Portfolio -->
+<!-- BEGIN: Reviews -->
+<section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="reviews">
+<h2 class="text-xl font-bold text-slate-900 mb-6">Reviews</h2>
+<div class="space-y-6">
+<!-- Review 1 -->
+<div class="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
+<div class="flex items-center gap-2 mb-2">
+<div class="flex text-yellow-400">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+</div>
+<span class="text-sm font-bold text-slate-900">Great experience!</span>
+</div>
+<p class="text-slate-600 text-sm italic">"Alex delivered a top-tier React application ahead of schedule. The code was clean, documented, and exactly what we needed. Communication was 10/10."</p>
+<div class="mt-3 flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200"></div>
+<span class="text-xs text-slate-500">Sarah J., CEO at TechFlow</span>
+</div>
+</div>
+<!-- Review 2 -->
+<div class="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
+<div class="flex items-center gap-2 mb-2">
+<div class="flex text-yellow-400">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 fill-current text-slate-200" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+</div>
+<span class="text-sm font-bold text-slate-900">Highly professional</span>
+</div>
+<p class="text-slate-600 text-sm italic">"Helped us redesign our landing page. Very attentive to detail and understood our brand vision immediately."</p>
+<div class="mt-3 flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200"></div>
+<span class="text-xs text-slate-500">Michael R., Marketing Manager</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Reviews -->
+</div>
+<!-- Right Column: Sidebar -->
+<aside class="lg:col-span-4">
+<div class="sticky-sidebar space-y-6">
+<!-- BEGIN: ContactCard -->
+<div class="bg-white p-6 rounded-theme border border-slate-200 shadow-sm" data-purpose="contact-card">
+<h3 class="text-lg font-bold text-slate-900 mb-4">Contact Alex</h3>
+<button class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded-theme flex items-center justify-center gap-2 transition-all">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Send Message
+            </button>
+<div class="mt-6 space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500">Response time</span>
+<span class="text-slate-900 font-semibold">~ 1 hour</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500">Last active</span>
+<span class="text-slate-900 font-semibold">20 mins ago</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500">Member since</span>
+<span class="text-slate-900 font-semibold">Jan 2021</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500">Completed Projects</span>
+<span class="text-slate-900 font-semibold">47</span>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 text-center">
+<p class="text-sm text-slate-500 mb-4 italic">"I'm currently accepting new projects for Q3."</p>
+<button class="text-brand text-sm font-bold hover:underline">View Availability Calendar</button>
+</div>
+</div>
+<!-- END: ContactCard -->
+<!-- BEGIN: QuickStats -->
+<div class="bg-red-50 p-6 rounded-theme border border-red-100" data-purpose="quick-facts">
+<h4 class="text-sm font-bold text-brand uppercase tracking-wider mb-3">Professional Facts</h4>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 text-sm text-slate-700">
+<span class="text-brand text-lg">✓</span>
+<span>Top 5% Rated Talent on PEDY</span>
+</li>
+<li class="flex items-start gap-3 text-sm text-slate-700">
+<span class="text-brand text-lg">✓</span>
+<span>100% Job Success Score</span>
+</li>
+<li class="flex items-start gap-3 text-sm text-slate-700">
+<span class="text-brand text-lg">✓</span>
+<span>Native English Speaker</span>
+</li>
+</ul>
+</div>
+<!-- END: QuickStats -->
+</div>
+</aside>
+</div>
+</main>
+<!-- BEGIN: Footer -->
+<footer class="bg-slate-900 text-white mt-12 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="col-span-2 md:col-span-1">
+<a class="text-2xl font-bold text-brand-light italic" href="#">PEDY</a>
+<p class="mt-4 text-slate-400 text-sm">The world's most trusted marketplace for premium professional services.</p>
+</div>
+<div>
+<h5 class="font-bold mb-4">Categories</h5>
+<ul class="text-sm text-slate-400 space-y-2">
+<li><a class="hover:text-white" href="#">Web Development</a></li>
+<li><a class="hover:text-white" href="#">Design</a></li>
+<li><a class="hover:text-white" href="#">Marketing</a></li>
+<li><a class="hover:text-white" href="#">Writing</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-4">Support</h5>
+<ul class="text-sm text-slate-400 space-y-2">
+<li><a class="hover:text-white" href="#">Help Center</a></li>
+<li><a class="hover:text-white" href="#">Trust &amp; Safety</a></li>
+<li><a class="hover:text-white" href="#">Contact Us</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-4">Social</h5>
+<div class="flex gap-4">
+<a class="text-slate-400 hover:text-white" href="#">
+<span class="sr-only">Twitter</span>
+<svg class="h-6 w-6 fill-current" viewbox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"></path></svg>
+</a>
+<a class="text-slate-400 hover:text-white" href="#">
+<span class="sr-only">LinkedIn</span>
+<svg class="h-6 w-6 fill-current" viewbox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-slate-800 text-center text-sm text-slate-500">
+<p>© 2023 PEDY Marketplace Inc. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+</body></html>
