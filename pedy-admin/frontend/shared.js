@@ -1,12 +1,21 @@
 // ─── API Configuration ───────────────────────────────────────────────────────
-const API_BASE = "http://localhost:4000/api/admin";
+const API_BASE = "http://localhost:5000/api/admin";
 
 /**
  * Authenticated fetch wrapper.
  * Prefers window.getCurrentIdToken() (provided by firebase-admin-init.js) so
  * that the Firebase ID token is always fresh.  Falls back to sessionStorage.
  */
-async function apiFetch(path, options = {}) {
+async function apiFetch(path, methodOrOptions = {}, body) {
+  // Support both apiFetch(path, options) and apiFetch(path, "METHOD", body)
+  let options;
+  if (typeof methodOrOptions === "string") {
+    options = { method: methodOrOptions };
+    if (body !== undefined) options.body = JSON.stringify(body);
+  } else {
+    options = methodOrOptions;
+  }
+
   let token;
   if (typeof window.getCurrentIdToken === "function") {
     token = await window.getCurrentIdToken();
@@ -51,12 +60,20 @@ function logout() {
 
 // ─── Role Permissions ────────────────────────────────────────────────────────
 const PERMISSIONS = {
-  super_admin: ["dashboard", "users", "services", "payments"],
+  admin:             ["dashboard", "users", "services", "payments"],
+  super_admin:       ["dashboard", "users", "services", "payments"],
   content_moderator: ["dashboard", "users", "services"],
-  payment_manager: ["dashboard", "payments"],
+  payment_manager:   ["dashboard", "payments"],
 };
 
 const ROLE_META = {
+  admin: {
+    label: "Super Admin",
+    color: "text-primary",
+    bg: "bg-red-50 dark:bg-red-900/30",
+    border: "border-primary/30",
+    icon: "shield",
+  },
   super_admin: {
     label: "Super Admin",
     color: "text-primary",

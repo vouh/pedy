@@ -43,8 +43,8 @@
           </div>
           <div>
             <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Users</p>
-            <p class="text-2xl font-bold mt-0.5">12,847</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 8.2% this week</p>
+            <p id="stat-users" class="text-2xl font-bold mt-0.5">—</p>
+            <p id="stat-users-sub" class="text-xs text-slate-400 font-semibold mt-0.5">loading…</p>
           </div>
         </div>
         <!-- Active Providers -->
@@ -54,8 +54,8 @@
           </div>
           <div>
             <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Active Providers</p>
-            <p class="text-2xl font-bold mt-0.5">3,412</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 5.4% this week</p>
+            <p id="stat-providers" class="text-2xl font-bold mt-0.5">—</p>
+            <p id="stat-providers-sub" class="text-xs text-slate-400 font-semibold mt-0.5">loading…</p>
           </div>
         </div>
         <!-- Total Bookings -->
@@ -65,8 +65,8 @@
           </div>
           <div>
             <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Bookings</p>
-            <p class="text-2xl font-bold mt-0.5">9,203</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 12.1% this week</p>
+            <p id="stat-bookings" class="text-2xl font-bold mt-0.5">—</p>
+            <p id="stat-bookings-sub" class="text-xs text-slate-400 font-semibold mt-0.5">loading…</p>
           </div>
         </div>
         <!-- Revenue -->
@@ -76,8 +76,8 @@
           </div>
           <div>
             <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Platform Revenue</p>
-            <p class="text-2xl font-bold mt-0.5">$48,920</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 9.8% this week</p>
+            <p id="stat-revenue" class="text-2xl font-bold mt-0.5">—</p>
+            <p id="stat-revenue-sub" class="text-xs text-slate-400 font-semibold mt-0.5">loading…</p>
           </div>
         </div>
       </div>
@@ -102,39 +102,8 @@
             <span class="material-symbols-outlined text-primary">person_add</span>
             Recent Signups
           </h3>
-          <ul class="space-y-3">
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">J</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Jane Wanjiku</p>
-                <p class="text-xs text-slate-400">Provider · Nairobi</p>
-              </div>
-              <span class="text-xs text-slate-400">2m ago</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-bold text-sm">M</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Michael Otieno</p>
-                <p class="text-xs text-slate-400">Client · Lagos</p>
-              </div>
-              <span class="text-xs text-slate-400">15m ago</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 font-bold text-sm">A</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Amina Hassan</p>
-                <p class="text-xs text-slate-400">Provider · Mombasa</p>
-              </div>
-              <span class="text-xs text-slate-400">1h ago</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-700 font-bold text-sm">D</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Daniel Mwangi</p>
-                <p class="text-xs text-slate-400">Client · Kisumu</p>
-              </div>
-              <span class="text-xs text-slate-400">3h ago</span>
-            </li>
+          <ul class="space-y-3" id="recentSignups">
+            <li class="text-sm text-slate-400 italic">Loading…</li>
           </ul>
         </div>
       </div>
@@ -152,54 +121,11 @@
                 <th class="text-left py-2 pr-4 font-semibold">Admin</th>
                 <th class="text-left py-2 pr-4 font-semibold">Action</th>
                 <th class="text-left py-2 pr-4 font-semibold">Target</th>
-                <th class="text-left py-2 font-semibold">Time</th>
+                <th class="text-left py-2 font-semibold">Date</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">S</span>
-                    Super Admin
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold px-2 py-0.5 rounded-full">Approved</span></td>
-                <td class="py-3 pr-4 text-slate-500">Provider: Jane Wanjiku</td>
-                <td class="py-3 text-slate-400 text-xs">Just now</td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 text-xs font-bold">C</span>
-                    Content Mod
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-semibold px-2 py-0.5 rounded-full">Removed</span></td>
-                <td class="py-3 pr-4 text-slate-500">Service: Fake Logo Design</td>
-                <td class="py-3 text-slate-400 text-xs">12m ago</td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 text-xs font-bold">P</span>
-                    Payment Mgr
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500 text-xs font-semibold px-2 py-0.5 rounded-full">Refunded</span></td>
-                <td class="py-3 pr-4 text-slate-500">Txn #TXN-8821 ($45)</td>
-                <td class="py-3 text-slate-400 text-xs">1h ago</td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 text-xs font-bold">C</span>
-                    Content Mod
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-semibold px-2 py-0.5 rounded-full">Suspended</span></td>
-                <td class="py-3 pr-4 text-slate-500">User: spam_account_44</td>
-                <td class="py-3 text-slate-400 text-xs">3h ago</td>
-              </tr>
+            <tbody id="activityLog" class="divide-y divide-slate-100 dark:divide-slate-700">
+              <tr><td colspan="4" class="py-4 text-sm text-slate-400 italic">Loading…</td></tr>
             </tbody>
           </table>
         </div>
@@ -215,35 +141,132 @@
       document.getElementById("sidebarContainer").innerHTML = buildSidebar(user, "dashboard");
       document.getElementById("topbarContainer").innerHTML = buildTopbar("Dashboard", "Welcome back, " + user.name);
 
-      // Role-specific pending actions
-      const actions = {
-        super_admin: [
-          { icon: "person_check", text: "14 providers awaiting verification", color: "text-primary", href: "users.html" },
-          { icon: "storefront", text: "8 new services pending review", color: "text-blue-600", href: "services.html" },
-          { icon: "report", text: "3 payment disputes to resolve", color: "text-green-700", href: "payments.html" },
-          { icon: "flag", text: "5 user reports flagged", color: "text-orange-600", href: "users.html" },
-        ],
-        content_moderator: [
-          { icon: "person_check", text: "14 providers awaiting verification", color: "text-primary", href: "users.html" },
-          { icon: "storefront", text: "8 new services pending review", color: "text-blue-600", href: "services.html" },
-          { icon: "flag", text: "5 user reports flagged", color: "text-orange-600", href: "users.html" },
-        ],
-        payment_manager: [
-          { icon: "report", text: "3 payment disputes to resolve", color: "text-green-700", href: "payments.html" },
-          { icon: "warning", text: "2 suspicious transactions flagged", color: "text-red-600", href: "payments.html" },
-          { icon: "receipt_long", text: "Monthly report ready to export", color: "text-slate-600", href: "payments.html" },
-        ],
-      };
+      // ── Fetch live analytics ──────────────────────────────────────────────
+      apiFetch("/analytics").then(async (res) => {
+        if (!res) return;
+        const data = await res.json();
+        const { users, services, bookings, payments } = data;
 
-      const items = actions[user.role] || [];
-      document.getElementById("pendingActions").innerHTML = items.map(a => `
-        <a href="${a.href}" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors group">
-          <div class="size-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center ${a.color} group-hover:bg-primary/10">
-            <span class="material-symbols-outlined !text-base">${a.icon}</span>
-          </div>
-          <p class="text-sm font-medium flex-1">${a.text}</p>
-          <span class="material-symbols-outlined !text-sm text-slate-300">chevron_right</span>
-        </a>`).join("");
+        // Stat cards
+        document.getElementById("stat-users").textContent        = users.total.toLocaleString();
+        document.getElementById("stat-users-sub").textContent    = `${users.providers} providers · ${users.pending} pending`;
+        document.getElementById("stat-users-sub").className      = "text-xs text-slate-500 font-semibold mt-0.5";
+
+        document.getElementById("stat-providers").textContent      = users.providers.toLocaleString();
+        document.getElementById("stat-providers-sub").textContent  = `${users.clients} clients registered`;
+        document.getElementById("stat-providers-sub").className    = "text-xs text-slate-500 font-semibold mt-0.5";
+
+        document.getElementById("stat-bookings").textContent      = bookings.total.toLocaleString();
+        document.getElementById("stat-bookings-sub").textContent  = `${bookings.pending} pending · ${bookings.completed} completed`;
+        document.getElementById("stat-bookings-sub").className    = "text-xs text-slate-500 font-semibold mt-0.5";
+
+        document.getElementById("stat-revenue").textContent      = `$${payments.revenue_usd.toLocaleString()}`;
+        document.getElementById("stat-revenue-sub").textContent  = `${payments.total} txns · ${payments.disputed} disputed`;
+        document.getElementById("stat-revenue-sub").className    = "text-xs text-slate-500 font-semibold mt-0.5";
+
+        // Role-specific pending actions with live counts
+        const actions = {
+          admin: [
+            { icon: "person_check", text: `${users.pending} provider${users.pending !== 1 ? "s" : ""} awaiting verification`, color: "text-primary",     href: "users.html" },
+            { icon: "storefront",   text: `${services.pending} service${services.pending !== 1 ? "s" : ""} pending review`,   color: "text-blue-600",    href: "services.html" },
+            { icon: "report",       text: `${payments.disputed} payment dispute${payments.disputed !== 1 ? "s" : ""} to resolve`, color: "text-green-700", href: "payments.html" },
+            { icon: "flag",         text: `${payments.flagged} transaction${payments.flagged !== 1 ? "s" : ""} flagged`,       color: "text-orange-600",  href: "payments.html" },
+          ],
+          super_admin: [
+            { icon: "person_check", text: `${users.pending} provider${users.pending !== 1 ? "s" : ""} awaiting verification`, color: "text-primary",     href: "users.html" },
+            { icon: "storefront",   text: `${services.pending} service${services.pending !== 1 ? "s" : ""} pending review`,   color: "text-blue-600",    href: "services.html" },
+            { icon: "report",       text: `${payments.disputed} payment dispute${payments.disputed !== 1 ? "s" : ""} to resolve`, color: "text-green-700", href: "payments.html" },
+            { icon: "flag",         text: `${payments.flagged} transaction${payments.flagged !== 1 ? "s" : ""} flagged`,       color: "text-orange-600",  href: "payments.html" },
+          ],
+          content_moderator: [
+            { icon: "person_check", text: `${users.pending} provider${users.pending !== 1 ? "s" : ""} awaiting verification`, color: "text-primary",    href: "users.html" },
+            { icon: "storefront",   text: `${services.pending} service${services.pending !== 1 ? "s" : ""} pending review`,   color: "text-blue-600",   href: "services.html" },
+          ],
+          payment_manager: [
+            { icon: "report",       text: `${payments.disputed} payment dispute${payments.disputed !== 1 ? "s" : ""} to resolve`, color: "text-green-700", href: "payments.html" },
+            { icon: "warning",      text: `${payments.flagged} transaction${payments.flagged !== 1 ? "s" : ""} flagged`,       color: "text-red-600",    href: "payments.html" },
+          ],
+        };
+
+        const items = actions[user.role] || [];
+        document.getElementById("pendingActions").innerHTML = items.map(a => `
+          <a href="${a.href}" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors group">
+            <div class="size-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center ${a.color} group-hover:bg-primary/10">
+              <span class="material-symbols-outlined !text-base">${a.icon}</span>
+            </div>
+            <p class="text-sm font-medium flex-1">${a.text}</p>
+            <span class="material-symbols-outlined !text-sm text-slate-300">chevron_right</span>
+          </a>`).join("");
+      }).catch(() => {
+        document.getElementById("pendingActions").innerHTML =
+          '<p class="text-sm text-slate-400 italic">Could not load data. Is the admin server running?</p>';
+      });
+
+      // ── Fetch recent signups ──────────────────────────────────────────────
+      const bgColors = ["bg-primary/10 text-primary", "bg-blue-100 dark:bg-blue-900/30 text-blue-600",
+                        "bg-green-100 dark:bg-green-900/30 text-green-700", "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700",
+                        "bg-purple-100 dark:bg-purple-900/30 text-purple-700"];
+      apiFetch("/users?role=&status=&q=").then(async (res) => {
+        if (!res) return;
+        const data  = await res.json();
+        const users = (data.users || []).slice(0, 5);
+        document.getElementById("recentSignups").innerHTML = users.length
+          ? users.map((u, i) => `
+              <li class="flex items-center gap-3">
+                <div class="size-8 rounded-full ${bgColors[i % bgColors.length]} flex items-center justify-center font-bold text-sm">${u.name.charAt(0)}</div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium">${u.name}</p>
+                  <p class="text-xs text-slate-400">${u.role.charAt(0).toUpperCase() + u.role.slice(1)} · ${u.location || "—"}</p>
+                </div>
+                <span class="text-xs text-slate-400">${u.joined}</span>
+              </li>`).join("")
+          : '<li class="text-sm text-slate-400 italic">No users yet.</li>';
+      });
+
+      // ── Fetch activity log ────────────────────────────────────────────────
+      const ACTION_STYLES = {
+        approved:   "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+        rejected:   "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+        removed:    "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+        suspended:  "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400",
+        reinstated: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
+        refunded:   "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500",
+        flagged:    "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400",
+        resolved:   "bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400",
+      };
+      const ROLE_CHIP = {
+        admin:             "bg-primary/10 text-primary",
+        super_admin:       "bg-primary/10 text-primary",
+        content_moderator: "bg-blue-100 dark:bg-blue-900/30 text-blue-600",
+        payment_manager:   "bg-green-100 dark:bg-green-900/30 text-green-700",
+      };
+      apiFetch("/activity?limit=8").then(async (res) => {
+        if (!res) return;
+        const { logs } = await res.json();
+        document.getElementById("activityLog").innerHTML = logs.length
+          ? logs.map((l) => {
+              const chipStyle = ACTION_STYLES[l.action] || "bg-slate-100 dark:bg-slate-700 text-slate-600";
+              const roleChip  = ROLE_CHIP[l.adminRole]  || "bg-slate-100 text-slate-500";
+              return `
+              <tr>
+                <td class="py-3 pr-4">
+                  <span class="flex items-center gap-2">
+                    <span class="size-6 rounded-full ${roleChip} flex items-center justify-center text-xs font-bold">${l.adminName.charAt(0)}</span>
+                    ${l.adminName}
+                  </span>
+                </td>
+                <td class="py-3 pr-4">
+                  <span class="text-xs font-semibold px-2 py-0.5 rounded-full capitalize ${chipStyle}">${l.action}</span>
+                </td>
+                <td class="py-3 pr-4 text-slate-500">${l.target}</td>
+                <td class="py-3 text-slate-400 text-xs">${l.time}</td>
+              </tr>`;
+            }).join("")
+          : '<tr><td colspan="4" class="py-4 text-sm text-slate-400 italic">No activity yet.</td></tr>';
+      }).catch(() => {
+        document.getElementById("activityLog").innerHTML =
+          '<tr><td colspan="4" class="py-4 text-sm text-slate-400 italic">Could not load activity log.</td></tr>';
+      });
     }
   </script>
 </body>

@@ -24,6 +24,7 @@
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     .filled { font-variation-settings: 'FILL' 1; }
   </style>
+  <script type="module" src="firebase-admin-init.js"></script>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
   <div id="sidebarContainer"></div>
@@ -57,19 +58,19 @@
       <!-- Stats row -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-primary">1,284</p>
+          <p id="stat-s-total" class="text-2xl font-bold text-primary">—</p>
           <p class="text-xs text-slate-500 mt-1">Total Services</p>
         </div>
         <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-yellow-600">8</p>
+          <p id="stat-s-pending" class="text-2xl font-bold text-yellow-600">—</p>
           <p class="text-xs text-slate-500 mt-1">Pending Review</p>
         </div>
         <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-green-600">1,251</p>
+          <p id="stat-s-approved" class="text-2xl font-bold text-green-600">—</p>
           <p class="text-xs text-slate-500 mt-1">Approved</p>
         </div>
         <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-red-600">25</p>
+          <p id="stat-s-rejected" class="text-2xl font-bold text-red-600">—</p>
           <p class="text-xs text-slate-500 mt-1">Rejected</p>
         </div>
       </div>
@@ -126,16 +127,7 @@
     document.getElementById("sidebarContainer").innerHTML = buildSidebar(user, "services");
     document.getElementById("topbarContainer").innerHTML = buildTopbar("Service Moderation", "Review, approve, and remove service listings");
 
-    const SERVICES = [
-      { id: 1, title: "Modern Web Development",   provider: "Alex Rivera",   type: "digital",   price: "$199", status: "approved" },
-      { id: 2, title: "Professional Home Cleaning", provider: "Sarah Jenkins", type: "physical",  price: "$45",  status: "approved" },
-      { id: 3, title: "Brand Photography",         provider: "Marcus Thorne", type: "physical",  price: "$120", status: "pending"  },
-      { id: 4, title: "Cybersecurity Audit",       provider: "David Kim",     type: "digital",   price: "$350", status: "approved" },
-      { id: 5, title: "Fake Logo Design",          provider: "spammer_01",    type: "digital",   price: "$5",   status: "pending"  },
-      { id: 6, title: "Personal Training",         provider: "Chris Evans",   type: "physical",  price: "$60",  status: "approved" },
-      { id: 7, title: "Virtual Interior Design",   provider: "Eliza Grant",   type: "digital",   price: "$150", status: "pending"  },
-      { id: 8, title: "Hair Braiding",             provider: "Grace Njeri",   type: "physical",  price: "KES 1500", status: "pending" },
-    ];
+    let SERVICES = [];
 
     const statusColors = {
       approved: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
@@ -145,11 +137,12 @@
 
     function renderServices(list) {
       document.getElementById("serviceCount").textContent = list.length + " services";
-      document.getElementById("servicesBody").innerHTML = list.map(s => `
+      document.getElementById("servicesBody").innerHTML = list.length
+        ? list.map(s => `
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
           <td class="py-4 px-6">
             <p class="font-medium">${s.title}</p>
-            <p class="text-xs text-slate-400">#SVC-${String(s.id).padStart(4,"0")}</p>
+            <p class="text-xs text-slate-400">#SVC-${String(s.id).padStart(4, '0')}</p>
           </td>
           <td class="py-4 px-4">
             <div class="flex items-center gap-2">
@@ -158,20 +151,21 @@
             </div>
           </td>
           <td class="py-4 px-4">
-            <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full ${s.type === "digital" ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400" : "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"}">${s.type}</span>
+            <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full ${s.category === 'digital' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400' : 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400'}">${s.category || s.type || '—'}</span>
           </td>
           <td class="py-4 px-4 font-semibold text-primary">${s.price}</td>
           <td class="py-4 px-4">
-            <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full ${statusColors[s.status]}">${s.status}</span>
+            <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full ${statusColors[s.status] || ''}">${s.status}</span>
           </td>
           <td class="py-4 px-4">
             <div class="flex items-center gap-1">
-              ${s.status === "pending" ? `<button onclick="openModal('approve', ${s.id})" class="px-2 py-1 rounded text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 transition-colors">Approve</button>` : ""}
-              ${s.status !== "rejected" ? `<button onclick="openModal('reject', ${s.id})" class="px-2 py-1 rounded text-xs font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 hover:bg-red-200 transition-colors">Reject</button>` : ""}
-              ${s.status === "approved" ? `<button onclick="openModal('remove', ${s.id})" class="px-2 py-1 rounded text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-colors">Remove</button>` : ""}
+              ${s.status === 'pending' ? `<button onclick="openModal('approve', '${s.id}')" class="px-2 py-1 rounded text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 transition-colors">Approve</button>` : ''}
+              ${s.status !== 'rejected' ? `<button onclick="openModal('reject', '${s.id}')" class="px-2 py-1 rounded text-xs font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 hover:bg-red-200 transition-colors">Reject</button>` : ''}
+              ${s.status === 'approved' ? `<button onclick="openModal('remove', '${s.id}')" class="px-2 py-1 rounded text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-colors">Remove</button>` : ''}
             </div>
           </td>
-        </tr>`).join("");
+        </tr>`).join("")
+        : '<tr><td colspan="6" class="py-8 text-center text-slate-400 italic">No services found.</td></tr>';
     }
 
     function filterServices() {
@@ -180,15 +174,36 @@
       const status = document.getElementById("filterStatus").value;
       const filtered = SERVICES.filter(s =>
         (!query  || s.title.toLowerCase().includes(query) || s.provider.toLowerCase().includes(query)) &&
-        (!type   || s.type === type) &&
+        (!type   || (s.category || s.type) === type) &&
         (!status || s.status === status)
       );
       renderServices(filtered);
     }
 
+    async function loadServices() {
+      document.getElementById("servicesBody").innerHTML =
+        '<tr><td colspan="6" class="py-8 text-center text-slate-400 italic">Loading…</td></tr>';
+      const res = await apiFetch("/services");
+      if (!res) return;
+      const data = await res.json();
+      SERVICES = data.services || [];
+      filterServices();
+    }
+
+    async function loadStats() {
+      const res = await apiFetch("/analytics");
+      if (!res) return;
+      const { services } = await res.json();
+      document.getElementById("stat-s-total").textContent    = services.total.toLocaleString();
+      document.getElementById("stat-s-pending").textContent  = services.pending.toLocaleString();
+      document.getElementById("stat-s-approved").textContent = services.approved.toLocaleString();
+      document.getElementById("stat-s-rejected").textContent = services.rejected.toLocaleString();
+    }
+
     let pendingAction = null;
     function openModal(action, serviceId) {
       const s = SERVICES.find(x => x.id === serviceId);
+      if (!s) return;
       const labels = { approve: "Approve Service", reject: "Reject Service", remove: "Remove Service" };
       const descs  = {
         approve: `Approve <strong>${s.title}</strong> by ${s.provider}. It will become visible on the marketplace.`,
@@ -207,18 +222,23 @@
       pendingAction = null;
     }
 
-    document.getElementById("modalConfirm").addEventListener("click", () => {
+    document.getElementById("modalConfirm").addEventListener("click", async () => {
       if (!pendingAction) return;
       const { action, serviceId } = pendingAction;
-      const s = SERVICES.find(x => x.id === serviceId);
-      if (action === "approve") s.status = "approved";
-      else if (action === "reject") s.status = "rejected";
-      else if (action === "remove") s.status = "rejected";
+      const btn = document.getElementById("modalConfirm");
+      btn.disabled = true; btn.textContent = "Working…";
+      const reason = document.getElementById("rejectReason")?.value || "";
+      if      (action === "approve") await apiFetch(`/services/${serviceId}/approve`, "PATCH");
+      else if (action === "reject")  await apiFetch(`/services/${serviceId}/reject`,  "PATCH", { reason });
+      else if (action === "remove")  await apiFetch(`/services/${serviceId}`,          "DELETE");
+      btn.disabled = false; btn.textContent = "Confirm";
       closeModal();
-      filterServices();
+      await loadServices();
+      await loadStats();
     });
 
-    renderServices(SERVICES);
+    loadStats();
+    loadServices();
   </script>
 </body>
 </html>

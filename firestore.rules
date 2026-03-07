@@ -1,0 +1,87 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Firestore Security Rules – PEDY  (project: pedy-4a29f)
+// Deploy: firebase deploy --only firestore:rules
+// ─────────────────────────────────────────────────────────────────────────────
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function isSignedIn()     { return request.auth != null; }
+    function isOwner(uid)     { return isSignedIn() && request.auth.uid == uid; }
+    function isAdmin()        {
+      return isSignedIn() &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    function isProvider()     {
+      return isSignedIn() &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ["provider","admin"];
+    }
+
+    // ── users ──────────────────────────────────────────────────────────────
+    // • Anyone signed-in can read any profile (needed to show provider cards)
+    // • Only the owner or an admin can write
+    match /users/{uid} {
+      allow read:   if isSignedIn();
+      allow create: if isOwner(uid);            // self-registration only
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── services ───────────────────────────────────────────────────────────
+    // • Public can read approved active services (marketplace)
+    // • Providers can create/edit their own
+    // • Admins can do anything
+    match /services/{serviceId} {
+      allow read:   if resource.data.status == "approved" && resource.data.isActive == true
+                    || isSignedIn();            // signed-in users see all (dashboard)
+      allow create: if isProvider()
+                    && request.resource.data.providerId == request.auth.uid;
+      allow update: if (isProvider()
+                        && resource.data.providerId == request.auth.uid)
+                    || isAdmin();
+      allow delete: if isAdmin()
+                    || (isProvider() && resource.data.providerId == request.auth.uid);
+    }
+
+    // ── bookings ───────────────────────────────────────────────────────────
+    // • Only the client or the provider of the booking can read/write
+    // • Any signed-in user can create a booking (as client)
+    match /bookings/{bookingId} {
+      allow read:   if isSignedIn() &&
+                    (resource.data.clientId == request.auth.uid ||
+                     resource.data.providerId == request.auth.uid ||
+                     isAdmin());
+      allow create: if isSignedIn()
+                    && request.resource.data.clientId == request.auth.uid;
+      allow update: if isSignedIn() &&
+                    (resource.data.clientId == request.auth.uid ||
+                     resource.data.providerId == request.auth.uid ||
+                     isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ── payments ───────────────────────────────────────────────────────────
+    // • Only the client of that payment or an admin can read
+    // • Writes only via the server (admin SDK bypasses rules); block client writes
+    match /payments/{paymentId} {
+      allow read:   if isSignedIn() &&
+                    (resource.data.clientId == request.auth.uid || isAdmin());
+      allow write:  if isAdmin();  // all payment writes go through the backend
+    }
+
+    // ── reviews ────────────────────────────────────────────────────────────
+    // • Anyone can read reviews
+    // • Signed-in users can create a review (the app validates ownership)
+    // • Only the author or an admin can delete
+    match /reviews/{reviewId} {
+      allow read:   if true;
+      allow create: if isSignedIn()
+                    && request.resource.data.clientId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.clientId == request.auth.uid;
+      allow delete: if isAdmin()
+                    || (isSignedIn() && resource.data.clientId == request.auth.uid);
+    }
+  }
+}

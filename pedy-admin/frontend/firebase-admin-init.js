@@ -29,7 +29,7 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig, "pedy-admin");
 const auth = getAuth(app);
 
-const API_BASE = "http://localhost:4000/api/admin";
+const API_BASE = "http://localhost:5000/api/admin";
 
 /**
  * Returns a valid (possibly refreshed) Firebase ID token for the current user.

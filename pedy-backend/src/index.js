@@ -21,14 +21,30 @@
  *   POST   /api/payments/stk-push
  *   POST   /api/payments/callback
  *   GET    /api/payments/status/:checkoutId
+ *
+ *   Admin routes (require Firebase token + role=admin in Firestore):
+ *   POST   /api/admin/auth/verify                – verify token, return admin profile (public)
+ *   GET    /api/admin/analytics
+ *   GET    /api/admin/activity
  *   GET    /api/admin/users
  *   PUT    /api/admin/users/:uid/status
  *   PUT    /api/admin/users/:uid/role
+ *   PATCH  /api/admin/users/:uid/approve
+ *   PATCH  /api/admin/users/:uid/suspend
+ *   PATCH  /api/admin/users/:uid/reinstate
+ *   DELETE /api/admin/users/:uid
  *   GET    /api/admin/services
  *   PUT    /api/admin/services/:id/status
+ *   PATCH  /api/admin/services/:id/approve
+ *   PATCH  /api/admin/services/:id/reject
+ *   DELETE /api/admin/services/:id
  *   GET    /api/admin/bookings
+ *   GET    /api/admin/payments/export/csv
  *   GET    /api/admin/payments
- *   GET    /api/admin/analytics
+ *   PATCH  /api/admin/payments/:id/refund
+ *   PATCH  /api/admin/payments/:id/resolve
+ *   PATCH  /api/admin/payments/:id/flag
+ *   PATCH  /api/admin/payments/:id/clear-flag
  */
 
 require("dotenv").config();
