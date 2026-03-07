@@ -365,186 +365,186 @@ Loading services…
 </div>
 </div>
 </main>
-<script type="module">
-import { initAuth, openAuthModal, getCurrentUser, getUserProfileData } from "./js/auth-ui.js";
-import { getServices } from "./js/db.js";
+<!-- Card interaction and service loading — plain script so it works even if auth import fails -->
+<script>
+// ── Navigation helpers ──────────────────────────────
+function openDetails(slug) {
+  window.location.href = 'details.html?slug=' + encodeURIComponent(slug);
+}
+function handleBook(slug) { openDetails(slug); }
 
-// ── Category filter checkboxes ──────────────────────
+// ── Render a single service card ───────────────────
+function renderCard(svc) {
+  const categoryClass = svc.category === 'Physical' ? 'Physical' : 'Digital';
+  const price = svc.priceUnit === 'per hour' ? '$' + svc.price + '/hr' : '$' + svc.price;
+  const img   = svc.imageURL || 'https://placehold.co/600x400/eb4c4c/ffffff?text=Service';
+  const avatar = svc.providerPhotoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(svc.providerName || 'P') + '&background=eb4c4c&color=fff';
+  return (
+    '<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"' +
+    ' onclick="openDetails(\'' + svc.slug + '\')"' +
+    ' role="button" tabindex="0"' +
+    ' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetails(\'' + svc.slug + '\')}"' +
+    ' aria-label="View details for ' + svc.title + '">' +
+    '<div class="relative aspect-video overflow-hidden">' +
+      '<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="' + img + '" alt="' + svc.title + '"/>' +
+      '<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">' + categoryClass + '</div>' +
+    '</div>' +
+    '<div class="p-4">' +
+      '<div class="flex items-center gap-2 mb-2">' +
+        '<img class="size-6 rounded-full object-cover" src="' + avatar + '" alt="' + (svc.providerName || '') + '"/>' +
+        '<span class="text-xs font-medium text-slate-500">' + (svc.providerName || 'Provider') + '</span>' +
+        '<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">' +
+          '<span class="material-symbols-outlined filled !text-sm">star</span>' +
+          (svc.rating || 0).toFixed(1) +
+        '</div>' +
+      '</div>' +
+      '<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">' + svc.title + '</h3>' +
+      '<p class="text-sm text-slate-500 line-clamp-2 mb-4">' + svc.description + '</p>' +
+      '<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">' +
+        '<div class="flex flex-col">' +
+          '<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>' +
+          '<span class="text-lg font-bold text-primary">' + price + '</span>' +
+        '</div>' +
+        '<button onclick="event.stopPropagation();handleBook(\'' + svc.slug + '\')"' +
+          ' class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>' +
+      '</div>' +
+    '</div>' +
+    '</div>'
+  );
+}
+
+// ── Load services from JSON ─────────────────────────
+async function loadServicesFromJSON() {
+  const res  = await fetch('data/services.json');
+  const data = await res.json();
+  return data.services || [];
+}
+
+// ── Load & display services ─────────────────────────
 const filterPhysical = document.querySelector('input[type="checkbox"]:nth-of-type(1)');
 const filterDigital  = document.querySelector('input[type="checkbox"]:nth-of-type(2)');
 const sortSelect     = document.querySelector('select');
 const searchInput    = document.getElementById('search-input');
 
-// ── Render a single service card ───────────────────
-function renderCard(svc) {
-  const categoryClass = svc.category === 'Physical' ? 'Physical' : 'Digital';
-  const stars = '★'.repeat(Math.round(svc.rating || 0)) + '☆'.repeat(5 - Math.round(svc.rating || 0));
-  const price = svc.priceUnit === 'per hour' ? `\$${svc.price}/hr` : `\$${svc.price}`;
-  const img   = svc.imageURL || 'https://placehold.co/600x400/eb4c4c/ffffff?text=Service';
-  const avatar = svc.providerPhotoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(svc.providerName||'P')}&background=eb4c4c&color=fff`;
-  return `
-  <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-    <div class="relative aspect-video overflow-hidden">
-      <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${img}" alt="${svc.title}"/>
-      <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">${categoryClass}</div>
-    </div>
-    <div class="p-4">
-      <div class="flex items-center gap-2 mb-2">
-        <img class="size-6 rounded-full object-cover" src="${avatar}" alt="${svc.providerName}"/>
-        <span class="text-xs font-medium text-slate-500">${svc.providerName || 'Provider'}</span>
-        <div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
-          <span class="material-symbols-outlined filled !text-sm">star</span>
-          ${(svc.rating||0).toFixed(1)}
-        </div>
-      </div>
-      <h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">${svc.title}</h3>
-      <p class="text-sm text-slate-500 line-clamp-2 mb-4">${svc.description}</p>
-      <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-        <div class="flex flex-col">
-          <span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
-          <span class="text-lg font-bold text-primary">${price}</span>
-        </div>
-        <button onclick="handleBook('${svc.slug}')"
-          class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-// ── Load & display services ─────────────────────────
 async function loadServices() {
-  const grid     = document.getElementById('services-grid');
-  const countEl  = document.getElementById('services-count');
-  const subEl    = document.getElementById('services-subtitle');
-  const searchTerm = searchInput?.value.trim() || '';
+  const grid    = document.getElementById('services-grid');
+  const countEl = document.getElementById('services-count');
+  const subEl   = document.getElementById('services-subtitle');
+  const searchTerm = searchInput ? searchInput.value.trim() : '';
 
-  const showPhysical = filterPhysical?.checked !== false;
-  const showDigital  = filterDigital?.checked  !== false;
-  let   category     = 'all';
-  if  (showPhysical && !showDigital) category = 'Physical';
+  const showPhysical = !filterPhysical || filterPhysical.checked;
+  const showDigital  = !filterDigital  || filterDigital.checked;
+  let category = 'all';
+  if (showPhysical && !showDigital) category = 'Physical';
   else if (!showPhysical && showDigital) category = 'Digital';
 
-  grid.innerHTML = `<div class="col-span-full flex items-center justify-center py-16 text-slate-400">
-    <span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>Loading…</div>`;
+  grid.innerHTML = '<div class="col-span-full flex items-center justify-center py-16 text-slate-400"><span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>Loading…</div>';
 
   try {
-    // Load from JSON data file
     let services = await loadServicesFromJSON();
-    
-    // Filter by category
-    if (category !== 'all') {
-      services = services.filter(s => s.category === category);
-    }
-    
-    // Filter by search term
+    if (category !== 'all') services = services.filter(function(s){ return s.category === category; });
     if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      services = services.filter(s =>
-        s.title?.toLowerCase().includes(term) ||
-        s.description?.toLowerCase().includes(term) ||
-        s.tags?.join(' ').toLowerCase().includes(term)
-      );
+      var term = searchTerm.toLowerCase();
+      services = services.filter(function(s){
+        return (s.title || '').toLowerCase().includes(term) ||
+               (s.description || '').toLowerCase().includes(term) ||
+               (s.tags || []).join(' ').toLowerCase().includes(term);
+      });
     }
+    var sort = sortSelect ? sortSelect.value : 'Most Relevant';
+    if (sort === 'Price: Low to High') services.sort(function(a,b){ return (a.price||0)-(b.price||0); });
+    if (sort === 'Price: High to Low') services.sort(function(a,b){ return (b.price||0)-(a.price||0); });
 
-    // Sort
-    const sort = sortSelect?.value || 'Most Relevant';
-    if (sort === 'Price: Low to High')  services.sort((a,b) => (a.price||0) - (b.price||0));
-    if (sort === 'Price: High to Low')  services.sort((a,b) => (b.price||0) - (a.price||0));
-
-    countEl.textContent = `${services.length} Service${services.length !== 1 ? 's' : ''} Found`;
-    subEl.textContent   = searchTerm
-      ? `Results for "${searchTerm}"`
-      : (category !== 'all' ? `Showing ${category} services` : 'Browsing all services');
+    if (countEl) countEl.textContent = services.length + ' Service' + (services.length !== 1 ? 's' : '') + ' Found';
+    if (subEl)   subEl.textContent   = searchTerm ? 'Results for "' + searchTerm + '"' : (category !== 'all' ? 'Showing ' + category + ' services' : 'Browsing all services');
 
     if (services.length === 0) {
-      grid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400">
-        <span class="material-symbols-outlined !text-5xl block mb-4">search_off</span>
-        <p class="font-semibold">No services found</p>
-        <p class="text-sm mt-1">Try adjusting your filters or search term</p>
-      </div>`;
+      grid.innerHTML = '<div class="col-span-full text-center py-16 text-slate-400"><span class="material-symbols-outlined !text-5xl block mb-4">search_off</span><p class="font-semibold">No services found</p><p class="text-sm mt-1">Try adjusting your filters or search term</p></div>';
       return;
     }
     grid.innerHTML = services.map(renderCard).join('');
-  } catch (err) {
+  } catch(err) {
     console.error(err);
-    grid.innerHTML = `<div class="col-span-full text-center py-16 text-red-400">
-      <span class="material-symbols-outlined !text-5xl block mb-4">error</span>
-      <p class="font-semibold">Failed to load services</p>
-      <p class="text-sm mt-1">${err.message}</p>
-    </div>`;
+    grid.innerHTML = '<div class="col-span-full text-center py-16 text-red-400"><span class="material-symbols-outlined !text-5xl block mb-4">error</span><p class="font-semibold">Failed to load services</p><p class="text-sm mt-1">' + err.message + '</p></div>';
   }
 }
 
-// ── Load services from JSON file ────────────────────
-async function loadServicesFromJSON() {
-  const response = await fetch('data/services.json');
-  const data = await response.json();
-  return data.services || [];
-}
-
-// ── Book handler ────────────────────────────────────
-window.handleBook = function(slug) {
-  const user = getCurrentUser();
-  if (!user) { openAuthModal('login'); return; }
-  // Redirect to profile page with slug parameter
-  window.location.href = `profile.html?slug=${slug}`;
-};
-
-// ── Init ────────────────────────────────────────────
-initAuth();
-loadServices();
-
-// Re-load on filter/search changes (debounced)
-let debounceTimer;
-const reload = () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(loadServices, 400); };
-filterPhysical?.addEventListener('change', reload);
-filterDigital?.addEventListener('change',  reload);
-sortSelect?.addEventListener('change',     loadServices);
-searchInput?.addEventListener('input',     reload);
+// ── Start on DOM ready ──────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  loadServices();
+  var debounceTimer;
+  var reload = function(){ clearTimeout(debounceTimer); debounceTimer = setTimeout(loadServices, 400); };
+  if (filterPhysical) filterPhysical.addEventListener('change', reload);
+  if (filterDigital)  filterDigital.addEventListener('change', reload);
+  if (sortSelect)     sortSelect.addEventListener('change', loadServices);
+  if (searchInput)    searchInput.addEventListener('input', reload);
+});
+</script>
+<!-- Auth (optional — graceful if Firebase not configured) -->
+<script type="module">
+try {
+  const { initAuth } = await import('./js/auth-ui.js');
+  initAuth();
+} catch(e) { /* Firebase not configured yet */ }
 </script>
 <!-- Footer -->
-<footer class="bg-gradient-to-r from-primary/90 via-red-700 to-slate-950 dark:from-primary/95 dark:via-red-900 dark:to-black text-white py-12 mt-20">
-<div class="max-w-[1280px] mx-auto px-10">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-<div class="col-span-1 md:col-span-1">
-<div class="flex items-center gap-0 mb-4">
-<img src="assets/images/logo_no_bg.png" alt="Pedy Logo" class="h-8 w-8 object-contain filter brightness-0 invert"/>
-<h2 class="text-lg font-black text-white">Pedy</h2>
-</div>
-<p class="text-sm text-white/80 leading-relaxed">The bridge between local needs and global talent. Transforming how services are discovered and delivered.</p>
-</div>
-<div>
-<h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Quick Links</h4>
-<ul class="text-sm text-white/80 space-y-2">
-<li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
-<li><a href="about-us.html" class="hover:text-white transition-colors">About Us</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Company</h4>
-<ul class="text-sm text-white/80 space-y-2">
-<li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
-<li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
-<li><a href="#" class="hover:text-white transition-colors">Press</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Support</h4>
-<ul class="text-sm text-white/80 space-y-2">
-<li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
-<li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
-<li><a href="#" class="hover:text-white transition-colors">Privacy</a></li>
-</ul>
-</div>
-</div>
-<div class="border-t border-white/20 pt-8 text-center text-sm text-white/70">
-<p>© <span id="current-year">2026</span> Pedy Technologies. All rights reserved.</p>
-</div>
+<footer class="bg-gradient-to-br from-slate-950 via-red-950 to-slate-900 text-white pt-16 pb-8 mt-20">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+  <!-- Top row -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+    <!-- Brand -->
+    <div class="md:col-span-5">
+      <a href="index.html" class="flex items-center gap-0 hover:opacity-80 transition-opacity inline-flex mb-5">
+        <img src="assets/images/logo_no_bg.png" alt="Pedy" class="h-10 w-10 object-contain filter brightness-0 invert"/>
+        <span class="text-2xl font-black tracking-tight text-white">Pedy</span>
+      </a>
+      <p class="text-sm text-white/60 leading-relaxed max-w-xs">The bridge between local needs and global talent — discover, hire, and get things done.</p>
+      <div class="flex gap-3 mt-6">
+        <a href="#" aria-label="Twitter" class="h-9 w-9 rounded-full border border-white/20 hover:border-white/60 hover:bg-white/10 flex items-center justify-center transition-all">
+          <svg class="w-4 h-4 fill-white/70" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.261 5.635L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="h-9 w-9 rounded-full border border-white/20 hover:border-white/60 hover:bg-white/10 flex items-center justify-center transition-all">
+          <svg class="w-4 h-4 fill-white/70" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram" class="h-9 w-9 rounded-full border border-white/20 hover:border-white/60 hover:bg-white/10 flex items-center justify-center transition-all">
+          <svg class="w-4 h-4 fill-white/70" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+      </div>
+    </div>
+    <!-- Links -->
+    <div class="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+      <div>
+        <h5 class="text-xs font-bold text-white uppercase tracking-widest mb-5">Navigate</h5>
+        <ul class="space-y-3 text-sm text-white/60">
+          <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+          <li><a href="about-us.html" class="hover:text-white transition-colors">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-xs font-bold text-white uppercase tracking-widest mb-5">Company</h5>
+        <ul class="space-y-3 text-sm text-white/60">
+          <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-xs font-bold text-white uppercase tracking-widest mb-5">Support</h5>
+        <ul class="space-y-3 text-sm text-white/60">
+          <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Bottom row -->
+  <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8">
+    <p class="text-xs text-white/40">© <span id="current-year">2026</span> Pedy. All rights reserved.</p>
+    <p class="text-xs text-white/40">Connecting talent with opportunity.</p>
+  </div>
 </div>
 </footer>
-<script>
-// Auto-update year to current
-document.getElementById('current-year').textContent = new Date().getFullYear();
-</script>
+<script>document.getElementById('current-year').textContent = new Date().getFullYear();</script>
 </div>
 </body></html>
