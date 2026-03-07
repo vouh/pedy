@@ -49,9 +49,9 @@
 </div>
 <!-- Navigation Menu -->
 <nav class="hidden md:flex gap-8">
-<a href="index.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Find Services</a>
-<a href="profile.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Browse Talent</a>
-<a href="marketplace.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Marketplace</a>
+<a href="index.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Home</a>
+<a href="profile.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Find Talent</a>
+<a href="about-us.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">About Us</a>
 </nav>
 <!-- Desktop Search -->
 <div class="hidden md:flex flex-1 max-w-xl">
@@ -481,54 +481,49 @@ sortSelect?.addEventListener('change',     loadServices);
 searchInput?.addEventListener('input',     reload);
 </script>
 <!-- Footer -->
-<footer class="mt-20 border-t border-slate-200 dark:border-slate-800 py-12 bg-white dark:bg-background-dark">
-<div class="max-w-[1280px] mx-auto px-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+<footer class="bg-gradient-to-r from-primary/90 via-red-700 to-slate-950 dark:from-primary/95 dark:via-red-900 dark:to-black text-white py-12 mt-20">
+<div class="max-w-[1280px] mx-auto px-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
 <div class="col-span-1 md:col-span-1">
-<div class="flex items-center gap-2 text-primary mb-4">
-<div class="size-6 bg-primary rounded flex items-center justify-center text-white">
-<span class="material-symbols-outlined !text-lg">diamond</span>
+<div class="flex items-center gap-0 mb-4">
+<img src="assets/images/logo_no_bg.png" alt="Pedy Logo" class="h-8 w-8 object-contain filter brightness-0 invert"/>
+<h2 class="text-lg font-black text-white">Pedy</h2>
 </div>
-<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Pedy</h2>
-</div>
-<p class="text-sm text-slate-500 leading-relaxed">The ultimate marketplace for physical and digital services. Find professional providers in seconds.</p>
+<p class="text-sm text-white/80 leading-relaxed">The bridge between local needs and global talent. Transforming how services are discovered and delivered.</p>
 </div>
 <div>
-<h4 class="font-bold mb-4">Marketplace</h4>
-<ul class="text-sm text-slate-500 space-y-2">
-<li class="hover:text-primary cursor-pointer transition-colors">Physical Services</li>
-<li class="hover:text-primary cursor-pointer transition-colors">Digital Services</li>
-<li class="hover:text-primary cursor-pointer transition-colors">Featured Providers</li>
-<li class="hover:text-primary cursor-pointer transition-colors">Recent Bookings</li>
+<h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Quick Links</h4>
+<ul class="text-sm text-white/80 space-y-2">
+<li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+<li><a href="profile.html" class="hover:text-white transition-colors">Find Talent</a></li>
+<li><a href="about-us.html" class="hover:text-white transition-colors">About Us</a></li>
 </ul>
 </div>
 <div>
-<h4 class="font-bold mb-4">Support</h4>
-<ul class="text-sm text-slate-500 space-y-2">
-<li class="hover:text-primary cursor-pointer transition-colors">Help Center</li>
-<li class="hover:text-primary cursor-pointer transition-colors">Safety Guidelines</li>
-<li class="hover:text-primary cursor-pointer transition-colors">Provider Dashboard</li>
-<li class="hover:text-primary cursor-pointer transition-colors">Contact Us</li>
+<h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Company</h4>
+<ul class="text-sm text-white/80 space-y-2">
+<li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+<li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+<li><a href="#" class="hover:text-white transition-colors">Press</a></li>
 </ul>
 </div>
 <div>
-<h4 class="font-bold mb-4">Subscribe</h4>
-<p class="text-sm text-slate-500 mb-4">Get the latest deals and services in your inbox.</p>
-<div class="flex gap-2">
-<input class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 px-3 text-sm flex-1 focus:ring-1 focus:ring-primary" placeholder="your@email.com" type="email"/>
-<button class="bg-primary text-white p-2 rounded-lg">
-<span class="material-symbols-outlined">send</span>
-</button>
+<h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Support</h4>
+<ul class="text-sm text-white/80 space-y-2">
+<li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+<li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+<li><a href="#" class="hover:text-white transition-colors">Privacy</a></li>
+</ul>
 </div>
 </div>
-</div>
-<div class="max-w-[1280px] mx-auto px-10 pt-12 mt-12 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
-<p>© 2024 PEDY Inc. All rights reserved.</p>
-<div class="flex gap-6">
-<span class="hover:text-slate-900 cursor-pointer">Privacy Policy</span>
-<span class="hover:text-slate-900 cursor-pointer">Terms of Service</span>
-<span class="hover:text-slate-900 cursor-pointer">Cookie Policy</span>
+<div class="border-t border-white/20 pt-8 text-center text-sm text-white/70">
+<p>© <span id="current-year">2026</span> Pedy Technologies. All rights reserved.</p>
 </div>
 </div>
 </footer>
+<script>
+// Auto-update year to current
+document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
 </div>
 </body></html>
