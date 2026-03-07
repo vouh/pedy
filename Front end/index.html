@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
@@ -63,6 +63,10 @@
 </div>
 </div>
 <div class="flex items-center gap-3">
+<!-- Hamburger (mobile only) -->
+<button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Menu">
+  <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">menu</span>
+</button>
 <!-- Unauthenticated: Sign In -->
 <button id="nav-sign-in-btn" class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors">
 <span class="material-symbols-outlined !text-lg">account_circle</span>
@@ -80,12 +84,20 @@
 </button>
 </div>
 </div>
-</div>
 </header>
-<main class="max-w-[1280px] mx-auto w-full px-4 md:px-10 py-6">
+<!-- Mobile nav dropdown -->
+<div id="mobile-nav" class="hidden md:hidden bg-white dark:bg-background-dark border-b border-slate-100 dark:border-slate-800 px-4 py-3 space-y-1">
+  <!-- Mobile search -->
+  <label class="relative flex w-full mb-3">
+    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">search</span>
+    <input id="search-input-mobile" class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search services..." type="text"/>
+  </label>
+  <a href="index.html" class="block px-3 py-2 rounded-lg text-sm font-semibold text-primary bg-primary/5">Home</a>
+  <a href="about-us.html" class="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">About Us</a>
+</div>
 <div class="flex flex-col lg:flex-row gap-8">
 <!-- Sidebar Filters -->
-<aside class="w-full lg:w-64 shrink-0 space-y-8">
+<aside id="filter-sidebar" class="hidden lg:block w-full lg:w-64 shrink-0 space-y-8">
 <div>
 <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">tune</span>
@@ -150,11 +162,19 @@
 </aside>
 <!-- Search Results Content -->
 <div class="flex-1">
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-<div>
-<h1 class="text-2xl font-bold"><span id="services-count">Loading…</span></h1>
-<p class="text-slate-500 text-sm" id="services-subtitle">Browsing all services</p>
+<!-- Mobile toolbar: filter toggle + sort -->
+<div class="flex sm:hidden items-center justify-between mb-4 gap-3">
+  <button id="filter-toggle-btn" class="flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg hover:border-primary hover:text-primary transition-colors">
+    <span class="material-symbols-outlined !text-base">tune</span>Filters
+  </button>
+  <select id="sort-select-mobile" class="flex-1 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2 focus:ring-primary focus:border-primary">
+    <option>Most Relevant</option>
+    <option>Price: Low to High</option>
+    <option>Price: High to Low</option>
+    <option>Newest Arrivals</option>
+  </select>
 </div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
 <div class="flex items-center gap-2">
 <span class="text-sm text-slate-500 whitespace-nowrap">Sort by:</span>
 <select class="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm py-1.5 focus:ring-primary focus:border-primary">
@@ -167,184 +187,7 @@
 </div>
 <!-- Grid of Service Cards (populated dynamically) -->
 <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-<div class="col-span-full flex items-center justify-center py-16 text-slate-400">
-<span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>
-Loading services…
-</div>
-<!-- static seed cards removed – see below for the real DOM source -->
-<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-<div class="relative aspect-video overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Laptop screen showing web design tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEtt2m70nufuoGlr2A-p0VGmqzKJqVOJ2Skq7FUOuHrK36DTT5Q2EGdzdqzvzLOZOaw5hr4y8igqqaKi2NyaWRoW6-T3dYLQ1-xhOcW-rN7vXGoizWZhV5y76nyucptLq97zPRwNWouVTxJyPJqd3B3r7GtgW9fULc2lJ7-KEF7VZN3Vwaj2RhLhks_prC3hzYI1syiwUfUU1IYEEiSvyjyHv_QRX5hSctuVVghsK9RXddf5G0rFoIVj0zOz-8rBItJB_TLQQP5Hks"/>
-<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Digital</div>
-<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined !text-lg">favorite</span>
-</button>
-</div>
-<div class="p-4">
-<div class="flex items-center gap-2 mb-2">
-<img class="size-6 rounded-full object-cover" data-alt="Professional man headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEsryVab8QbhCpd4wefziMZ_VkVI5sq-ua0FP3sy3699GPN9TJhVzpOypW3zf3TcF7i-yt1aggFHOtJC-idCz5PXqLDRxT8BCxsRAtDZKFqOti2V5y3mYSJ_aq1iz5UPjnLpzcCrU5EGoBMeddxSS77ysUeAb0g3hm662TsIFhWrN_SaW5fmAP6BwEjbM13_BXsEG45Ss2DCrldhyQ3AHi4h0nhB_45GZyFAhsVCJl0YLlDhF1_Qdq1iXUI_3UyCZZrXkyNHgnSrop"/>
-<span class="text-xs font-medium text-slate-500">Alex Rivera</span>
-<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
-<span class="material-symbols-outlined filled !text-sm">star</span>
-                                    4.9
-                                </div>
-</div>
-<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Modern Web Development</h3>
-<p class="text-sm text-slate-500 line-clamp-2 mb-4">React, Tailwind CSS, and full-stack solutions for your business.</p>
-<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-<div class="flex flex-col">
-<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
-<span class="text-lg font-bold text-primary">$199</span>
-</div>
-<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
-</div>
-</div>
-</div>
-<!-- (dynamic) -->
-<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-<div class="relative aspect-video overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Clean modern kitchen interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQMIDbITHMzy7oTF5uDyyINdwB7At8_q4UKBKt-o_Lwg7AtNo1fJvNwYGSdCWodpfYvKt6KdRFh7PmHU55DG0rN76sccTORIf-1AiKBFuZhiZzoSI72KHjk58XDf-CkSgq0JK58giwC9oufM3SFRC6I0NPORa-diMAehOZkqLpF4QrWaW4Ch1i0Ru7Z8JmjBmQHmqtQZ0bg5RLaJfNQCfkTxQDYg5xgp91tAy3ay1Rpm5CLrmPHWJj8GBQDDkkTl6V9VCBDcblSITu"/>
-<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Physical</div>
-<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined !text-lg">favorite</span>
-</button>
-</div>
-<div class="p-4">
-<div class="flex items-center gap-2 mb-2">
-<img class="size-6 rounded-full object-cover" data-alt="Professional woman headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuQWy8tTw9pg1d1gqLi1-e_LWNXhg8LFlrfx4DwndGAEaCpKJqbs6OHzBd5_l2WwHuJncmQhClcN_CXhCUqJQK9qYYUVdPk1Fdjrlc81lnyMBZ70MBpKt1uh0q2C2tKA1W-L226mgJ6IqcEoODlTYf1lA-lhL4rZduKp_m_oRfhiUz-GtG_ipvsEil-ZqSJ2Aj5Nb3LC_VY34MIpNrp9CCKUL8qvVF3FYFqXadfTsdT7qMDAtxfB6wA3w8ujJxB1BWJinY4YBjJm1P"/>
-<span class="text-xs font-medium text-slate-500">Sarah Jenkins</span>
-<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
-<span class="material-symbols-outlined filled !text-sm">star</span>
-                                    4.8
-                                </div>
-</div>
-<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Professional Home Cleaning</h3>
-<p class="text-sm text-slate-500 line-clamp-2 mb-4">Eco-friendly deep cleaning for apartments and family homes.</p>
-<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-<div class="flex flex-col">
-<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
-<span class="text-lg font-bold text-primary">$45</span>
-</div>
-<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
-</div>
-</div>
-</div>
-<!-- (dynamic) -->
-<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-<div class="relative aspect-video overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Camera lens and creative workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8RePlPJr9faQpCkkRY0lVma2BC-qefdcvlESwxY3z3ZvA8cAhtFHGKnj80E81Num54uWOKO7JBpUFPKeFTLSLbCOlRZWJeVjfueKDcHVr3jheIaQTlW0tqGsqeFMgG3qaY4PXKoB8Ifjg4iOCUNZq_r8qBHxfxGws3CGwvveQKw0DsE7gXlUhapQJIKFB0b7QJQj1raLwmFqGF1n4ZKffeBdC1-_ktHFh7LiADHZRTbng80fHrJYq1NjziPXJlUVV71mhiZsxiWT7"/>
-<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Physical</div>
-<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined !text-lg">favorite</span>
-</button>
-</div>
-<div class="p-4">
-<div class="flex items-center gap-2 mb-2">
-<img class="size-6 rounded-full object-cover" data-alt="Creative professional headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0PZtPs1xqWaJ7l0cBT3Bwd7ZdZwbSqRsM7Vaqf9mJ-KutDaUI-hP1uCsrB0ZqztzFgRqCEG9Uzgcdtg2p44Dk8Jx4tkxGFmeluSjOUsgcCKs5yzGYiT0a4MG9BagCX5UKnFerVZyzBfDNlRD7PaRAXNjgGOE-AzMNCroG3q05QeeOPrOGshfsonijj8QZHX7qXZdlIB3Ogpa7hd2xl1PJZ0h60T6uaH7AtzrzFjIL85my88zTf4W9nV-29yDTf634fp0QquxPwCl8"/>
-<span class="text-xs font-medium text-slate-500">Marcus Thorne</span>
-<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
-<span class="material-symbols-outlined filled !text-sm">star</span>
-                                    5.0
-                                </div>
-</div>
-<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Brand Photography</h3>
-<p class="text-sm text-slate-500 line-clamp-2 mb-4">High-end product and portrait photography for growing brands.</p>
-<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-<div class="flex flex-col">
-<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
-<span class="text-lg font-bold text-primary">$120</span>
-</div>
-<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
-</div>
-</div>
-</div>
-<!-- (dynamic) -->
-<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-<div class="relative aspect-video overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Code on a monitor with neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ3VH2vSrOmZjU3abRKe9XnumsliDeUxrjJpBNYXDIx6wdhg2abGPM5U_RPDoRYclmah01W7j9TRmsfxtUXtRErJte49XZY2d6Kz-EM-aa24CeI-LFcYUdVDgp_FNsYD9vdGx_hw4GgpKD-XzBc3W_ROmw_JZCMpgiQK-1qDoxUDBySiYGigHNal7YKW-fJ4rl-vl5uweFvkLLrVipflAHsycMbDypxbsdTI5jqcE7lI2XvtxBezJWzKuF03dq_bTcf2eJcWVjXLOc"/>
-<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Digital</div>
-<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined !text-lg">favorite</span>
-</button>
-</div>
-<div class="p-4">
-<div class="flex items-center gap-2 mb-2">
-<img class="size-6 rounded-full object-cover" data-alt="Smiling developer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA71UBbDQVUIMMjt6WAnSyMun8hloNmU46I6wPewojEhGUKau1HogJZT9FVOeL_ZK-773WhzcEz45UXs-lSr-f7AZeVSGPpNEAflUGr9_f96RDsOkIf2ajpEjoRmmT6-rb8wjxwXhO4ZszgX4TkbOePUwBYJaAR2U5VmhgjXzjbsrH_SuoHTa18UNzhY4XMU-SpsCUrROvvsX4MoNYUIYtaSqVCnN2mkOgc3EWIHexVN5T-Tbo2LokCsp91rhU2NVoZ5koXb6Shfqwo"/>
-<span class="text-xs font-medium text-slate-500">David Kim</span>
-<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
-<span class="material-symbols-outlined filled !text-sm">star</span>
-                                    4.7
-                                </div>
-</div>
-<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Cybersecurity Audit</h3>
-<p class="text-sm text-slate-500 line-clamp-2 mb-4">Complete security assessment for your web applications and APIs.</p>
-<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-<div class="flex flex-col">
-<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
-<span class="text-lg font-bold text-primary">$350</span>
-</div>
-<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
-</div>
-</div>
-</div>
-<!-- (dynamic) -->
-<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-<div class="relative aspect-video overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Personal trainer in a gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqoxrtP8f6dgQC971aDmJjJwU-7y0cjZ3YUsRTqSHm8ovUldYa-cm5peAmRsUEJqAYm74sUMLxyLai_9MPvhQ-vbSqn1BHdIRsiyCQGjYWaD8hrln_HUPW_y-3f54nJrnQpnMFGrHnE0C3YQQJaNmcAL5SsoIYQph_zdzYtkWrv9mZn8pG_0sOmnzTzpUjzqUqibYWtmQdYlk0ubwEfLMUFWVOS13sXT4Pw2u2gSVWsiHzy2MUZoLws9qgCkW1oHJAS39iEm6Ll9sZ"/>
-<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Physical</div>
-<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined !text-lg">favorite</span>
-</button>
-</div>
-<div class="p-4">
-<div class="flex items-center gap-2 mb-2">
-<img class="size-6 rounded-full object-cover" data-alt="Athletic trainer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA54YXa7KUdutpZ6DOoSTTcCx7KvHlPWiurN1Nw4SGKlk5eSpkTV8by7XMQBoH6yKyt8AQ6NgkUlvkStV-WFRIiYMoBFjMwLdbTuK7EoKloPHPFAmygrlByFFBYDJ3aHdGSt9ggJ-Z21vkfxRqO3xA46Eo5FO_9Rc0Qa7I3BIti54A9LqsLnWFATVZZzKRhf6CSX3YRqBko6WVfeQvAYSQZVpajCGojWLo7RnpTbiFMDzhiWuZ8KVtBXT0hEV6BfaKOpNfhoDRBbKAW"/>
-<span class="text-xs font-medium text-slate-500">Chris Evans</span>
-<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
-<span class="material-symbols-outlined filled !text-sm">star</span>
-                                    4.9
-                                </div>
-</div>
-<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Personal Training</h3>
-<p class="text-sm text-slate-500 line-clamp-2 mb-4">1-on-1 sessions tailored to your fitness goals and health history.</p>
-<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-<div class="flex flex-col">
-<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
-<span class="text-lg font-bold text-primary">$60</span>
-</div>
-<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
-</div>
-</div>
-</div>
-<!-- Card 6 -->
-<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-<div class="relative aspect-video overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Interior designer sketching" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAobA-lVavfwpiwRPUiRZofAgHR_zVthXsnj050wCGvjH9uUxEOoBkSbvP2sNBQqNz9LMskvgnInXOHv8HwYrnen7J8V_mdmnG4KnzvRij-kXwgt_yhQqj4wnyudVmetDPIgwak3k75PeHdebf2B6RXwhVbdTiJk7MZteT99hboOBqAK9PC85KbmIkJ8pZoe6b1raTiVHZFg6jcsKXxjvCKfa-vVrts0FWsOAJfcZKxm76Zxu9VF-t-R1nWb2sARxWMqX8-KucXnLlg"/>
-<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">Digital</div>
-<button class="absolute top-3 right-3 size-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined !text-lg">favorite</span>
-</button>
-</div>
-<div class="p-4">
-<div class="flex items-center gap-2 mb-2">
-<img class="size-6 rounded-full object-cover" data-alt="Smiling designer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvlB3H4DTaAnriybEm5xsEayTEBjaaZcbBqJuicVv50MEagA2IAVDEvxjpsTJdwO_H9Juaga9dv2X5HkW41NEyV0CKHzGZyowzwnpekLLwVrwrlfkyP4bLNBQebonEJC_bG0aun9QuBVaS7PqP1ESpZeGsEpVUYcY-RJPVRGu6mvoDIdHSTKvWvveG696bX4dj6QkYFdWrgTVbe03yju9QjgFmpFL5jFIC-svpmAlyvT3rSTIHoPdTy3Z4Ft7oqI4-VrwvJNKNTukg"/>
-<span class="text-xs font-medium text-slate-500">Eliza Grant</span>
-<div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
-<span class="material-symbols-outlined filled !text-sm">star</span>
-                                    4.6
-                                </div>
-</div>
-<h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Virtual Interior Design</h3>
-<p class="text-sm text-slate-500 line-clamp-2 mb-4">Complete 3D room layouts and furniture shopping lists delivered online.</p>
-<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-<div class="flex flex-col">
-<span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
-<span class="text-lg font-bold text-primary">$150</span>
-</div>
-<button class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
-</div>
-</div>
-</div>
+<!-- cards populated by loadServices() -->
 </div>
 <!-- Pagination -->
 <div class="mt-12 flex justify-center">
@@ -413,11 +256,18 @@ function renderCard(svc) {
   );
 }
 
-// ── Load services from JSON ─────────────────────────
-async function loadServicesFromJSON() {
-  const res  = await fetch('data/services.json');
-  const data = await res.json();
-  return data.services || [];
+// ── Inline service data (no network request needed) ────
+var SERVICES_DATA = [
+  {id:"svc_001",slug:"web-design-responsive",title:"Responsive Web Design",description:"Custom responsive website design with modern UI/UX principles. Mobile-first approach.",category:"Digital",price:85,priceUnit:"per hour",rating:4.9,reviewCount:127,imageURL:"https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop",providerName:"Alex Rivera",providerPhotoURL:"https://ui-avatars.com/api/?name=Alex+Rivera&background=eb4c4c&color=fff",verified:true,tags:["web design","UI/UX","responsive","modern"]},
+  {id:"svc_002",slug:"electrical-wiring-installation",title:"Electrical Wiring & Installation",description:"Professional electrical wiring, circuit installation, and home upgrades. Licensed and insured.",category:"Physical",price:65,priceUnit:"per hour",rating:4.8,reviewCount:89,imageURL:"https://images.unsplash.com/photo-1574604894657-262f2b878358?w=600&h=400&fit=crop",providerName:"Mike Thompson",providerPhotoURL:"https://ui-avatars.com/api/?name=Mike+Thompson&background=eb4c4c&color=fff",verified:true,tags:["electrical","installation","licensed","insured"]},
+  {id:"svc_003",slug:"social-media-content-strategy",title:"Social Media & Content Strategy",description:"Develop comprehensive social media strategy including content calendar, posting schedule, and engagement tactics.",category:"Digital",price:75,priceUnit:"per hour",rating:4.7,reviewCount:156,imageURL:"https://images.unsplash.com/photo-1611532736580-5ec40a4b3495?w=600&h=400&fit=crop",providerName:"Jessica Lee",providerPhotoURL:"https://ui-avatars.com/api/?name=Jessica+Lee&background=eb4c4c&color=fff",verified:true,tags:["social media","content","marketing","strategy"]},
+  {id:"svc_004",slug:"plumbing-repairs-installation",title:"Plumbing Repairs & Installation",description:"Emergency plumbing repairs, fixture installation, leak detection. Available 24/7.",category:"Physical",price:80,priceUnit:"per hour",rating:4.6,reviewCount:203,imageURL:"https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&h=400&fit=crop",providerName:"David Chen",providerPhotoURL:"https://ui-avatars.com/api/?name=David+Chen&background=eb4c4c&color=fff",verified:true,tags:["plumbing","repairs","installation","24/7"]},
+  {id:"svc_005",slug:"graphic-design-branding",title:"Graphic Design & Branding",description:"Logo design, brand identity, marketing materials. Professional design for your business.",category:"Digital",price:90,priceUnit:"per hour",rating:4.9,reviewCount:178,imageURL:"https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop",providerName:"Sophie Martin",providerPhotoURL:"https://ui-avatars.com/api/?name=Sophie+Martin&background=eb4c4c&color=fff",verified:true,tags:["graphic design","branding","logo","marketing"]},
+  {id:"svc_006",slug:"video-production-editing",title:"Video Production & Editing",description:"Professional video shoots, drone footage, color grading, and post-production editing.",category:"Digital",price:120,priceUnit:"per hour",rating:4.8,reviewCount:95,imageURL:"https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=600&h=400&fit=crop",providerName:"Marcus Johnson",providerPhotoURL:"https://ui-avatars.com/api/?name=Marcus+Johnson&background=eb4c4c&color=fff",verified:true,tags:["video production","editing","drone","post-production"]}
+];
+
+function loadServicesFromJSON() {
+  return Promise.resolve(SERVICES_DATA);
 }
 
 // ── Load & display services ─────────────────────────
@@ -428,8 +278,6 @@ const searchInput    = document.getElementById('search-input');
 
 async function loadServices() {
   const grid    = document.getElementById('services-grid');
-  const countEl = document.getElementById('services-count');
-  const subEl   = document.getElementById('services-subtitle');
   const searchTerm = searchInput ? searchInput.value.trim() : '';
 
   const showPhysical = !filterPhysical || filterPhysical.checked;
@@ -455,9 +303,6 @@ async function loadServices() {
     if (sort === 'Price: Low to High') services.sort(function(a,b){ return (a.price||0)-(b.price||0); });
     if (sort === 'Price: High to Low') services.sort(function(a,b){ return (b.price||0)-(a.price||0); });
 
-    if (countEl) countEl.textContent = services.length + ' Service' + (services.length !== 1 ? 's' : '') + ' Found';
-    if (subEl)   subEl.textContent   = searchTerm ? 'Results for "' + searchTerm + '"' : (category !== 'all' ? 'Showing ' + category + ' services' : 'Browsing all services');
-
     if (services.length === 0) {
       grid.innerHTML = '<div class="col-span-full text-center py-16 text-slate-400"><span class="material-symbols-outlined !text-5xl block mb-4">search_off</span><p class="font-semibold">No services found</p><p class="text-sm mt-1">Try adjusting your filters or search term</p></div>';
       return;
@@ -470,14 +315,48 @@ async function loadServices() {
 }
 
 // ── Start on DOM ready ──────────────────────────────
+var debounceTimer;
 document.addEventListener('DOMContentLoaded', function() {
   loadServices();
-  var debounceTimer;
   var reload = function(){ clearTimeout(debounceTimer); debounceTimer = setTimeout(loadServices, 400); };
+
+  // Desktop filters & search
   if (filterPhysical) filterPhysical.addEventListener('change', reload);
   if (filterDigital)  filterDigital.addEventListener('change', reload);
   if (sortSelect)     sortSelect.addEventListener('change', loadServices);
   if (searchInput)    searchInput.addEventListener('input', reload);
+
+  // Mobile hamburger
+  var mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  var mobileNav     = document.getElementById('mobile-nav');
+  if (mobileMenuBtn && mobileNav) {
+    mobileMenuBtn.addEventListener('click', function() { mobileNav.classList.toggle('hidden'); });
+  }
+
+  // Mobile filter sidebar toggle
+  var filterToggleBtn = document.getElementById('filter-toggle-btn');
+  var filterSidebar   = document.getElementById('filter-sidebar');
+  if (filterToggleBtn && filterSidebar) {
+    filterToggleBtn.addEventListener('click', function() { filterSidebar.classList.toggle('hidden'); });
+  }
+
+  // Mobile search (syncs to desktop search input, triggers reload)
+  var mobileSearch = document.getElementById('search-input-mobile');
+  if (mobileSearch) {
+    mobileSearch.addEventListener('input', function() {
+      if (searchInput) searchInput.value = mobileSearch.value;
+      reload();
+    });
+  }
+
+  // Mobile sort select
+  var mobileSortSelect = document.getElementById('sort-select-mobile');
+  if (mobileSortSelect) {
+    mobileSortSelect.addEventListener('change', function() {
+      if (sortSelect) sortSelect.value = mobileSortSelect.value;
+      loadServices();
+    });
+  }
 });
 </script>
 <!-- Auth (optional — graceful if Firebase not configured) -->
@@ -488,7 +367,7 @@ try {
 } catch(e) { /* Firebase not configured yet */ }
 </script>
 <!-- Footer -->
-<footer class="bg-gradient-to-br from-slate-950 via-red-950 to-slate-900 text-white pt-16 pb-8 mt-20">
+<footer class="bg-gradient-to-r from-red-600 via-primary to-rose-400 text-white pt-16 pb-8 mt-20">
 <div class="max-w-[1280px] mx-auto px-6 md:px-10">
   <!-- Top row -->
   <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
