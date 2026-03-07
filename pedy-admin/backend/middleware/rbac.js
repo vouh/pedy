@@ -13,22 +13,37 @@ const PERMISSIONS = {
     users: ["read", "write", "suspend", "ban"],
     services: ["read", "write", "approve", "reject", "remove"],
     payments: ["read", "refund", "resolve", "flag", "export"],
-    admins: ["read", "write"], // manage other admin accounts
+    reviews: ["read", "write", "remove"],
+    notifications: ["read", "write"],
+    bookings: ["read", "write"],
+    analytics: ["read"],
+    admins: ["read", "write"],
     settings: ["read", "write"],
+    auditlog: ["read"],
   },
   content_moderator: {
     users: ["read", "write", "suspend"],
     services: ["read", "write", "approve", "reject", "remove"],
-    payments: ["read"], // read-only
+    payments: ["read"],
+    reviews: ["read", "write", "remove"],
+    notifications: ["read", "write"],
+    bookings: ["read", "write"],
+    analytics: ["read"],
     admins: [],
     settings: [],
+    auditlog: [],
   },
   payment_manager: {
-    users: ["read"], // read-only
-    services: ["read"], // read-only
+    users: ["read"],
+    services: ["read"],
     payments: ["read", "refund", "resolve", "flag", "export"],
+    reviews: [],
+    notifications: [],
+    bookings: ["read"],
+    analytics: ["read"],
     admins: [],
     settings: [],
+    auditlog: [],
   },
 };
 

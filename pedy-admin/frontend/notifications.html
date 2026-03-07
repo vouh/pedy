@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <script>
+      !(function () {
+        var t = localStorage.getItem("pedy_theme");
+        (t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches)) &&
+          document.documentElement.classList.add("dark");
+      })();
+    </script>
+    <title>Notifications – PEDY Admin</title>
+    <link rel="stylesheet" href="dist/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans h-screen overflow-hidden"
+  >
+    <div id="sidebar-container"></div>
+    <div class="lg:pl-64 h-screen overflow-y-auto flex flex-col">
+      <div id="topbar-container"></div>
+      <main class="flex-1 px-4 sm:px-6 py-6">
+        <div class="grid lg:grid-cols-3 gap-6">
+          <!-- Send notification panel -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-5"
+          >
+            <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined !text-base text-primary"
+                >send</span
+              >Send Notification
+            </h3>
+            <div class="space-y-3" id="sendForm">
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Type</label
+                >
+                <select
+                  id="nType"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none"
+                >
+                  <option value="info">Info</option>
+                  <option value="success">Success</option>
+                  <option value="warning">Warning</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Send To</label
+                >
+                <select
+                  id="nSentTo"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none"
+                >
+                  <option value="all">All users</option>
+                  <option value="providers">Providers</option>
+                  <option value="clients">Clients</option>
+                  <option value="super_admin">Super Admin</option>
+                  <option value="payment_manager">Payment Managers</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Title</label
+                >
+                <input
+                  id="nTitle"
+                  type="text"
+                  placeholder="Notification title"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Body</label
+                >
+                <textarea
+                  id="nBody"
+                  rows="3"
+                  placeholder="Notification content…"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+                ></textarea>
+              </div>
+              <button
+                onclick="sendNotif()"
+                class="w-full bg-primary text-white rounded-lg py-2 text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+              >
+                <span class="material-symbols-outlined !text-base">send</span
+                >Send Now
+              </button>
+              <div id="sendMsg" class="text-xs text-center hidden"></div>
+            </div>
+          </div>
+
+          <!-- Notifications list -->
+          <div
+            class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm"
+          >
+            <div
+              class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-700"
+            >
+              <h3 class="font-semibold text-sm flex-1">Recent Notifications</h3>
+              <select
+                id="filterStatus"
+                onchange="loadNotifs()"
+                class="text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-1.5 bg-white dark:bg-slate-700 outline-none"
+              >
+                <option value="">All</option>
+                <option value="sent">Sent</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+            <div
+              id="notifList"
+              class="divide-y divide-slate-100 dark:divide-slate-700 min-h-[200px]"
+            >
+              <div class="px-5 py-10 text-center text-slate-400 text-sm">
+                Loading…
+              </div>
+            </div>
+            <div id="pagination" class="px-5 py-3"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+      let currentUser,
+        currentPage = 1;
+      const PAGE_SIZE = 15;
+
+      async function init() {
+        currentUser = requireAuth();
+        if (!currentUser) return;
+        document.getElementById("sidebar-container").innerHTML = buildSidebar(
+          currentUser,
+          "notifications",
+        );
+        document.getElementById("topbar-container").innerHTML = buildTopbar(
+          "Notifications",
+          "Broadcast messages to users",
+        );
+        loadNotifs();
+      }
+
+      async function loadNotifs(page = currentPage) {
+        currentPage = page;
+        const status = document.getElementById("filterStatus").value;
+        const params = new URLSearchParams({ page, limit: PAGE_SIZE });
+        if (status) params.set("status", status);
+        const res = await apiFetch(`/notifications?${params}`);
+        if (!res) return;
+        const { notifications, total } = await res.json();
+        const typeIcon = {
+          info: "info",
+          success: "check_circle",
+          warning: "warning",
+        };
+        const typeBg = {
+          info: "text-blue-500",
+          success: "text-green-500",
+          warning: "text-amber-500",
+        };
+        document.getElementById("notifList").innerHTML = notifications.length
+          ? notifications
+              .map(
+                (n) => `
+      <div class="flex items-start gap-3 px-5 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+        <span class="material-symbols-outlined !text-lg mt-0.5 ${typeBg[n.type] || "text-slate-400"}">${typeIcon[n.type] || "notifications"}</span>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold">${n.title}</p>
+          <p class="text-xs text-slate-400 truncate">${n.body}</p>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-[10px] text-slate-400">${n.sentTo} · ${n.createdAt}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${n.status === "sent" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-slate-100 text-slate-500"}">${n.status}</span>
+          </div>
+        </div>
+        <button onclick="deleteNotif('${n.id}')" class="text-slate-300 dark:text-slate-600 hover:text-primary transition-colors ml-2">
+          <span class="material-symbols-outlined !text-base">delete</span>
+        </button>
+      </div>`,
+              )
+              .join("")
+          : `<div class="px-5 py-10 text-center text-slate-400 text-sm">No notifications.</div>`;
+        document.getElementById("pagination").innerHTML = createPagination(
+          total,
+          currentPage,
+          PAGE_SIZE,
+          loadNotifs,
+        );
+      }
+
+      async function sendNotif() {
+        const title = document.getElementById("nTitle").value.trim();
+        const body = document.getElementById("nBody").value.trim();
+        if (!title || !body)
+          return showMsg("Title and body are required.", "text-primary");
+        const res = await apiFetch("/notifications/send", {
+          method: "POST",
+          body: JSON.stringify({
+            type: document.getElementById("nType").value,
+            sentTo: document.getElementById("nSentTo").value,
+            title,
+            body,
+          }),
+        });
+        if (res?.ok) {
+          showMsg("Notification sent!", "text-green-600");
+          document.getElementById("nTitle").value = "";
+          document.getElementById("nBody").value = "";
+          loadNotifs();
+        }
+      }
+
+      async function deleteNotif(id) {
+        const res = await apiFetch(`/notifications/${id}`, {
+          method: "DELETE",
+        });
+        if (res?.ok) loadNotifs();
+      }
+
+      function showMsg(msg, cls) {
+        const el = document.getElementById("sendMsg");
+        el.textContent = msg;
+        el.className = `text-xs text-center ${cls}`;
+        el.classList.remove("hidden");
+        setTimeout(() => el.classList.add("hidden"), 3000);
+      }
+
+      init();
+    </script>
+  </body>
+</html>

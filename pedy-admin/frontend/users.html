@@ -1,148 +1,323 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>PEDY Admin – Users</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: { "primary": "#eb4c4c", "background-light": "#f8f6f6", "background-dark": "#211111" },
-          fontFamily: { "display": ["Inter"] },
-          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-        },
-      },
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    .filled { font-variation-settings: 'FILL' 1; }
-  </style>
-</head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
-  <div id="sidebarContainer"></div>
-  <div class="lg:pl-64 min-h-screen flex flex-col">
-    <div id="topbarContainer"></div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link rel="icon" href="data:," />
+    <script>
+      !(function () {
+        var t = localStorage.getItem("pedy_theme");
+        (t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches)) &&
+          document.documentElement.classList.add("dark");
+      })();
+    </script>
+    <title>PEDY Admin – Users</title>
+    <link rel="stylesheet" href="dist/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="theme.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans h-screen overflow-hidden"
+  >
+    <div id="sidebar-container"></div>
+    <div class="lg:pl-64 h-screen overflow-y-auto flex flex-col">
+      <div id="topbar-container"></div>
 
-    <main class="flex-1 px-6 py-8 max-w-[1200px] w-full mx-auto">
+      <main
+        class="flex-1 px-4 sm:px-6 py-6 sm:py-8 w-full max-w-[1200px] mx-auto"
+      >
+        <!-- Toolbar -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+          <div class="relative flex-1 max-w-sm">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 !text-lg"
+              >search</span
+            >
+            <input
+              type="text"
+              id="searchInput"
+              oninput="filterUsers()"
+              placeholder="Search users..."
+              class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none"
+            />
+          </div>
+          <div class="flex items-center gap-2">
+            <select
+              id="filterRole"
+              onchange="filterUsers()"
+              class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none"
+            >
+              <option value="">All Roles</option>
+              <option value="client">Client</option>
+              <option value="provider">Provider</option>
+            </select>
+            <select
+              id="filterStatus"
+              onchange="filterUsers()"
+              class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none"
+            >
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+              <option value="suspended">Suspended</option>
+            </select>
+            <div class="pedy-export-wrap relative">
+              <button
+                onclick="toggleExportMenu('exportMenuUsers')"
+                class="flex items-center gap-1.5 px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium hover:border-primary hover:text-primary transition-colors bg-white dark:bg-slate-800"
+              >
+                <span class="material-symbols-outlined !text-base"
+                  >download</span
+                >
+                Export
+                <span class="material-symbols-outlined !text-sm"
+                  >expand_more</span
+                >
+              </button>
+              <div
+                id="exportMenuUsers"
+                class="pedy-export-menu hidden absolute right-0 mt-1 w-36 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-50 overflow-hidden"
+              >
+                <button
+                  onclick="
+                    exportUsers();
+                    toggleExportMenu('exportMenuUsers');
+                  "
+                  class="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                >
+                  <span
+                    class="material-symbols-outlined !text-base text-green-600"
+                    >table_chart</span
+                  >CSV
+                </button>
+                <button
+                  onclick="
+                    exportUsersPDF();
+                    toggleExportMenu('exportMenuUsers');
+                  "
+                  class="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-t border-slate-100 dark:border-slate-700"
+                >
+                  <span
+                    class="material-symbols-outlined !text-base text-red-500"
+                    >picture_as_pdf</span
+                  >PDF
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <!-- Toolbar -->
-      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-        <div class="relative flex-1 max-w-sm">
-          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 !text-lg">search</span>
-          <input type="text" id="searchInput" oninput="filterUsers()" placeholder="Search users..."
-            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none"/>
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center"
+          >
+            <p class="text-2xl font-bold text-primary">12,847</p>
+            <p class="text-xs text-slate-500 mt-1">Total Users</p>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center"
+          >
+            <p class="text-2xl font-bold text-blue-600">3,412</p>
+            <p class="text-xs text-slate-500 mt-1">Providers</p>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center"
+          >
+            <p class="text-2xl font-bold text-yellow-600">14</p>
+            <p class="text-xs text-slate-500 mt-1">Pending Verify</p>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center"
+          >
+            <p class="text-2xl font-bold text-red-600">23</p>
+            <p class="text-xs text-slate-500 mt-1">Suspended</p>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <select id="filterRole" onchange="filterUsers()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none">
-            <option value="">All Roles</option>
-            <option value="client">Client</option>
-            <option value="provider">Provider</option>
-          </select>
-          <select id="filterStatus" onchange="filterUsers()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="pending">Pending</option>
-            <option value="suspended">Suspended</option>
-          </select>
-        </div>
-      </div>
 
-      <!-- Stats row -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-primary">12,847</p>
-          <p class="text-xs text-slate-500 mt-1">Total Users</p>
+        <!-- Users Table -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
+        >
+          <div
+            class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between"
+          >
+            <h3 class="font-bold">All Users</h3>
+            <span
+              id="userCount"
+              class="text-xs text-slate-400 font-medium"
+            ></span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm" id="usersTable">
+              <thead>
+                <tr
+                  class="text-xs text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700"
+                >
+                  <th class="text-left py-3 px-6 font-semibold">User</th>
+                  <th class="text-left py-3 px-4 font-semibold">Role</th>
+                  <th class="text-left py-3 px-4 font-semibold">Status</th>
+                  <th class="text-left py-3 px-4 font-semibold">Joined</th>
+                  <th class="text-left py-3 px-4 font-semibold">Location</th>
+                  <th class="text-left py-3 px-4 font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody
+                id="usersBody"
+                class="divide-y divide-slate-100 dark:divide-slate-700"
+              ></tbody>
+            </table>
+          </div>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-blue-600">3,412</p>
-          <p class="text-xs text-slate-500 mt-1">Providers</p>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-yellow-600">14</p>
-          <p class="text-xs text-slate-500 mt-1">Pending Verify</p>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
-          <p class="text-2xl font-bold text-red-600">23</p>
-          <p class="text-xs text-slate-500 mt-1">Suspended</p>
-        </div>
-      </div>
+      </main>
+    </div>
 
-      <!-- Users Table -->
-      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-          <h3 class="font-bold">All Users</h3>
-          <span id="userCount" class="text-xs text-slate-400 font-medium"></span>
+    <!-- Action Modal -->
+    <div
+      id="actionModal"
+      class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      style="display: none"
+    >
+      <div
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6"
+      >
+        <h3 id="modalTitle" class="text-lg font-bold mb-2"></h3>
+        <p id="modalBody" class="text-sm text-slate-500 mb-6"></p>
+        <div class="flex gap-3 justify-end">
+          <button
+            onclick="closeModal()"
+            class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            id="modalConfirm"
+            class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
+          >
+            Confirm
+          </button>
         </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm" id="usersTable">
-            <thead>
-              <tr class="text-xs text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
-                <th class="text-left py-3 px-6 font-semibold">User</th>
-                <th class="text-left py-3 px-4 font-semibold">Role</th>
-                <th class="text-left py-3 px-4 font-semibold">Status</th>
-                <th class="text-left py-3 px-4 font-semibold">Joined</th>
-                <th class="text-left py-3 px-4 font-semibold">Location</th>
-                <th class="text-left py-3 px-4 font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="usersBody" class="divide-y divide-slate-100 dark:divide-slate-700">
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </main>
-  </div>
-
-  <!-- Action Modal -->
-  <div id="actionModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
-      <h3 id="modalTitle" class="text-lg font-bold mb-2"></h3>
-      <p id="modalBody" class="text-sm text-slate-500 mb-6"></p>
-      <div class="flex gap-3 justify-end">
-        <button onclick="closeModal()" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Cancel</button>
-        <button id="modalConfirm" class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors">Confirm</button>
       </div>
     </div>
-  </div>
 
-  <script src="shared.js"></script>
-  <script>
-    const user = requireAuth();
-    if (!can(user, "users")) { window.location.href = "dashboard.html"; }
+    <script src="shared.js"></script>
+    <script>
+      const user = requireAuth();
+      if (!can(user, "users")) {
+        window.location.href = "dashboard.html";
+      }
 
-    document.getElementById("sidebarContainer").innerHTML = buildSidebar(user, "users");
-    document.getElementById("topbarContainer").innerHTML = buildTopbar("User Management", "Manage clients, providers, and account verifications");
+      document.getElementById("sidebar-container").innerHTML = buildSidebar(
+        user,
+        "users",
+      );
+      document.getElementById("topbar-container").innerHTML = buildTopbar(
+        "User Management",
+        "Manage clients, providers, and account verifications",
+      );
 
-    const USERS = [
-      { id: 1, name: "Jane Wanjiku",    email: "jane@email.com",    role: "provider", status: "pending",   joined: "Mar 7, 2026",  location: "Nairobi, KE" },
-      { id: 2, name: "Michael Otieno",  email: "michael@email.com", role: "client",   status: "active",    joined: "Mar 6, 2026",  location: "Lagos, NG" },
-      { id: 3, name: "Amina Hassan",    email: "amina@email.com",   role: "provider", status: "active",    joined: "Mar 5, 2026",  location: "Mombasa, KE" },
-      { id: 4, name: "Daniel Mwangi",   email: "daniel@email.com",  role: "client",   status: "active",    joined: "Mar 4, 2026",  location: "Kisumu, KE" },
-      { id: 5, name: "spam_account_44", email: "spam@spam.com",     role: "provider", status: "suspended", joined: "Mar 3, 2026",  location: "Unknown" },
-      { id: 6, name: "Grace Njeri",     email: "grace@email.com",   role: "provider", status: "pending",   joined: "Mar 3, 2026",  location: "Nakuru, KE" },
-      { id: 7, name: "Brian Kipchoge",  email: "brian@email.com",   role: "client",   status: "active",    joined: "Mar 2, 2026",  location: "Eldoret, KE" },
-      { id: 8, name: "Fatuma Ali",      email: "fatuma@email.com",  role: "provider", status: "active",    joined: "Mar 1, 2026",  location: "Zanzibar, TZ" },
-    ];
+      const USERS = [
+        {
+          id: 1,
+          name: "Jane Wanjiku",
+          email: "jane@email.com",
+          role: "provider",
+          status: "pending",
+          joined: "Mar 7, 2026",
+          location: "Nairobi, KE",
+        },
+        {
+          id: 2,
+          name: "Michael Otieno",
+          email: "michael@email.com",
+          role: "client",
+          status: "active",
+          joined: "Mar 6, 2026",
+          location: "Lagos, NG",
+        },
+        {
+          id: 3,
+          name: "Amina Hassan",
+          email: "amina@email.com",
+          role: "provider",
+          status: "active",
+          joined: "Mar 5, 2026",
+          location: "Mombasa, KE",
+        },
+        {
+          id: 4,
+          name: "Daniel Mwangi",
+          email: "daniel@email.com",
+          role: "client",
+          status: "active",
+          joined: "Mar 4, 2026",
+          location: "Kisumu, KE",
+        },
+        {
+          id: 5,
+          name: "spam_account_44",
+          email: "spam@spam.com",
+          role: "provider",
+          status: "suspended",
+          joined: "Mar 3, 2026",
+          location: "Unknown",
+        },
+        {
+          id: 6,
+          name: "Grace Njeri",
+          email: "grace@email.com",
+          role: "provider",
+          status: "pending",
+          joined: "Mar 3, 2026",
+          location: "Nakuru, KE",
+        },
+        {
+          id: 7,
+          name: "Brian Kipchoge",
+          email: "brian@email.com",
+          role: "client",
+          status: "active",
+          joined: "Mar 2, 2026",
+          location: "Eldoret, KE",
+        },
+        {
+          id: 8,
+          name: "Fatuma Ali",
+          email: "fatuma@email.com",
+          role: "provider",
+          status: "active",
+          joined: "Mar 1, 2026",
+          location: "Zanzibar, TZ",
+        },
+      ];
 
-    let users = [...USERS];
+      let users = [...USERS];
 
-    const statusColors = {
-      active:    "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
-      pending:   "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500",
-      suspended: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
-    };
+      const statusColors = {
+        active:
+          "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+        pending:
+          "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500",
+        suspended:
+          "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+      };
 
-    function renderUsers(list) {
-      document.getElementById("userCount").textContent = list.length + " users";
-      document.getElementById("usersBody").innerHTML = list.map(u => `
+      function renderUsers(list) {
+        document.getElementById("userCount").textContent =
+          list.length + " users";
+        document.getElementById("usersBody").innerHTML = list
+          .map(
+            (u) => `
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
           <td class="py-4 px-6">
             <div class="flex items-center gap-3">
@@ -168,55 +343,121 @@
               ${user.role === "super_admin" ? `<button onclick="openModal('ban', ${u.id})" class="px-2 py-1 rounded text-xs font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 hover:bg-red-200 transition-colors">Ban</button>` : ""}
             </div>
           </td>
-        </tr>`).join("");
-    }
+        </tr>`,
+          )
+          .join("");
+      }
 
-    function filterUsers() {
-      const query  = document.getElementById("searchInput").value.toLowerCase();
-      const role   = document.getElementById("filterRole").value;
-      const status = document.getElementById("filterStatus").value;
-      const filtered = USERS.filter(u =>
-        (!query  || u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query)) &&
-        (!role   || u.role === role) &&
-        (!status || u.status === status)
-      );
-      renderUsers(filtered);
-    }
+      function filterUsers() {
+        const query = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const role = document.getElementById("filterRole").value;
+        const status = document.getElementById("filterStatus").value;
+        const filtered = USERS.filter(
+          (u) =>
+            (!query ||
+              u.name.toLowerCase().includes(query) ||
+              u.email.toLowerCase().includes(query)) &&
+            (!role || u.role === role) &&
+            (!status || u.status === status),
+        );
+        renderUsers(filtered);
+      }
 
-    let pendingAction = null;
-    function openModal(action, userId) {
-      const u = USERS.find(x => x.id === userId);
-      const labels = { approve: "Approve Provider", suspend: "Suspend User", reinstate: "Reinstate User", ban: "Permanently Ban User" };
-      const descs  = {
-        approve: `Approve <strong>${u.name}</strong> as a verified provider. They will be able to list services.`,
-        suspend: `Suspend <strong>${u.name}</strong>'s account. They will not be able to access PEDY.`,
-        reinstate: `Reinstate <strong>${u.name}</strong>'s account and restore their access.`,
-        ban: `<span class="text-red-600">Permanently ban</span> <strong>${u.name}</strong>. This action cannot be undone.`,
-      };
-      document.getElementById("modalTitle").textContent = labels[action];
-      document.getElementById("modalBody").innerHTML = descs[action];
-      pendingAction = { action, userId };
-      document.getElementById("actionModal").classList.remove("hidden");
-    }
+      let pendingAction = null;
+      function openModal(action, userId) {
+        const u = USERS.find((x) => x.id === userId);
+        const labels = {
+          approve: "Approve Provider",
+          suspend: "Suspend User",
+          reinstate: "Reinstate User",
+          ban: "Permanently Ban User",
+        };
+        const descs = {
+          approve: `Approve <strong>${u.name}</strong> as a verified provider. They will be able to list services.`,
+          suspend: `Suspend <strong>${u.name}</strong>'s account. They will not be able to access PEDY.`,
+          reinstate: `Reinstate <strong>${u.name}</strong>'s account and restore their access.`,
+          ban: `<span class="text-red-600">Permanently ban</span> <strong>${u.name}</strong>. This action cannot be undone.`,
+        };
+        document.getElementById("modalTitle").textContent = labels[action];
+        document.getElementById("modalBody").innerHTML = descs[action];
+        pendingAction = { action, userId };
+        document.getElementById("actionModal").style.display = "flex";
+      }
 
-    function closeModal() {
-      document.getElementById("actionModal").classList.add("hidden");
-      pendingAction = null;
-    }
+      function closeModal() {
+        document.getElementById("actionModal").style.display = "none";
+        pendingAction = null;
+      }
 
-    document.getElementById("modalConfirm").addEventListener("click", () => {
-      if (!pendingAction) return;
-      const { action, userId } = pendingAction;
-      const u = USERS.find(x => x.id === userId);
-      if (action === "approve") u.status = "active";
-      else if (action === "suspend") u.status = "suspended";
-      else if (action === "reinstate") u.status = "active";
-      else if (action === "ban") { const idx = USERS.findIndex(x => x.id === userId); USERS.splice(idx, 1); }
-      closeModal();
-      filterUsers();
-    });
+      document.getElementById("modalConfirm").addEventListener("click", () => {
+        if (!pendingAction) return;
+        const { action, userId } = pendingAction;
+        const u = USERS.find((x) => x.id === userId);
+        if (action === "approve") u.status = "active";
+        else if (action === "suspend") u.status = "suspended";
+        else if (action === "reinstate") u.status = "active";
+        else if (action === "ban") {
+          const idx = USERS.findIndex((x) => x.id === userId);
+          USERS.splice(idx, 1);
+        }
+        closeModal();
+        filterUsers();
+      });
 
-    renderUsers(USERS);
-  </script>
-</body>
+      renderUsers(USERS);
+
+      function exportUsers() {
+        const visible = getVisibleUsers();
+        exportCSV(
+          "users.csv",
+          ["ID", "Name", "Email", "Role", "Status", "Joined", "Location"],
+          visible.map((u) => [
+            u.id,
+            u.name,
+            u.email,
+            u.role,
+            u.status,
+            u.joined,
+            u.location,
+          ]),
+        );
+      }
+
+      function exportUsersPDF() {
+        const visible = getVisibleUsers();
+        exportPDF(
+          "users.pdf",
+          "Users Report",
+          ["ID", "Name", "Email", "Role", "Status", "Joined", "Location"],
+          visible.map((u) => [
+            u.id,
+            u.name,
+            u.email,
+            u.role,
+            u.status,
+            u.joined,
+            u.location,
+          ]),
+          { orientation: "landscape" },
+        );
+      }
+
+      function getVisibleUsers() {
+        return USERS.filter((u) => {
+          const q = document.getElementById("searchInput").value.toLowerCase();
+          const r = document.getElementById("filterRole").value;
+          const s = document.getElementById("filterStatus").value;
+          return (
+            (!q ||
+              u.name.toLowerCase().includes(q) ||
+              u.email.toLowerCase().includes(q)) &&
+            (!r || u.role === r) &&
+            (!s || u.status === s)
+          );
+        });
+      }
+    </script>
+  </body>
 </html>

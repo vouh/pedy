@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <script>
+      !(function () {
+        var t = localStorage.getItem("pedy_theme");
+        (t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches)) &&
+          document.documentElement.classList.add("dark");
+      })();
+    </script>
+    <title>Reviews – PEDY Admin</title>
+    <link rel="stylesheet" href="dist/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans h-screen overflow-hidden"
+  >
+    <div id="sidebar-container"></div>
+    <div class="lg:pl-64 h-screen overflow-y-auto flex flex-col">
+      <div id="topbar-container"></div>
+      <main class="flex-1 px-4 sm:px-6 py-6">
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-yellow-500"
+              >star</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Avg Rating</p>
+              <p id="statAvg" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-primary"
+              >reviews</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Total</p>
+              <p id="statTotal" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-amber-500"
+              >pending</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Pending</p>
+              <p id="statPending" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-red-500"
+              >flag</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Flagged</p>
+              <p id="statFlagged" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table card -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm"
+        >
+          <div
+            class="flex flex-wrap items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-700"
+          >
+            <h3 class="font-semibold text-sm flex-1">All Reviews</h3>
+            <select
+              id="filterStatus"
+              onchange="loadReviews()"
+              class="text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-1.5 bg-white dark:bg-slate-700 outline-none"
+            >
+              <option value="">All statuses</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="flagged">Flagged</option>
+            </select>
+            <select
+              id="filterRating"
+              onchange="loadReviews()"
+              class="text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-1.5 bg-white dark:bg-slate-700 outline-none"
+            >
+              <option value="">All ratings</option>
+              <option value="1">★ 1</option>
+              <option value="2">★ 2</option>
+              <option value="3">★ 3</option>
+              <option value="4">★ 4</option>
+              <option value="5">★ 5</option>
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr
+                  class="text-left text-xs text-slate-400 border-b border-slate-100 dark:border-slate-700"
+                >
+                  <th class="px-5 py-3 font-semibold">User</th>
+                  <th class="px-5 py-3 font-semibold">Service</th>
+                  <th class="px-5 py-3 font-semibold">Rating</th>
+                  <th class="px-5 py-3 font-semibold">Comment</th>
+                  <th class="px-5 py-3 font-semibold">Status</th>
+                  <th class="px-5 py-3 font-semibold">Date</th>
+                  <th class="px-5 py-3 font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reviewsTable">
+                <tr>
+                  <td colspan="7" class="px-5 py-10 text-center text-slate-400">
+                    Loading…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="pagination" class="px-5 py-3"></div>
+        </div>
+      </main>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+      let currentUser,
+        currentPage = 1;
+      const PAGE_SIZE = 10;
+
+      async function init() {
+        currentUser = requireAuth();
+        if (!currentUser) return;
+        document.getElementById("sidebar-container").innerHTML = buildSidebar(
+          currentUser,
+          "reviews",
+        );
+        document.getElementById("topbar-container").innerHTML = buildTopbar(
+          "Reviews",
+          "Manage service reviews",
+        );
+        await loadReviews();
+      }
+
+      async function loadReviews(page = currentPage) {
+        currentPage = page;
+        const status = document.getElementById("filterStatus").value;
+        const rating = document.getElementById("filterRating").value;
+        const params = new URLSearchParams({ page, limit: PAGE_SIZE });
+        if (status) params.set("status", status);
+        if (rating) params.set("rating", rating);
+        const res = await apiFetch(`/reviews?${params}`);
+        if (!res) return;
+        const { reviews, total } = await res.json();
+
+        // Stats (simplified from full set)
+        document.getElementById("statTotal").textContent = total;
+        document.getElementById("statPending").textContent = reviews.filter(
+          (r) => r.status === "pending",
+        ).length;
+        document.getElementById("statFlagged").textContent = reviews.filter(
+          (r) => r.status === "flagged",
+        ).length;
+        const avg =
+          reviews.reduce((s, r) => s + r.rating, 0) / (reviews.length || 1);
+        document.getElementById("statAvg").textContent = avg.toFixed(1);
+
+        const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
+        const statusBadge = (s) =>
+          ({
+            approved:
+              "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+            pending:
+              "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+            flagged:
+              "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+          })[s] || "";
+
+        document.getElementById("reviewsTable").innerHTML = reviews.length
+          ? reviews
+              .map(
+                (rv) => `
+    <tr class="border-b border-slate-50 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+      <td class="px-5 py-3 font-medium">${rv.userName}</td>
+      <td class="px-5 py-3 text-slate-500 dark:text-slate-400">${rv.serviceName}</td>
+      <td class="px-5 py-3 text-yellow-500 text-xs">${stars(rv.rating)}</td>
+      <td class="px-5 py-3 max-w-xs truncate text-slate-500 dark:text-slate-400">${rv.comment}</td>
+      <td class="px-5 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-semibold capitalize ${statusBadge(rv.status)}">${rv.status}</span></td>
+      <td class="px-5 py-3 text-slate-400 text-xs">${rv.createdAt}</td>
+      <td class="px-5 py-3">
+        <div class="flex items-center gap-1">
+          ${rv.status !== "approved" ? `<button onclick="action('${rv.id}','approve')" class="px-2 py-1 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs font-semibold hover:bg-green-100 transition-colors">Approve</button>` : ""}
+          ${rv.status !== "flagged" ? `<button onclick="action('${rv.id}','flag')"    class="px-2 py-1 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-semibold hover:bg-amber-100 transition-colors">Flag</button>` : ""}
+          <button onclick="action('${rv.id}','delete')" class="px-2 py-1 rounded-lg bg-red-50 dark:bg-red-900/20 text-primary text-xs font-semibold hover:bg-red-100 transition-colors">Remove</button>
+        </div>
+      </td>
+    </tr>`,
+              )
+              .join("")
+          : `<tr><td colspan="7" class="px-5 py-10 text-center text-slate-400">No reviews found.</td></tr>`;
+
+        document.getElementById("pagination").innerHTML = createPagination(
+          total,
+          currentPage,
+          PAGE_SIZE,
+          loadReviews,
+        );
+      }
+
+      async function action(id, type) {
+        let res;
+        if (type === "approve")
+          res = await apiFetch(`/reviews/${id}/approve`, { method: "PATCH" });
+        else if (type === "flag")
+          res = await apiFetch(`/reviews/${id}/flag`, { method: "PATCH" });
+        else res = await apiFetch(`/reviews/${id}`, { method: "DELETE" });
+        if (res?.ok) loadReviews();
+      }
+
+      init();
+    </script>
+  </body>
+</html>

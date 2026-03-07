@@ -1,249 +1,419 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>PEDY Admin – Dashboard</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: { "primary": "#eb4c4c", "background-light": "#f8f6f6", "background-dark": "#211111" },
-          fontFamily: { "display": ["Inter"] },
-          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-        },
-      },
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    .filled { font-variation-settings: 'FILL' 1; }
-  </style>
-</head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
-  <div id="sidebarContainer"></div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link rel="icon" href="data:," />
+    <script>
+      !(function () {
+        var t = localStorage.getItem("pedy_theme");
+        (t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches)) &&
+          document.documentElement.classList.add("dark");
+      })();
+    </script>
+    <title>PEDY Admin – Dashboard</title>
+    <link rel="stylesheet" href="dist/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans h-screen overflow-hidden"
+  >
+    <div id="sidebar-container"></div>
 
-  <div class="lg:pl-64 min-h-screen flex flex-col">
-    <div id="topbarContainer"></div>
+    <div class="lg:pl-64 h-screen overflow-y-auto flex flex-col">
+      <div id="topbar-container"></div>
 
-    <main class="flex-1 px-6 py-8 max-w-[1200px] w-full mx-auto">
-
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
-        <!-- Total Users -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4">
-          <div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-            <span class="material-symbols-outlined !text-2xl">group</span>
+      <main
+        class="flex-1 px-4 sm:px-6 py-6 sm:py-8 w-full max-w-[1200px] mx-auto"
+      >
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+          <!-- Total Users -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4"
+          >
+            <div
+              class="size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary"
+            >
+              <span class="material-symbols-outlined !text-2xl">group</span>
+            </div>
+            <div>
+              <p
+                class="text-xs text-slate-500 font-medium uppercase tracking-wider"
+              >
+                Total Users
+              </p>
+              <p class="text-2xl font-bold mt-0.5">12,847</p>
+              <p class="text-xs text-green-600 font-semibold mt-0.5">
+                ↑ 8.2% this week
+              </p>
+            </div>
           </div>
-          <div>
-            <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Users</p>
-            <p class="text-2xl font-bold mt-0.5">12,847</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 8.2% this week</p>
+          <!-- Active Providers -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4"
+          >
+            <div
+              class="size-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"
+            >
+              <span class="material-symbols-outlined !text-2xl"
+                >storefront</span
+              >
+            </div>
+            <div>
+              <p
+                class="text-xs text-slate-500 font-medium uppercase tracking-wider"
+              >
+                Active Providers
+              </p>
+              <p class="text-2xl font-bold mt-0.5">3,412</p>
+              <p class="text-xs text-green-600 font-semibold mt-0.5">
+                ↑ 5.4% this week
+              </p>
+            </div>
+          </div>
+          <!-- Total Bookings -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4"
+          >
+            <div
+              class="size-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-500"
+            >
+              <span class="material-symbols-outlined !text-2xl"
+                >calendar_month</span
+              >
+            </div>
+            <div>
+              <p
+                class="text-xs text-slate-500 font-medium uppercase tracking-wider"
+              >
+                Total Bookings
+              </p>
+              <p class="text-2xl font-bold mt-0.5">9,203</p>
+              <p class="text-xs text-green-600 font-semibold mt-0.5">
+                ↑ 12.1% this week
+              </p>
+            </div>
+          </div>
+          <!-- Revenue -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4"
+          >
+            <div
+              class="size-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400"
+            >
+              <span class="material-symbols-outlined !text-2xl">payments</span>
+            </div>
+            <div>
+              <p
+                class="text-xs text-slate-500 font-medium uppercase tracking-wider"
+              >
+                Platform Revenue
+              </p>
+              <p class="text-2xl font-bold mt-0.5">$48,920</p>
+              <p class="text-xs text-green-600 font-semibold mt-0.5">
+                ↑ 9.8% this week
+              </p>
+            </div>
           </div>
         </div>
-        <!-- Active Providers -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4">
-          <div class="size-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-            <span class="material-symbols-outlined !text-2xl">storefront</span>
-          </div>
-          <div>
-            <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Active Providers</p>
-            <p class="text-2xl font-bold mt-0.5">3,412</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 5.4% this week</p>
-          </div>
-        </div>
-        <!-- Total Bookings -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4">
-          <div class="size-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-500">
-            <span class="material-symbols-outlined !text-2xl">calendar_month</span>
-          </div>
-          <div>
-            <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Bookings</p>
-            <p class="text-2xl font-bold mt-0.5">9,203</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 12.1% this week</p>
-          </div>
-        </div>
-        <!-- Revenue -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4">
-          <div class="size-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
-            <span class="material-symbols-outlined !text-2xl">payments</span>
-          </div>
-          <div>
-            <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Platform Revenue</p>
-            <p class="text-2xl font-bold mt-0.5">$48,920</p>
-            <p class="text-xs text-green-600 font-semibold mt-0.5">↑ 9.8% this week</p>
-          </div>
-        </div>
-      </div>
 
-      <!-- Two-column middle section -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Two-column middle section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <!-- Pending Actions -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+          >
+            <h3 class="font-bold text-base mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary"
+                >pending_actions</span
+              >
+              Pending Actions
+            </h3>
+            <div class="space-y-3" id="pendingActions">
+              <!-- Injected by JS based on role -->
+            </div>
+          </div>
 
-        <!-- Pending Actions -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+          <!-- Recent Signups -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+          >
+            <h3 class="font-bold text-base mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary"
+                >person_add</span
+              >
+              Recent Signups
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3">
+                <div
+                  class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm"
+                >
+                  J
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium">Jane Wanjiku</p>
+                  <p class="text-xs text-slate-400">Provider · Nairobi</p>
+                </div>
+                <span class="text-xs text-slate-400">2m ago</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="size-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-bold text-sm"
+                >
+                  M
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium">Michael Otieno</p>
+                  <p class="text-xs text-slate-400">Client · Lagos</p>
+                </div>
+                <span class="text-xs text-slate-400">15m ago</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="size-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 font-bold text-sm"
+                >
+                  A
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium">Amina Hassan</p>
+                  <p class="text-xs text-slate-400">Provider · Mombasa</p>
+                </div>
+                <span class="text-xs text-slate-400">1h ago</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="size-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-700 font-bold text-sm"
+                >
+                  D
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium">Daniel Mwangi</p>
+                  <p class="text-xs text-slate-400">Client · Kisumu</p>
+                </div>
+                <span class="text-xs text-slate-400">3h ago</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Recent Activity Log -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+        >
           <h3 class="font-bold text-base mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">pending_actions</span>
-            Pending Actions
+            <span class="material-symbols-outlined text-primary">history</span>
+            Activity Log
           </h3>
-          <div class="space-y-3" id="pendingActions">
-            <!-- Injected by JS based on role -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr
+                  class="text-xs text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700"
+                >
+                  <th class="text-left py-2 pr-4 font-semibold">Admin</th>
+                  <th class="text-left py-2 pr-4 font-semibold">Action</th>
+                  <th class="text-left py-2 pr-4 font-semibold">Target</th>
+                  <th class="text-left py-2 font-semibold">Time</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                <tr>
+                  <td class="py-3 pr-4">
+                    <span class="flex items-center gap-2">
+                      <span
+                        class="size-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold"
+                        >S</span
+                      >
+                      Super Admin
+                    </span>
+                  </td>
+                  <td class="py-3 pr-4">
+                    <span
+                      class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold px-2 py-0.5 rounded-full"
+                      >Approved</span
+                    >
+                  </td>
+                  <td class="py-3 pr-4 text-slate-500">
+                    Provider: Jane Wanjiku
+                  </td>
+                  <td class="py-3 text-slate-400 text-xs">Just now</td>
+                </tr>
+                <tr>
+                  <td class="py-3 pr-4">
+                    <span class="flex items-center gap-2">
+                      <span
+                        class="size-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 text-xs font-bold"
+                        >C</span
+                      >
+                      Content Mod
+                    </span>
+                  </td>
+                  <td class="py-3 pr-4">
+                    <span
+                      class="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-semibold px-2 py-0.5 rounded-full"
+                      >Removed</span
+                    >
+                  </td>
+                  <td class="py-3 pr-4 text-slate-500">
+                    Service: Fake Logo Design
+                  </td>
+                  <td class="py-3 text-slate-400 text-xs">12m ago</td>
+                </tr>
+                <tr>
+                  <td class="py-3 pr-4">
+                    <span class="flex items-center gap-2">
+                      <span
+                        class="size-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 text-xs font-bold"
+                        >P</span
+                      >
+                      Payment Mgr
+                    </span>
+                  </td>
+                  <td class="py-3 pr-4">
+                    <span
+                      class="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500 text-xs font-semibold px-2 py-0.5 rounded-full"
+                      >Refunded</span
+                    >
+                  </td>
+                  <td class="py-3 pr-4 text-slate-500">Txn #TXN-8821 ($45)</td>
+                  <td class="py-3 text-slate-400 text-xs">1h ago</td>
+                </tr>
+                <tr>
+                  <td class="py-3 pr-4">
+                    <span class="flex items-center gap-2">
+                      <span
+                        class="size-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 text-xs font-bold"
+                        >C</span
+                      >
+                      Content Mod
+                    </span>
+                  </td>
+                  <td class="py-3 pr-4">
+                    <span
+                      class="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-semibold px-2 py-0.5 rounded-full"
+                      >Suspended</span
+                    >
+                  </td>
+                  <td class="py-3 pr-4 text-slate-500">
+                    User: spam_account_44
+                  </td>
+                  <td class="py-3 text-slate-400 text-xs">3h ago</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
+      </main>
+    </div>
 
-        <!-- Recent Signups -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-          <h3 class="font-bold text-base mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">person_add</span>
-            Recent Signups
-          </h3>
-          <ul class="space-y-3">
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">J</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Jane Wanjiku</p>
-                <p class="text-xs text-slate-400">Provider · Nairobi</p>
-              </div>
-              <span class="text-xs text-slate-400">2m ago</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-bold text-sm">M</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Michael Otieno</p>
-                <p class="text-xs text-slate-400">Client · Lagos</p>
-              </div>
-              <span class="text-xs text-slate-400">15m ago</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 font-bold text-sm">A</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Amina Hassan</p>
-                <p class="text-xs text-slate-400">Provider · Mombasa</p>
-              </div>
-              <span class="text-xs text-slate-400">1h ago</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <div class="size-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-700 font-bold text-sm">D</div>
-              <div class="flex-1">
-                <p class="text-sm font-medium">Daniel Mwangi</p>
-                <p class="text-xs text-slate-400">Client · Kisumu</p>
-              </div>
-              <span class="text-xs text-slate-400">3h ago</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <script src="shared.js"></script>
+    <script>
+      const user = requireAuth();
+      if (user) {
+        document.getElementById("sidebar-container").innerHTML = buildSidebar(
+          user,
+          "dashboard",
+        );
+        document.getElementById("topbar-container").innerHTML = buildTopbar(
+          "Dashboard",
+          "Welcome back, " + user.name,
+        );
 
-      <!-- Recent Activity Log -->
-      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 class="font-bold text-base mb-4 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">history</span>
-          Activity Log
-        </h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="text-xs text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
-                <th class="text-left py-2 pr-4 font-semibold">Admin</th>
-                <th class="text-left py-2 pr-4 font-semibold">Action</th>
-                <th class="text-left py-2 pr-4 font-semibold">Target</th>
-                <th class="text-left py-2 font-semibold">Time</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">S</span>
-                    Super Admin
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold px-2 py-0.5 rounded-full">Approved</span></td>
-                <td class="py-3 pr-4 text-slate-500">Provider: Jane Wanjiku</td>
-                <td class="py-3 text-slate-400 text-xs">Just now</td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 text-xs font-bold">C</span>
-                    Content Mod
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-semibold px-2 py-0.5 rounded-full">Removed</span></td>
-                <td class="py-3 pr-4 text-slate-500">Service: Fake Logo Design</td>
-                <td class="py-3 text-slate-400 text-xs">12m ago</td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 text-xs font-bold">P</span>
-                    Payment Mgr
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500 text-xs font-semibold px-2 py-0.5 rounded-full">Refunded</span></td>
-                <td class="py-3 pr-4 text-slate-500">Txn #TXN-8821 ($45)</td>
-                <td class="py-3 text-slate-400 text-xs">1h ago</td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4">
-                  <span class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 text-xs font-bold">C</span>
-                    Content Mod
-                  </span>
-                </td>
-                <td class="py-3 pr-4"><span class="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-semibold px-2 py-0.5 rounded-full">Suspended</span></td>
-                <td class="py-3 pr-4 text-slate-500">User: spam_account_44</td>
-                <td class="py-3 text-slate-400 text-xs">3h ago</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        // Role-specific pending actions
+        const actions = {
+          super_admin: [
+            {
+              icon: "person_check",
+              text: "14 providers awaiting verification",
+              color: "text-primary",
+              href: "users.html",
+            },
+            {
+              icon: "storefront",
+              text: "8 new services pending review",
+              color: "text-blue-600",
+              href: "services.html",
+            },
+            {
+              icon: "report",
+              text: "3 payment disputes to resolve",
+              color: "text-green-700",
+              href: "payments.html",
+            },
+            {
+              icon: "flag",
+              text: "5 user reports flagged",
+              color: "text-orange-600",
+              href: "users.html",
+            },
+          ],
+          content_moderator: [
+            {
+              icon: "person_check",
+              text: "14 providers awaiting verification",
+              color: "text-primary",
+              href: "users.html",
+            },
+            {
+              icon: "storefront",
+              text: "8 new services pending review",
+              color: "text-blue-600",
+              href: "services.html",
+            },
+            {
+              icon: "flag",
+              text: "5 user reports flagged",
+              color: "text-orange-600",
+              href: "users.html",
+            },
+          ],
+          payment_manager: [
+            {
+              icon: "report",
+              text: "3 payment disputes to resolve",
+              color: "text-green-700",
+              href: "payments.html",
+            },
+            {
+              icon: "warning",
+              text: "2 suspicious transactions flagged",
+              color: "text-red-600",
+              href: "payments.html",
+            },
+            {
+              icon: "receipt_long",
+              text: "Monthly report ready to export",
+              color: "text-slate-600",
+              href: "payments.html",
+            },
+          ],
+        };
 
-    </main>
-  </div>
-
-  <script src="shared.js"></script>
-  <script>
-    const user = requireAuth();
-    if (user) {
-      document.getElementById("sidebarContainer").innerHTML = buildSidebar(user, "dashboard");
-      document.getElementById("topbarContainer").innerHTML = buildTopbar("Dashboard", "Welcome back, " + user.name);
-
-      // Role-specific pending actions
-      const actions = {
-        super_admin: [
-          { icon: "person_check", text: "14 providers awaiting verification", color: "text-primary", href: "users.html" },
-          { icon: "storefront", text: "8 new services pending review", color: "text-blue-600", href: "services.html" },
-          { icon: "report", text: "3 payment disputes to resolve", color: "text-green-700", href: "payments.html" },
-          { icon: "flag", text: "5 user reports flagged", color: "text-orange-600", href: "users.html" },
-        ],
-        content_moderator: [
-          { icon: "person_check", text: "14 providers awaiting verification", color: "text-primary", href: "users.html" },
-          { icon: "storefront", text: "8 new services pending review", color: "text-blue-600", href: "services.html" },
-          { icon: "flag", text: "5 user reports flagged", color: "text-orange-600", href: "users.html" },
-        ],
-        payment_manager: [
-          { icon: "report", text: "3 payment disputes to resolve", color: "text-green-700", href: "payments.html" },
-          { icon: "warning", text: "2 suspicious transactions flagged", color: "text-red-600", href: "payments.html" },
-          { icon: "receipt_long", text: "Monthly report ready to export", color: "text-slate-600", href: "payments.html" },
-        ],
-      };
-
-      const items = actions[user.role] || [];
-      document.getElementById("pendingActions").innerHTML = items.map(a => `
+        const items = actions[user.role] || [];
+        document.getElementById("pendingActions").innerHTML = items
+          .map(
+            (a) => `
         <a href="${a.href}" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors group">
           <div class="size-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center ${a.color} group-hover:bg-primary/10">
             <span class="material-symbols-outlined !text-base">${a.icon}</span>
           </div>
           <p class="text-sm font-medium flex-1">${a.text}</p>
           <span class="material-symbols-outlined !text-sm text-slate-300">chevron_right</span>
-        </a>`).join("");
-    }
-  </script>
-</body>
+        </a>`,
+          )
+          .join("");
+      }
+    </script>
+  </body>
 </html>

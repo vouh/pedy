@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <script>
+      !(function () {
+        var t = localStorage.getItem("pedy_theme");
+        (t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches)) &&
+          document.documentElement.classList.add("dark");
+      })();
+    </script>
+    <title>Admin Accounts – PEDY Admin</title>
+    <link rel="stylesheet" href="dist/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans h-screen overflow-hidden"
+  >
+    <div id="sidebar-container"></div>
+    <div class="lg:pl-64 h-screen overflow-y-auto flex flex-col">
+      <div id="topbar-container"></div>
+      <main class="flex-1 px-4 sm:px-6 py-6">
+        <div class="grid lg:grid-cols-3 gap-6">
+          <!-- Create Admin Form -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-5"
+          >
+            <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined !text-base text-primary"
+                >person_add</span
+              >Create Admin
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Full Name</label
+                >
+                <input
+                  id="aName"
+                  type="text"
+                  placeholder="Jane Doe"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Email</label
+                >
+                <input
+                  id="aEmail"
+                  type="email"
+                  placeholder="jane@pedy.com"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Role</label
+                >
+                <select
+                  id="aRole"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none"
+                >
+                  <option value="super_admin">Super Admin</option>
+                  <option value="content_moderator" selected>
+                    Content Moderator
+                  </option>
+                  <option value="payment_manager">Payment Manager</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs text-slate-500 font-semibold block mb-1"
+                  >Password</label
+                >
+                <input
+                  id="aPassword"
+                  type="password"
+                  placeholder="Min 8 chars"
+                  class="w-full text-sm border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
+              <button
+                onclick="createAdmin()"
+                class="w-full bg-primary text-white rounded-lg py-2 text-sm font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+              >
+                <span class="material-symbols-outlined !text-base"
+                  >add_circle</span
+                >Create Admin
+              </button>
+              <p id="createMsg" class="text-xs text-center hidden"></p>
+            </div>
+          </div>
+
+          <!-- Admins table -->
+          <div
+            class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm"
+          >
+            <div
+              class="px-5 py-4 border-b border-slate-100 dark:border-slate-700"
+            >
+              <h3 class="font-semibold text-sm">Admin Accounts</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr
+                    class="text-left text-xs text-slate-400 border-b border-slate-100 dark:border-slate-700"
+                  >
+                    <th class="px-5 py-3 font-semibold">Name</th>
+                    <th class="px-5 py-3 font-semibold">Email</th>
+                    <th class="px-5 py-3 font-semibold">Role</th>
+                    <th class="px-5 py-3 font-semibold">Status</th>
+                    <th class="px-5 py-3 font-semibold">Created</th>
+                    <th class="px-5 py-3 font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminsTable">
+                  <tr>
+                    <td
+                      colspan="6"
+                      class="px-5 py-10 text-center text-slate-400"
+                    >
+                      Loading…
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+      let currentUser;
+
+      async function init() {
+        currentUser = requireAuth();
+        if (!currentUser) return;
+        document.getElementById("sidebar-container").innerHTML = buildSidebar(
+          currentUser,
+          "admins",
+        );
+        document.getElementById("topbar-container").innerHTML = buildTopbar(
+          "Admin Accounts",
+          "Manage admin users and roles",
+        );
+        loadAdmins();
+      }
+
+      async function loadAdmins() {
+        const res = await apiFetch("/admins");
+        if (!res) return;
+        const { admins } = await res.json();
+
+        const roleBadge = (r) =>
+          ({
+            super_admin: "bg-red-100 text-primary dark:bg-red-900/30",
+            content_moderator:
+              "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+            payment_manager:
+              "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+          })[r] || "";
+
+        const roleLabel = (r) =>
+          ({
+            super_admin: "Super Admin",
+            content_moderator: "Moderator",
+            payment_manager: "Pay Manager",
+          })[r] || r;
+
+        document.getElementById("adminsTable").innerHTML = admins
+          .map(
+            (a) => `
+    <tr class="border-b border-slate-50 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+      <td class="px-5 py-3 font-semibold flex items-center gap-2">
+        <div class="size-7 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">${a.name.charAt(0)}</div>
+        ${a.name} ${a.id === currentUser.id ? '<span class="text-[10px] text-slate-400">(you)</span>' : ""}
+      </td>
+      <td class="px-5 py-3 text-slate-500 dark:text-slate-400 text-xs">${a.email}</td>
+      <td class="px-5 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-semibold ${roleBadge(a.role)}">${roleLabel(a.role)}</span></td>
+      <td class="px-5 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-semibold ${a.status === "active" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-slate-100 text-slate-500"}">${a.status}</span></td>
+      <td class="px-5 py-3 text-xs text-slate-400">${a.createdAt}</td>
+      <td class="px-5 py-3">
+        ${
+          a.id !== currentUser.id
+            ? `
+          <button onclick="deactivate('${a.id}')" class="px-2 py-1 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-semibold hover:bg-amber-100 transition-colors mr-1">Deactivate</button>
+          <button onclick="deleteAdmin('${a.id}')" class="px-2 py-1 rounded-lg bg-red-50 dark:bg-red-900/20 text-primary text-xs font-semibold hover:bg-red-100 transition-colors">Delete</button>
+        `
+            : `<span class="text-xs text-slate-300">–</span>`
+        }
+      </td>
+    </tr>`,
+          )
+          .join("");
+      }
+
+      async function createAdmin() {
+        const name = document.getElementById("aName").value.trim();
+        const email = document.getElementById("aEmail").value.trim();
+        const role = document.getElementById("aRole").value;
+        const password = document.getElementById("aPassword").value.trim();
+        if (!name || !email || !password)
+          return showMsg("All fields required.", "text-primary");
+        const res = await apiFetch("/admins", {
+          method: "POST",
+          body: JSON.stringify({ name, email, role, password }),
+        });
+        if (res?.ok) {
+          showMsg("Admin created!", "text-green-600");
+          ["aName", "aEmail", "aPassword"].forEach(
+            (id) => (document.getElementById(id).value = ""),
+          );
+          loadAdmins();
+        } else {
+          const err = await res?.json();
+          showMsg(err?.error || "Failed to create.", "text-primary");
+        }
+      }
+
+      async function deactivate(id) {
+        const res = await apiFetch(`/admins/${id}/deactivate`, {
+          method: "PATCH",
+        });
+        if (res?.ok) loadAdmins();
+      }
+
+      async function deleteAdmin(id) {
+        if (!confirm("Delete this admin? This cannot be undone.")) return;
+        const res = await apiFetch(`/admins/${id}`, { method: "DELETE" });
+        if (res?.ok) loadAdmins();
+      }
+
+      function showMsg(msg, cls) {
+        const el = document.getElementById("createMsg");
+        el.textContent = msg;
+        el.className = `text-xs text-center ${cls}`;
+        el.classList.remove("hidden");
+        setTimeout(() => el.classList.add("hidden"), 3000);
+      }
+
+      init();
+    </script>
+  </body>
+</html>

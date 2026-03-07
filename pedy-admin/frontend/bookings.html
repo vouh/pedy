@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <script>
+      !(function () {
+        var t = localStorage.getItem("pedy_theme");
+        (t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches)) &&
+          document.documentElement.classList.add("dark");
+      })();
+    </script>
+    <title>Bookings – PEDY Admin</title>
+    <link rel="stylesheet" href="dist/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="theme.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans h-screen overflow-hidden"
+  >
+    <div id="sidebar-container"></div>
+    <div class="lg:pl-64 h-screen overflow-y-auto flex flex-col">
+      <div id="topbar-container"></div>
+      <main class="flex-1 px-4 sm:px-6 py-6">
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-primary"
+              >calendar_month</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Total</p>
+              <p id="statTotal" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-amber-500"
+              >pending</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Pending</p>
+              <p id="statPending" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-green-500"
+              >check_circle</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Completed</p>
+              <p id="statCompleted" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3"
+          >
+            <span class="material-symbols-outlined !text-2xl text-slate-400"
+              >cancel</span
+            >
+            <div>
+              <p class="text-xs text-slate-400">Cancelled</p>
+              <p id="statCancelled" class="text-xl font-bold">–</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm"
+        >
+          <div
+            class="flex flex-wrap items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-700"
+          >
+            <h3 class="font-semibold text-sm flex-1">All Bookings</h3>
+            <input
+              id="searchQ"
+              type="text"
+              placeholder="Search…"
+              oninput="loadBookings()"
+              class="text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-1.5 w-40 bg-white dark:bg-slate-700 outline-none"
+            />
+            <select
+              id="filterStatus"
+              onchange="loadBookings()"
+              class="text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-1.5 bg-white dark:bg-slate-700 outline-none"
+            >
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <div class="pedy-export-wrap relative">
+              <button
+                onclick="toggleExportMenu('exportMenuBookings')"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 text-xs font-semibold hover:border-primary hover:text-primary transition-colors"
+              >
+                <span class="material-symbols-outlined !text-xs">download</span>
+                Export
+                <span class="material-symbols-outlined !text-[10px]"
+                  >expand_more</span
+                >
+              </button>
+              <div
+                id="exportMenuBookings"
+                class="pedy-export-menu hidden absolute right-0 mt-1 w-36 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-50 overflow-hidden"
+              >
+                <button
+                  onclick="
+                    exportBookings();
+                    toggleExportMenu('exportMenuBookings');
+                  "
+                  class="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                >
+                  <span
+                    class="material-symbols-outlined !text-base text-green-600"
+                    >table_chart</span
+                  >CSV
+                </button>
+                <button
+                  onclick="
+                    exportBookingsPDF();
+                    toggleExportMenu('exportMenuBookings');
+                  "
+                  class="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-t border-slate-100 dark:border-slate-700"
+                >
+                  <span
+                    class="material-symbols-outlined !text-base text-red-500"
+                    >picture_as_pdf</span
+                  >PDF
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr
+                  class="text-left text-xs text-slate-400 border-b border-slate-100 dark:border-slate-700"
+                >
+                  <th class="px-5 py-3 font-semibold">Service</th>
+                  <th class="px-5 py-3 font-semibold">Client</th>
+                  <th class="px-5 py-3 font-semibold">Provider</th>
+                  <th class="px-5 py-3 font-semibold">Amount</th>
+                  <th class="px-5 py-3 font-semibold">Status</th>
+                  <th class="px-5 py-3 font-semibold">Scheduled</th>
+                  <th class="px-5 py-3 font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookingsTable">
+                <tr>
+                  <td colspan="7" class="px-5 py-10 text-center text-slate-400">
+                    Loading…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="pagination" class="px-5 py-3"></div>
+        </div>
+      </main>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+      let currentUser,
+        currentPage = 1,
+        allBookings = [];
+      const PAGE_SIZE = 10;
+
+      async function init() {
+        currentUser = requireAuth();
+        if (!currentUser) return;
+        document.getElementById("sidebar-container").innerHTML = buildSidebar(
+          currentUser,
+          "bookings",
+        );
+        document.getElementById("topbar-container").innerHTML = buildTopbar(
+          "Bookings",
+          "View and manage all bookings",
+        );
+        await loadBookings();
+      }
+
+      async function loadBookings(page = 1) {
+        currentPage = page;
+        const status = document.getElementById("filterStatus").value;
+        const q = document.getElementById("searchQ").value;
+        const params = new URLSearchParams({ page, limit: PAGE_SIZE });
+        if (status) params.set("status", status);
+        if (q) params.set("q", q);
+        const res = await apiFetch(`/bookings?${params}`);
+        if (!res) return;
+        const { bookings, total } = await res.json();
+        allBookings = bookings;
+
+        document.getElementById("statTotal").textContent = total;
+        document.getElementById("statPending").textContent = bookings.filter(
+          (b) => b.status === "pending",
+        ).length;
+        document.getElementById("statCompleted").textContent = bookings.filter(
+          (b) => b.status === "completed",
+        ).length;
+        document.getElementById("statCancelled").textContent = bookings.filter(
+          (b) => b.status === "cancelled",
+        ).length;
+
+        const statusBadge = (s) =>
+          ({
+            pending:
+              "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+            confirmed:
+              "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+            in_progress:
+              "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+            completed:
+              "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+            cancelled:
+              "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400",
+          })[s] || "";
+
+        document.getElementById("bookingsTable").innerHTML = bookings.length
+          ? bookings
+              .map(
+                (b) => `
+      <tr class="border-b border-slate-50 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+        <td class="px-5 py-3 font-medium">${b.serviceName}</td>
+        <td class="px-5 py-3 text-slate-500 dark:text-slate-400">${b.clientName}</td>
+        <td class="px-5 py-3 text-slate-500 dark:text-slate-400">${b.providerName}</td>
+        <td class="px-5 py-3 font-semibold">$${b.amount}</td>
+        <td class="px-5 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-semibold capitalize ${statusBadge(b.status)}">${b.status.replace("_", " ")}</span></td>
+        <td class="px-5 py-3 text-slate-400 text-xs">${b.scheduledAt}</td>
+        <td class="px-5 py-3">
+          ${
+            b.status !== "cancelled" && b.status !== "completed"
+              ? `<button onclick="cancelBooking('${b.id}')" class="px-2 py-1 rounded-lg bg-red-50 dark:bg-red-900/20 text-primary text-xs font-semibold hover:bg-red-100 transition-colors">Cancel</button>`
+              : `<span class="text-xs text-slate-300">–</span>`
+          }
+        </td>
+      </tr>`,
+              )
+              .join("")
+          : `<tr><td colspan="7" class="px-5 py-10 text-center text-slate-400">No bookings found.</td></tr>`;
+
+        document.getElementById("pagination").innerHTML = createPagination(
+          total,
+          currentPage,
+          PAGE_SIZE,
+          loadBookings,
+        );
+      }
+
+      async function cancelBooking(id) {
+        const res = await apiFetch(`/bookings/${id}/cancel`, {
+          method: "PATCH",
+        });
+        if (res?.ok) loadBookings(currentPage);
+      }
+
+      function exportBookings() {
+        exportCSV(
+          "bookings.csv",
+          [
+            "ID",
+            "Service",
+            "Client",
+            "Provider",
+            "Amount",
+            "Status",
+            "Scheduled",
+          ],
+          allBookings.map((b) => [
+            b.id,
+            b.serviceName,
+            b.clientName,
+            b.providerName,
+            b.amount,
+            b.status,
+            b.scheduledAt,
+          ]),
+        );
+      }
+
+      function exportBookingsPDF() {
+        exportPDF(
+          "bookings.pdf",
+          "Bookings Report",
+          [
+            "ID",
+            "Service",
+            "Client",
+            "Provider",
+            "Amount",
+            "Status",
+            "Scheduled",
+          ],
+          allBookings.map((b) => [
+            b.id,
+            b.serviceName,
+            b.clientName,
+            b.providerName,
+            b.amount,
+            b.status,
+            b.scheduledAt,
+          ]),
+          { orientation: "landscape" },
+        );
+      }
+
+      init();
+    </script>
+  </body>
+</html>

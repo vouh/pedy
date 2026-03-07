@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <script>
+      !(function () {
+        var t = localStorage.getItem("pedy_theme");
+        (t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches)) &&
+          document.documentElement.classList.add("dark");
+      })();
+    </script>
+    <title>Analytics – PEDY Admin</title>
+    <link rel="stylesheet" href="dist/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans h-screen overflow-hidden"
+  >
+    <div id="sidebar-container"></div>
+    <div class="lg:pl-64 h-screen overflow-y-auto flex flex-col">
+      <div id="topbar-container"></div>
+      <main class="flex-1 px-4 sm:px-6 py-6 space-y-6">
+        <!-- KPI Row -->
+        <div
+          id="kpiRow"
+          class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4"
+        ></div>
+
+        <!-- Charts row -->
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Revenue chart -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-5"
+          >
+            <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined !text-base text-primary"
+                >bar_chart</span
+              >Monthly Revenue (USD)
+            </h3>
+            <div id="revenueChart" class="flex items-end gap-1.5 h-40"></div>
+            <div id="revenueLabels" class="flex gap-1.5 mt-1"></div>
+          </div>
+
+          <!-- User growth -->
+          <div
+            class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-5"
+          >
+            <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined !text-base text-blue-500"
+                >trending_up</span
+              >User Growth
+            </h3>
+            <div id="growthChart" class="flex items-end gap-1.5 h-40"></div>
+            <div id="growthLabels" class="flex gap-1.5 mt-1"></div>
+          </div>
+        </div>
+
+        <!-- Top Categories -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-5"
+        >
+          <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined !text-base text-purple-500"
+              >category</span
+            >Top Categories
+          </h3>
+          <div id="categoriesTable"></div>
+        </div>
+      </main>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+      async function init() {
+        const currentUser = requireAuth();
+        if (!currentUser) return;
+        document.getElementById("sidebar-container").innerHTML = buildSidebar(
+          currentUser,
+          "analytics",
+        );
+        document.getElementById("topbar-container").innerHTML = buildTopbar(
+          "Analytics",
+          "Platform performance overview",
+        );
+
+        const [ovRes, revRes, catRes, grwRes] = await Promise.all([
+          apiFetch("/analytics/overview"),
+          apiFetch("/analytics/revenue"),
+          apiFetch("/analytics/categories"),
+          apiFetch("/analytics/growth"),
+        ]);
+        if (!ovRes) return;
+        const [ov, rev, cats, grw] = await Promise.all([
+          ovRes.json(),
+          revRes.json(),
+          catRes.json(),
+          grwRes.json(),
+        ]);
+
+        // KPIs
+        const kpis = [
+          {
+            label: "Total Users",
+            value: ov.totalUsers.toLocaleString(),
+            icon: "group",
+            color: "text-blue-500",
+          },
+          {
+            label: "Active Services",
+            value: ov.activeServices.toLocaleString(),
+            icon: "storefront",
+            color: "text-green-500",
+          },
+          {
+            label: "Total Bookings",
+            value: ov.totalBookings.toLocaleString(),
+            icon: "calendar_month",
+            color: "text-purple-500",
+          },
+          {
+            label: "Revenue",
+            value: "$" + ov.totalRevenue.toLocaleString(),
+            icon: "payments",
+            color: "text-primary",
+          },
+          {
+            label: "New Today",
+            value: ov.newUsersToday,
+            icon: "person_add",
+            color: "text-amber-500",
+          },
+          {
+            label: "Pending Reviews",
+            value: ov.pendingReviews,
+            icon: "reviews",
+            color: "text-slate-500",
+          },
+        ];
+        document.getElementById("kpiRow").innerHTML = kpis
+          .map(
+            (k) => `
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-3">
+      <span class="material-symbols-outlined !text-2xl ${k.color}">${k.icon}</span>
+      <div><p class="text-[11px] text-slate-400 leading-none">${k.label}</p><p class="text-lg font-bold mt-0.5">${k.value}</p></div>
+    </div>`,
+          )
+          .join("");
+
+        // Revenue bar chart
+        renderBar(
+          "revenueChart",
+          "revenueLabels",
+          rev,
+          "month",
+          "revenue",
+          "bg-primary",
+          "$",
+        );
+        renderBar(
+          "growthChart",
+          "growthLabels",
+          grw,
+          "month",
+          "users",
+          "bg-blue-500",
+          "",
+        );
+
+        // Top categories table
+        const maxRev = Math.max(...cats.map((c) => c.revenue));
+        document.getElementById("categoriesTable").innerHTML = `
+    <div class="space-y-3">
+      ${cats
+        .map(
+          (c) => `
+        <div>
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="font-semibold">${c.name}</span>
+            <span class="text-slate-400">${c.bookings} bookings · $${c.revenue.toLocaleString()}</span>
+          </div>
+          <div class="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div class="h-full bg-primary rounded-full transition-all duration-500" style="width:${Math.round((c.revenue / maxRev) * 100)}%"></div>
+          </div>
+        </div>`,
+        )
+        .join("")}
+    </div>`;
+      }
+
+      function renderBar(
+        chartId,
+        labelId,
+        data,
+        labelKey,
+        valueKey,
+        colorClass,
+        prefix,
+      ) {
+        const max = Math.max(...data.map((d) => d[valueKey]));
+        document.getElementById(chartId).innerHTML = data
+          .map(
+            (d) =>
+              `<div class="flex-1 flex flex-col items-center gap-1">
+      <span class="text-[9px] text-slate-400 font-semibold">${prefix}${d[valueKey].toLocaleString()}</span>
+      <div class="bar w-full ${colorClass} rounded-t-sm" style="height:${Math.round((d[valueKey] / max) * 120)}px"></div>
+    </div>`,
+          )
+          .join("");
+        document.getElementById(labelId).innerHTML = data
+          .map(
+            (d) =>
+              `<div class="flex-1 text-center text-[9px] text-slate-400 font-semibold">${d[labelKey]}</div>`,
+          )
+          .join("");
+      }
+
+      init();
+    </script>
+  </body>
+</html>

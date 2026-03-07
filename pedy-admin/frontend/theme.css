@@ -1,0 +1,1046 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PEDY Admin – Advanced Colour System
+   "Smoked Crimson" dark palette + full semantic token stack
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── 1. Design Token Layer ───────────────────────────────────────────────── */
+:root {
+  /* ── Surfaces ── */
+  --pd-base: #f8f6f6;
+  --pd-surface: #ffffff;
+  --pd-raised: #f1ecec;
+  --pd-overlay: #ffffff;
+  --pd-inset: #ede7e7;
+
+  /* ── Borders ── */
+  --pd-hair: #ede4e4;
+  --pd-edge: #ddd3d3;
+  --pd-rim: #c9bbbb;
+
+  /* ── Typography ── */
+  --pd-ink: #150e0e;
+  --pd-text: #3d2f32;
+  --pd-dim: #7a6566;
+  --pd-ghost: #a89090;
+
+  /* ── Brand ── */
+  --pd-primary: #e63946;
+  --pd-primary-glow: rgba(230, 57, 70, 0.12);
+  --pd-primary-haze: rgba(230, 57, 70, 0.07);
+  --pd-primary-flare: rgba(230, 57, 70, 0.22);
+
+  /* ── Semantic: Success ── */
+  --pd-ok-bg: #f0faf4;
+  --pd-ok-bdr: #bbf7d0;
+  --pd-ok-text: #15803d;
+
+  /* ── Semantic: Warning ── */
+  --pd-warn-bg: #fffceb;
+  --pd-warn-bdr: #fde68a;
+  --pd-warn-text: #b45309;
+
+  /* ── Semantic: Danger ── */
+  --pd-err-bg: #fff1f1;
+  --pd-err-bdr: #fecaca;
+  --pd-err-text: #b91c1c;
+
+  /* ── Semantic: Info ── */
+  --pd-info-bg: #eff6ff;
+  --pd-info-bdr: #bfdbfe;
+  --pd-info-text: #1d4ed8;
+
+  /* ── Semantic: Accent/Purple ── */
+  --pd-acc-bg: #faf5ff;
+  --pd-acc-bdr: #e9d5ff;
+  --pd-acc-text: #7c3aed;
+
+  /* ── Shadows ── */
+  --pd-shadow-sm: 0 1px 2px rgba(21, 14, 14, 0.06);
+  --pd-shadow-md: 0 4px 12px rgba(21, 14, 14, 0.1);
+  --pd-shadow-lg: 0 8px 24px rgba(21, 14, 14, 0.14);
+
+  /* ── Transitions ── */
+  --pd-ease: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── 1b. Dark Mode Tokens ─────────────────────────────────────────────────
+   "Smoked Crimson" palette: warm blacks with a crimson undertone that
+   echoes the PEDY red without overwhelming the UI.
+   ─────────────────────────────────────────────────────────────────────────── */
+.dark {
+  color-scheme: dark;
+
+  /* ── Surfaces (warm-neutral — subtle warmth, not obviously red) ── */
+  --pd-base: #111014; /* page canvas             – near-black          */
+  --pd-surface: #1c1b21; /* cards, sidebar           – clearly lifted      */
+  --pd-raised: #28262e; /* inputs, table headers    – interactive layer   */
+  --pd-overlay: #33303a; /* modals, popovers         – top layer          */
+  --pd-inset: #15141a; /* table rows, recessed     – sunken             */
+
+  /* ── Borders (visible, neutral-warm gray) ── */
+  --pd-hair: #24222a; /* subtle divider                                 */
+  --pd-edge: #38353f; /* standard border — clearly visible              */
+  --pd-rim: #504b5a; /* prominent / focus ring                         */
+
+  /* ── Typography (clean, high-contrast) ── */
+  --pd-ink: #f0edf3; /* headings / high-contrast text                  */
+  --pd-text: #c8c3d0; /* body copy                                      */
+  --pd-dim: #908a9a; /* labels, meta, secondary                        */
+  --pd-ghost: #5e586a; /* placeholder / disabled                         */
+
+  /* ── Brand glow (subtle crimson accents) ── */
+  --pd-primary-glow: rgba(230, 57, 70, 0.15);
+  --pd-primary-haze: rgba(230, 57, 70, 0.06);
+  --pd-primary-flare: rgba(230, 57, 70, 0.25);
+
+  /* ── Semantic: Success ── */
+  --pd-ok-bg: #0c1f15;
+  --pd-ok-bdr: #1a5c38;
+  --pd-ok-text: #4ade80;
+
+  /* ── Semantic: Warning ── */
+  --pd-warn-bg: #1e1808;
+  --pd-warn-bdr: #7a4a16;
+  --pd-warn-text: #fcd34d;
+
+  /* ── Semantic: Danger ── */
+  --pd-err-bg: #1f0c0c;
+  --pd-err-bdr: #8b2222;
+  --pd-err-text: #f87171;
+
+  /* ── Semantic: Info ── */
+  --pd-info-bg: #0a1428;
+  --pd-info-bdr: #264980;
+  --pd-info-text: #60a5fa;
+
+  /* ── Semantic: Accent/Purple ── */
+  --pd-acc-bg: #140e30;
+  --pd-acc-bdr: #45287a;
+  --pd-acc-text: #c084fc;
+
+  /* ── Shadows (deeper, cooler) ── */
+  --pd-shadow-sm:
+    0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  --pd-shadow-md:
+    0 4px 16px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --pd-shadow-lg:
+    0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* ─── 2. Global dark body / html ───────────────────────────────────────────── */
+html.dark,
+.dark body {
+  background-color: var(--pd-base) !important;
+}
+
+.dark body {
+  color: var(--pd-text) !important;
+}
+
+/* Color-scheme scrollbar tinting */
+html.dark {
+  scrollbar-color: var(--pd-rim) var(--pd-inset);
+}
+
+/* ─── 2b. Catch-all: non-dark-prefixed classes ──────────────────────────────
+   Many elements use bare Tailwind classes (text-slate-500, bg-white, etc.)
+   without a matching dark:* variant.  Without these overrides, those
+   elements keep their light-mode values in dark mode → invisible text,
+   white cards on dark canvas, bright borders, etc.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Backgrounds ── */
+.dark .bg-white {
+  background-color: var(--pd-surface) !important;
+}
+.dark .bg-slate-50 {
+  background-color: var(--pd-base) !important;
+}
+.dark .bg-slate-100 {
+  background-color: var(--pd-raised) !important;
+}
+.dark .bg-slate-200 {
+  background-color: var(--pd-overlay) !important;
+}
+
+/* ── Text ── */
+.dark .text-slate-900 {
+  color: var(--pd-ink) !important;
+}
+.dark .text-slate-800 {
+  color: var(--pd-ink) !important;
+}
+.dark .text-slate-700 {
+  color: var(--pd-text) !important;
+}
+.dark .text-slate-600 {
+  color: var(--pd-text) !important;
+}
+.dark .text-slate-500 {
+  color: var(--pd-dim) !important;
+}
+.dark .text-slate-400 {
+  color: var(--pd-dim) !important;
+}
+.dark .text-gray-900 {
+  color: var(--pd-ink) !important;
+}
+.dark .text-gray-700 {
+  color: var(--pd-text) !important;
+}
+.dark .text-gray-500 {
+  color: var(--pd-dim) !important;
+}
+
+/* ── Borders ── */
+.dark .border-slate-200 {
+  border-color: var(--pd-edge) !important;
+}
+.dark .border-slate-100 {
+  border-color: var(--pd-hair) !important;
+}
+.dark .border-slate-300 {
+  border-color: var(--pd-edge) !important;
+}
+.dark .divide-slate-100 > * + * {
+  border-color: var(--pd-hair) !important;
+}
+.dark .divide-slate-200 > * + * {
+  border-color: var(--pd-edge) !important;
+}
+
+/* ── Semantic backgrounds (non-dark variants) ── */
+.dark .bg-green-50 {
+  background-color: var(--pd-ok-bg) !important;
+}
+.dark .bg-green-100 {
+  background-color: var(--pd-ok-bg) !important;
+}
+.dark .bg-red-50 {
+  background-color: var(--pd-err-bg) !important;
+}
+.dark .bg-red-100 {
+  background-color: var(--pd-err-bg) !important;
+}
+.dark .bg-yellow-50 {
+  background-color: var(--pd-warn-bg) !important;
+}
+.dark .bg-yellow-100 {
+  background-color: var(--pd-warn-bg) !important;
+}
+.dark .bg-amber-50 {
+  background-color: var(--pd-warn-bg) !important;
+}
+.dark .bg-amber-100 {
+  background-color: var(--pd-warn-bg) !important;
+}
+.dark .bg-blue-50 {
+  background-color: var(--pd-info-bg) !important;
+}
+.dark .bg-blue-100 {
+  background-color: var(--pd-info-bg) !important;
+}
+.dark .bg-orange-50 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 80%,
+    var(--pd-err-bg)
+  ) !important;
+}
+.dark .bg-orange-100 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 80%,
+    var(--pd-err-bg)
+  ) !important;
+}
+.dark .bg-purple-50 {
+  background-color: var(--pd-acc-bg) !important;
+}
+.dark .bg-purple-100 {
+  background-color: var(--pd-acc-bg) !important;
+}
+
+/* ── Semantic text (non-dark variants) ── */
+.dark .text-green-700 {
+  color: var(--pd-ok-text) !important;
+}
+.dark .text-green-600 {
+  color: var(--pd-ok-text) !important;
+}
+.dark .text-red-700 {
+  color: var(--pd-err-text) !important;
+}
+.dark .text-red-600 {
+  color: var(--pd-err-text) !important;
+}
+.dark .text-yellow-700 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .text-yellow-600 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .text-yellow-500 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .text-amber-700 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .text-amber-600 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .text-blue-700 {
+  color: var(--pd-info-text) !important;
+}
+.dark .text-blue-600 {
+  color: var(--pd-info-text) !important;
+}
+.dark .text-orange-700 {
+  color: #fb923c !important;
+}
+.dark .text-orange-600 {
+  color: #fb923c !important;
+}
+.dark .text-purple-700 {
+  color: var(--pd-acc-text) !important;
+}
+.dark .text-purple-600 {
+  color: var(--pd-acc-text) !important;
+}
+
+/* ── Hover states for bare classes ── */
+.dark .hover\:bg-slate-50:hover {
+  background-color: var(--pd-raised) !important;
+}
+.dark .hover\:bg-slate-100:hover {
+  background-color: var(--pd-raised) !important;
+}
+.dark .hover\:bg-green-100:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-ok-bg) 60%,
+    transparent
+  ) !important;
+}
+.dark .hover\:bg-red-100:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-err-bg) 60%,
+    transparent
+  ) !important;
+}
+.dark .hover\:bg-amber-100:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 60%,
+    transparent
+  ) !important;
+}
+
+/* ─── 3. Tailwind Surface Overrides (dark-prefixed) ─────────────────────────
+   Override Tailwind's cold slate grays with warm "Smoked Crimson" surfaces.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Page backgrounds */
+.dark .dark\:bg-background-dark {
+  background-color: var(--pd-base) !important;
+}
+.dark .dark\:bg-slate-900 {
+  background-color: var(--pd-base) !important;
+}
+.dark .dark\:bg-slate-900\/80 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-base) 80%,
+    transparent
+  ) !important;
+}
+.dark .dark\:bg-slate-900\/90 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-base) 90%,
+    transparent
+  ) !important;
+}
+
+/* Card / sidebar surfaces */
+.dark .dark\:bg-slate-800 {
+  background-color: var(--pd-surface) !important;
+}
+.dark .dark\:bg-slate-800\/50 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-surface) 50%,
+    transparent
+  ) !important;
+}
+.dark .dark\:bg-slate-800\/80 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-surface) 80%,
+    transparent
+  ) !important;
+}
+
+/* Elevated / hover surfaces */
+.dark .dark\:bg-slate-700 {
+  background-color: var(--pd-raised) !important;
+}
+.dark .dark\:bg-slate-700\/30 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-raised) 30%,
+    transparent
+  ) !important;
+}
+.dark .dark\:bg-slate-700\/40 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-raised) 40%,
+    transparent
+  ) !important;
+}
+.dark .dark\:bg-slate-700\/50 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-raised) 50%,
+    transparent
+  ) !important;
+}
+
+/* Hover interactive states */
+.dark .dark\:hover\:bg-slate-800:hover {
+  background-color: var(--pd-surface) !important;
+}
+.dark .dark\:hover\:bg-slate-700:hover {
+  background-color: var(--pd-raised) !important;
+}
+.dark .dark\:hover\:bg-slate-700\/30:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-raised) 30%,
+    transparent
+  ) !important;
+}
+.dark .dark\:hover\:bg-slate-700\/40:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-raised) 40%,
+    transparent
+  ) !important;
+}
+
+/* ─── 4. Border Overrides ───────────────────────────────────────────────────── */
+.dark .dark\:border-slate-700 {
+  border-color: var(--pd-edge) !important;
+}
+.dark .dark\:border-slate-600 {
+  border-color: var(--pd-rim) !important;
+}
+.dark .dark\:divide-slate-700 > * + * {
+  border-color: var(--pd-edge) !important;
+}
+
+/* ─── 5. Typography Overrides ──────────────────────────────────────────────── */
+.dark .dark\:text-slate-100 {
+  color: var(--pd-ink) !important;
+}
+.dark .dark\:text-slate-200 {
+  color: var(--pd-ink) !important;
+}
+.dark .dark\:text-slate-300 {
+  color: var(--pd-text) !important;
+}
+.dark .dark\:text-slate-400 {
+  color: var(--pd-dim) !important;
+}
+.dark .dark\:text-slate-500 {
+  color: var(--pd-ghost) !important;
+}
+.dark .dark\:text-slate-600 {
+  color: var(--pd-ghost) !important;
+}
+
+/* ─── 6. Semantic Color Token Overrides ─────────────────────────────────────
+   Each category has: bg, border, text — in both /30 and solid variants.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Success ── */
+.dark .dark\:bg-green-900\/30 {
+  background-color: var(--pd-ok-bg) !important;
+}
+.dark .dark\:bg-green-900\/20 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-ok-bg) 70%,
+    transparent
+  ) !important;
+}
+.dark .dark\:text-green-400 {
+  color: var(--pd-ok-text) !important;
+}
+.dark .dark\:border-green-700 {
+  border-color: var(--pd-ok-bdr) !important;
+}
+.dark .dark\:hover\:bg-green-900\/30:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-ok-bg) 60%,
+    transparent
+  ) !important;
+}
+
+/* ── Warning / Amber ── */
+.dark .dark\:bg-amber-900\/30 {
+  background-color: var(--pd-warn-bg) !important;
+}
+.dark .dark\:bg-amber-900\/20 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 70%,
+    transparent
+  ) !important;
+}
+.dark .dark\:bg-yellow-900\/30 {
+  background-color: var(--pd-warn-bg) !important;
+}
+.dark .dark\:bg-yellow-900\/20 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 70%,
+    transparent
+  ) !important;
+}
+.dark .dark\:text-amber-400 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .dark\:text-yellow-400 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .dark\:text-yellow-500 {
+  color: var(--pd-warn-text) !important;
+}
+.dark .dark\:border-amber-700 {
+  border-color: var(--pd-warn-bdr) !important;
+}
+.dark .dark\:hover\:bg-amber-900\/30:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 60%,
+    transparent
+  ) !important;
+}
+
+/* ── Danger / Red ── */
+.dark .dark\:bg-red-900\/30 {
+  background-color: var(--pd-err-bg) !important;
+}
+.dark .dark\:bg-red-900\/20 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-err-bg) 70%,
+    transparent
+  ) !important;
+}
+.dark .dark\:text-red-400 {
+  color: var(--pd-err-text) !important;
+}
+.dark .dark\:border-red-700 {
+  border-color: var(--pd-err-bdr) !important;
+}
+.dark .dark\:hover\:bg-red-900\/20:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-err-bg) 55%,
+    transparent
+  ) !important;
+}
+
+/* ── Info / Blue ── */
+.dark .dark\:bg-blue-900\/30 {
+  background-color: var(--pd-info-bg) !important;
+}
+.dark .dark\:bg-blue-900\/20 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-info-bg) 70%,
+    transparent
+  ) !important;
+}
+.dark .dark\:text-blue-400 {
+  color: var(--pd-info-text) !important;
+}
+.dark .dark\:border-blue-700 {
+  border-color: var(--pd-info-bdr) !important;
+}
+
+/* ── Accent / Purple ── */
+.dark .dark\:bg-purple-900\/30 {
+  background-color: var(--pd-acc-bg) !important;
+}
+.dark .dark\:bg-purple-900\/20 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-acc-bg) 70%,
+    transparent
+  ) !important;
+}
+.dark .dark\:text-purple-400 {
+  color: var(--pd-acc-text) !important;
+}
+.dark .dark\:border-purple-700 {
+  border-color: var(--pd-acc-bdr) !important;
+}
+
+/* ── Orange ── */
+.dark .dark\:bg-orange-900\/30 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 80%,
+    var(--pd-err-bg)
+  ) !important;
+}
+.dark .dark\:bg-orange-900\/20 {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-warn-bg) 50%,
+    transparent
+  ) !important;
+}
+.dark .dark\:text-orange-400 {
+  color: #fb923c !important;
+}
+
+/* ─── 7. Pedy-specific Component Classes ─────────────────────────────────────
+   Applied by shared.js buildSidebar() and buildTopbar().
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Sidebar ── */
+.pedy-sidebar {
+  background: var(--pd-surface);
+  border-right-color: var(--pd-edge);
+  box-shadow: var(--pd-shadow-sm);
+  transition:
+    background var(--pd-ease),
+    border-color var(--pd-ease),
+    transform 300ms ease;
+}
+
+/* Hide scrollbar but keep scrolling */
+.pedy-hide-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.pedy-hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.dark .pedy-sidebar {
+  background: var(--pd-surface);
+  border-right-color: var(--pd-edge);
+  box-shadow:
+    1px 0 0 var(--pd-edge),
+    4px 0 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Sidebar atmospheric gradient overlay (dark only)
+   Note: position:fixed already acts as a containing block
+   for the ::before — do NOT set position:relative here
+   as it would override the Tailwind 'fixed' class. */
+.dark .pedy-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(230, 57, 70, 0.02) 0%,
+    transparent 30%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── Topbar ── */
+.pedy-topbar {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: var(--pd-hair);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  box-shadow: var(--pd-shadow-sm);
+  transition:
+    background var(--pd-ease),
+    border-color var(--pd-ease);
+}
+
+.dark .pedy-topbar {
+  background-color: var(--pd-surface) !important;
+  border-bottom: 1px solid var(--pd-edge) !important;
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow:
+    0 1px 0 var(--pd-edge),
+    0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Nav item: active glow ── */
+.dark .pedy-nav-active {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--pd-primary) 85%, #ff8080) 0%,
+    var(--pd-primary) 100%
+  ) !important;
+  box-shadow:
+    0 4px 14px var(--pd-primary-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ── Nav badge ── */
+.pedy-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  background: var(--pd-primary-glow);
+  color: var(--pd-primary);
+  border: 1px solid var(--pd-primary-flare);
+}
+
+.dark .pedy-badge {
+  background: color-mix(in srgb, var(--pd-primary) 15%, transparent);
+  color: #ff8b8b;
+  border-color: color-mix(in srgb, var(--pd-primary) 35%, transparent);
+}
+
+/* ── Section label in sidebar ── */
+.pedy-nav-section {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pd-ghost);
+  padding: 0 12px;
+  margin-bottom: 4px;
+}
+.dark .pedy-nav-section {
+  color: var(--pd-ghost);
+}
+
+/* ─── 8. Card System ──────────────────────────────────────────────────────────
+   Rich depth hierarchy for dark cards.
+   ─────────────────────────────────────────────────────────────────────────── */
+.dark .pedy-card,
+.dark .bg-white.rounded-xl,
+.dark .dark\:bg-slate-800.rounded-xl {
+  background: var(--pd-surface) !important;
+  border-color: var(--pd-edge) !important;
+  box-shadow: var(--pd-shadow-sm);
+}
+
+/* Stat cards: subtle gradient top-right highlight */
+.dark .pedy-stat-card {
+  background:
+    linear-gradient(135deg, transparent 50%, var(--pd-primary-haze) 100%),
+    var(--pd-surface);
+  border-color: var(--pd-edge);
+  box-shadow: var(--pd-shadow-sm);
+}
+
+/* ─── 9. Form Controls ────────────────────────────────────────────────────────
+   Inputs and selects get warmer backgrounds, visible focus rings.
+   ─────────────────────────────────────────────────────────────────────────── */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: var(--pd-raised) !important;
+  border-color: var(--pd-edge) !important;
+  color: var(--pd-ink) !important;
+  transition:
+    border-color var(--pd-ease),
+    box-shadow var(--pd-ease);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--pd-ghost) !important;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: var(--pd-rim) !important;
+  box-shadow: 0 0 0 3px var(--pd-primary-haze) !important;
+  outline: none !important;
+}
+
+/* ─── 10. Table System ────────────────────────────────────────────────────────
+   Warm zebra stripes and hover states.
+   ─────────────────────────────────────────────────────────────────────────── */
+.dark thead tr {
+  background-color: var(--pd-raised) !important;
+}
+
+.dark thead th {
+  color: var(--pd-dim) !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.dark tbody tr {
+  border-bottom: 1px solid var(--pd-hair);
+}
+
+.dark tbody tr:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--pd-raised) 50%,
+    transparent
+  ) !important;
+}
+
+.dark .dark\:bg-slate-800\/50 th,
+.dark .dark\:bg-slate-800\/50 {
+  background-color: var(--pd-inset) !important;
+}
+
+/* ─── 11. Scrollbar (Webkit) ──────────────────────────────────────────────── */
+.dark ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: var(--pd-inset);
+  border-radius: 99px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--pd-rim);
+  border-radius: 99px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--pd-primary);
+}
+.dark ::-webkit-scrollbar-corner {
+  background: var(--pd-inset);
+}
+
+/* ─── 12. Buttons ─────────────────────────────────────────────────────────────
+   Primary action button gets a richer glow in dark mode.
+   ─────────────────────────────────────────────────────────────────────────── */
+.dark .bg-primary {
+  box-shadow: 0 4px 14px var(--pd-primary-glow);
+}
+
+.dark .bg-primary:hover {
+  box-shadow: 0 6px 20px var(--pd-primary-flare);
+  filter: brightness(1.05);
+}
+
+/* Secondary/outline buttons */
+.dark button:not(.bg-primary):not([disabled]) {
+  transition:
+    border-color var(--pd-ease),
+    color var(--pd-ease),
+    box-shadow var(--pd-ease);
+}
+
+.dark button:not(.bg-primary):hover {
+  border-color: color-mix(
+    in srgb,
+    var(--pd-primary) 50%,
+    var(--pd-rim)
+  ) !important;
+}
+
+/* ─── 13. Login page (index.html) specific ────────────────────────────────── */
+.dark .dark\:bg-slate-800.rounded-2xl {
+  background: var(--pd-surface) !important;
+  border-color: var(--pd-edge) !important;
+  box-shadow:
+    var(--pd-shadow-lg),
+    0 0 80px rgba(230, 57, 70, 0.04) !important;
+}
+
+/* ─── 14. Focus ring ──────────────────────────────────────────────────────── */
+.dark *:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--pd-primary) 80%, transparent);
+  outline-offset: 2px;
+}
+
+/* ─── 15. Selection colour ─────────────────────────────────────────────────── */
+.dark ::selection {
+  background: var(--pd-primary-flare);
+  color: var(--pd-ink);
+}
+
+/* ─── 16. Modal / overlay ─────────────────────────────────────────────────── */
+.dark .pedy-modal {
+  background: var(--pd-overlay);
+  border-color: var(--pd-rim);
+  box-shadow:
+    var(--pd-shadow-lg),
+    0 0 60px var(--pd-primary-haze);
+}
+
+/* ─── 17. Color-scheme smooth transition ─────────────────────────────────────
+   Smooth transition when toggling dark mode.
+   ─────────────────────────────────────────────────────────────────────────── */
+html.dark-transitioning,
+html.dark-transitioning * {
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 120ms ease,
+    box-shadow 220ms ease !important;
+}
+
+/* ─── 18. Page atmosphere (dark only) ────────────────────────────────────────
+   A very faint radial crimson glow from the top of the page —
+   visible on the body background, adds depth.
+   ─────────────────────────────────────────────────────────────────────────── */
+html.dark body {
+  position: relative; /* stacking context anchors the ::before */
+}
+html.dark body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 25% at 50% 0%,
+    rgba(230, 57, 70, 0.015),
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ─── 19. Role badge ring highlights (dark) ──────────────────────────────── */
+.dark .border-primary\/30 {
+  border-color: rgba(230, 57, 70, 0.35) !important;
+}
+/* bg-red-50, bg-blue-50, bg-green-50 already handled in Section 2b */
+
+/* ─── 20. Analytics bar chart (dark) ─────────────────────────────────────── */
+.dark .bg-primary.bar,
+.dark .bar.bg-primary {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--pd-primary) 80%, #ff9090) 0%,
+    var(--pd-primary) 100%
+  );
+  box-shadow: 0 -2px 8px var(--pd-primary-glow);
+}
+
+.dark .bg-blue-500.bar {
+  background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+  box-shadow: 0 -2px 8px rgba(96, 165, 250, 0.2);
+}
+
+/* ─── 21. Toggle switch (settings page) ──────────────────────────────────── */
+.dark .peer-checked\:bg-primary:where(.peer:checked ~ *) {
+  box-shadow: 0 0 0 3px var(--pd-primary-haze);
+}
+
+/* ─── 22. Pagination active page ─────────────────────────────────────────── */
+.dark .bg-primary.text-white:not(aside):not(header) {
+  box-shadow: 0 2px 8px var(--pd-primary-glow);
+}
+
+/* ─── 22b. Export dropdown (dark mode) ───────────────────────────────────── */
+.dark .pedy-export-menu {
+  background: var(--pd-surface);
+  border-color: var(--pd-edge);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.dark .pedy-export-menu button:hover {
+  background: var(--pd-raised);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   23. Responsive Layout System
+   Ensures sidebar + content fill the viewport with no gaps or overflow.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Lock the viewport — body must not scroll; only the main wrapper scrolls */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Small screens (< 1024px): sidebar is off-canvas ── */
+@media (max-width: 1023px) {
+  /* No left padding when sidebar is hidden */
+  .lg\:pl-64 {
+    padding-left: 0 !important;
+  }
+
+  /* Cards & tables: compact on mobile */
+  main .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tables become horizontally scrollable */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Stat cards stack on small screens */
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4,
+  .sm\:grid-cols-2,
+  .sm\:grid-cols-3,
+  .sm\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Medium screens (640px – 1023px) ── */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .grid-cols-2,
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .sm\:grid-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .sm\:grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* ── Extra-small screens (< 480px) ── */
+@media (max-width: 479px) {
+  /* Tighter padding on very small screens */
+  main {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Topbar compact */
+  .pedy-topbar {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  /* Search bar hidden on xs */
+  .pedy-topbar .hidden.sm\:flex {
+    display: none !important;
+  }
+
+  /* Stat number text smaller */
+  .text-2xl {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* ── Large+ screens (≥ 1024px): sidebar visible, content offset ── */
+@media (min-width: 1024px) {
+  /* Ensure no horizontal overflow */
+  body {
+    overflow: hidden;
+  }
+}
