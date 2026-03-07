@@ -58,18 +58,27 @@
 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
 <span class="material-symbols-outlined">search</span>
 </div>
-<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search for services (e.g. Web Design, Plumbing)..." type="text"/>
+<input id="search-input" class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search for services (e.g. Web Design, Plumbing)..." type="text"/>
 </label>
 </div>
 </div>
 <div class="flex items-center gap-3">
-<button class="flex items-center justify-center p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 text-slate-700 dark:text-slate-300 transition-colors">
-<span class="material-symbols-outlined">notifications</span>
-</button>
-<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors">
+<!-- Unauthenticated: Sign In -->
+<button id="nav-sign-in-btn" class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors">
 <span class="material-symbols-outlined !text-lg">account_circle</span>
 <span class="hidden sm:inline">Sign In</span>
 </button>
+<!-- Authenticated: user menu -->
+<div id="nav-user-menu" class="hidden flex items-center gap-2">
+<a href="dashboard.html" id="nav-dashboard-btn" class="provider-only hidden text-sm font-semibold text-primary hover:opacity-80 transition-colors">Dashboard</a>
+<div class="flex items-center gap-2 bg-primary text-white pl-2 pr-3 py-1.5 rounded-lg font-semibold text-sm">
+<span id="nav-user-initial" class="size-6 bg-white/20 rounded-full flex items-center justify-center text-xs font-bold">U</span>
+<span id="nav-user-name" class="hidden sm:inline text-sm">User</span>
+</div>
+<button id="nav-sign-out-btn" title="Sign out" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-red-50 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-lg">logout</span>
+</button>
+</div>
 </div>
 </div>
 </header>
@@ -143,8 +152,8 @@
 <div class="flex-1">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
 <div>
-<h1 class="text-2xl font-bold">124 Services Found</h1>
-<p class="text-slate-500 text-sm">Showing results for "All Categories" in "New York"</p>
+<h1 class="text-2xl font-bold"><span id="services-count">Loading…</span></h1>
+<p class="text-slate-500 text-sm" id="services-subtitle">Browsing all services</p>
 </div>
 <div class="flex items-center gap-2">
 <span class="text-sm text-slate-500 whitespace-nowrap">Sort by:</span>
@@ -156,9 +165,13 @@
 </select>
 </div>
 </div>
-<!-- Grid of Service Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-<!-- Card 1 -->
+<!-- Grid of Service Cards (populated dynamically) -->
+<div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<div class="col-span-full flex items-center justify-center py-16 text-slate-400">
+<span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>
+Loading services…
+</div>
+<!-- static seed cards removed – see below for the real DOM source -->
 <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
 <div class="relative aspect-video overflow-hidden">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Laptop screen showing web design tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEtt2m70nufuoGlr2A-p0VGmqzKJqVOJ2Skq7FUOuHrK36DTT5Q2EGdzdqzvzLOZOaw5hr4y8igqqaKi2NyaWRoW6-T3dYLQ1-xhOcW-rN7vXGoizWZhV5y76nyucptLq97zPRwNWouVTxJyPJqd3B3r7GtgW9fULc2lJ7-KEF7VZN3Vwaj2RhLhks_prC3hzYI1syiwUfUU1IYEEiSvyjyHv_QRX5hSctuVVghsK9RXddf5G0rFoIVj0zOz-8rBItJB_TLQQP5Hks"/>
@@ -187,7 +200,7 @@
 </div>
 </div>
 </div>
-<!-- Card 2 -->
+<!-- (dynamic) -->
 <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
 <div class="relative aspect-video overflow-hidden">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Clean modern kitchen interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQMIDbITHMzy7oTF5uDyyINdwB7At8_q4UKBKt-o_Lwg7AtNo1fJvNwYGSdCWodpfYvKt6KdRFh7PmHU55DG0rN76sccTORIf-1AiKBFuZhiZzoSI72KHjk58XDf-CkSgq0JK58giwC9oufM3SFRC6I0NPORa-diMAehOZkqLpF4QrWaW4Ch1i0Ru7Z8JmjBmQHmqtQZ0bg5RLaJfNQCfkTxQDYg5xgp91tAy3ay1Rpm5CLrmPHWJj8GBQDDkkTl6V9VCBDcblSITu"/>
@@ -216,7 +229,7 @@
 </div>
 </div>
 </div>
-<!-- Card 3 -->
+<!-- (dynamic) -->
 <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
 <div class="relative aspect-video overflow-hidden">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Camera lens and creative workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8RePlPJr9faQpCkkRY0lVma2BC-qefdcvlESwxY3z3ZvA8cAhtFHGKnj80E81Num54uWOKO7JBpUFPKeFTLSLbCOlRZWJeVjfueKDcHVr3jheIaQTlW0tqGsqeFMgG3qaY4PXKoB8Ifjg4iOCUNZq_r8qBHxfxGws3CGwvveQKw0DsE7gXlUhapQJIKFB0b7QJQj1raLwmFqGF1n4ZKffeBdC1-_ktHFh7LiADHZRTbng80fHrJYq1NjziPXJlUVV71mhiZsxiWT7"/>
@@ -245,7 +258,7 @@
 </div>
 </div>
 </div>
-<!-- Card 4 -->
+<!-- (dynamic) -->
 <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
 <div class="relative aspect-video overflow-hidden">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Code on a monitor with neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ3VH2vSrOmZjU3abRKe9XnumsliDeUxrjJpBNYXDIx6wdhg2abGPM5U_RPDoRYclmah01W7j9TRmsfxtUXtRErJte49XZY2d6Kz-EM-aa24CeI-LFcYUdVDgp_FNsYD9vdGx_hw4GgpKD-XzBc3W_ROmw_JZCMpgiQK-1qDoxUDBySiYGigHNal7YKW-fJ4rl-vl5uweFvkLLrVipflAHsycMbDypxbsdTI5jqcE7lI2XvtxBezJWzKuF03dq_bTcf2eJcWVjXLOc"/>
@@ -274,7 +287,7 @@
 </div>
 </div>
 </div>
-<!-- Card 5 -->
+<!-- (dynamic) -->
 <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
 <div class="relative aspect-video overflow-hidden">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Personal trainer in a gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqoxrtP8f6dgQC971aDmJjJwU-7y0cjZ3YUsRTqSHm8ovUldYa-cm5peAmRsUEJqAYm74sUMLxyLai_9MPvhQ-vbSqn1BHdIRsiyCQGjYWaD8hrln_HUPW_y-3f54nJrnQpnMFGrHnE0C3YQQJaNmcAL5SsoIYQph_zdzYtkWrv9mZn8pG_0sOmnzTzpUjzqUqibYWtmQdYlk0ubwEfLMUFWVOS13sXT4Pw2u2gSVWsiHzy2MUZoLws9qgCkW1oHJAS39iEm6Ll9sZ"/>
@@ -352,6 +365,120 @@
 </div>
 </div>
 </main>
+<script type="module">
+import { initAuth, openAuthModal, getCurrentUser, getUserProfileData } from "./js/auth-ui.js";
+import { getServices } from "./js/db.js";
+
+// ── Category filter checkboxes ──────────────────────
+const filterPhysical = document.querySelector('input[type="checkbox"]:nth-of-type(1)');
+const filterDigital  = document.querySelector('input[type="checkbox"]:nth-of-type(2)');
+const sortSelect     = document.querySelector('select');
+const searchInput    = document.getElementById('search-input');
+
+// ── Render a single service card ───────────────────
+function renderCard(svc) {
+  const categoryClass = svc.category === 'Physical' ? 'Physical' : 'Digital';
+  const stars = '★'.repeat(Math.round(svc.rating || 0)) + '☆'.repeat(5 - Math.round(svc.rating || 0));
+  const price = svc.priceUnit === 'per hour' ? `\$${svc.price}/hr` : `\$${svc.price}`;
+  const img   = svc.imageURL || 'https://placehold.co/600x400/eb4c4c/ffffff?text=Service';
+  const avatar = svc.providerPhotoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(svc.providerName||'P')}&background=eb4c4c&color=fff`;
+  return `
+  <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+    <div class="relative aspect-video overflow-hidden">
+      <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${img}" alt="${svc.title}"/>
+      <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">${categoryClass}</div>
+    </div>
+    <div class="p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <img class="size-6 rounded-full object-cover" src="${avatar}" alt="${svc.providerName}"/>
+        <span class="text-xs font-medium text-slate-500">${svc.providerName || 'Provider'}</span>
+        <div class="ml-auto flex items-center gap-1 text-xs font-bold text-yellow-600">
+          <span class="material-symbols-outlined filled !text-sm">star</span>
+          ${(svc.rating||0).toFixed(1)}
+        </div>
+      </div>
+      <h3 class="font-bold text-lg mb-1 group-hover:text-primary transition-colors">${svc.title}</h3>
+      <p class="text-sm text-slate-500 line-clamp-2 mb-4">${svc.description}</p>
+      <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+        <div class="flex flex-col">
+          <span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
+          <span class="text-lg font-bold text-primary">${price}</span>
+        </div>
+        <button onclick="handleBook('${svc.id}','${svc.providerId}','${svc.title}')"
+          class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Load & display services ─────────────────────────
+async function loadServices() {
+  const grid     = document.getElementById('services-grid');
+  const countEl  = document.getElementById('services-count');
+  const subEl    = document.getElementById('services-subtitle');
+  const searchTerm = searchInput?.value.trim() || '';
+
+  const showPhysical = filterPhysical?.checked !== false;
+  const showDigital  = filterDigital?.checked  !== false;
+  let   category     = 'all';
+  if  (showPhysical && !showDigital) category = 'Physical';
+  else if (!showPhysical && showDigital) category = 'Digital';
+
+  grid.innerHTML = `<div class="col-span-full flex items-center justify-center py-16 text-slate-400">
+    <span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>Loading…</div>`;
+
+  try {
+    let services = await getServices({ category, searchTerm });
+
+    // Sort
+    const sort = sortSelect?.value || 'Most Relevant';
+    if (sort === 'Price: Low to High')  services.sort((a,b) => (a.price||0) - (b.price||0));
+    if (sort === 'Price: High to Low')  services.sort((a,b) => (b.price||0) - (a.price||0));
+
+    countEl.textContent = `${services.length} Service${services.length !== 1 ? 's' : ''} Found`;
+    subEl.textContent   = searchTerm
+      ? `Results for "${searchTerm}"`
+      : (category !== 'all' ? `Showing ${category} services` : 'Browsing all services');
+
+    if (services.length === 0) {
+      grid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400">
+        <span class="material-symbols-outlined !text-5xl block mb-4">search_off</span>
+        <p class="font-semibold">No services found</p>
+        <p class="text-sm mt-1">Try adjusting your filters or search term</p>
+      </div>`;
+      return;
+    }
+    grid.innerHTML = services.map(renderCard).join('');
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = `<div class="col-span-full text-center py-16 text-red-400">
+      <span class="material-symbols-outlined !text-5xl block mb-4">error</span>
+      <p class="font-semibold">Failed to load services</p>
+      <p class="text-sm mt-1">${err.message}</p>
+    </div>`;
+  }
+}
+
+// ── Book handler ────────────────────────────────────
+window.handleBook = function(serviceId, providerId, title) {
+  const user = getCurrentUser();
+  if (!user) { openAuthModal('login'); return; }
+  // Redirect to profile page which has the full booking flow
+  window.location.href = `profile.html?uid=${providerId}&service=${serviceId}`;
+};
+
+// ── Init ────────────────────────────────────────────
+initAuth();
+loadServices();
+
+// Re-load on filter/search changes (debounced)
+let debounceTimer;
+const reload = () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(loadServices, 400); };
+filterPhysical?.addEventListener('change', reload);
+filterDigital?.addEventListener('change',  reload);
+sortSelect?.addEventListener('change',     loadServices);
+searchInput?.addEventListener('input',     reload);
+</script>
 <!-- Footer -->
 <footer class="mt-20 border-t border-slate-200 dark:border-slate-800 py-12 bg-white dark:bg-background-dark">
 <div class="max-w-[1280px] mx-auto px-10 grid grid-cols-1 md:grid-cols-4 gap-8">
