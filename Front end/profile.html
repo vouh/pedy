@@ -61,7 +61,6 @@
 <nav class="hidden md:flex gap-6 font-medium text-slate-600">
 <a class="hover:text-brand transition-colors" href="index.html">Home</a>
 <a class="hover:text-brand transition-colors" href="profile.html">Find Talent</a>
-<a class="hover:text-brand transition-colors" href="about-us.html">About Us</a>
 </nav>
 </div>
 <div class="flex items-center gap-4">
@@ -254,7 +253,6 @@
 <ul class="text-sm text-white/80 space-y-2">
 <li><a class="hover:text-white" href="index.html">Home</a></li>
 <li><a class="hover:text-white" href="profile.html">Find Talent</a></li>
-<li><a class="hover:text-white" href="about-us.html">About Us</a></li>
 </ul>
 </div>
 <div>
@@ -284,185 +282,171 @@
 document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
 <!-- END: Footer -->
-<script type="module">
-import { initAuth, openAuthModal, getCurrentUser } from "./js/auth-ui.js";
-import { getUserDoc, getProviderServices, getProviderReviews, createBooking } from "./js/db.js";
-
-const params     = new URLSearchParams(window.location.search);
-const providerId = params.get('uid');
-const highlightService = params.get('service');
-
-// ── Helpers ───────────────────────────────────────
-function stars(rating) {
-  const full  = Math.round(rating || 0);
-  const empty = 5 - full;
-  const svg   = (filled) => `<svg class="w-4 h-4 fill-current ${filled ? 'text-yellow-400' : 'text-slate-200'}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
-  return Array(full).fill(svg(true)).join('') + Array(empty).fill(svg(false)).join('');
-}
-
-function formatDate(ts) {
-  if (!ts) return '—';
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-}
-
-// ── Load provider profile ───────────────────────────
-async function loadProfile() {
-  if (!providerId) {
-    // Show current user's own profile if no UID given
-    const user = getCurrentUser();
-    if (user) {
-      window.location.search = `?uid=${user.uid}`;
-    } else {
-      document.getElementById('provider-name').textContent = 'Profile not found';
-    }
+<script>
+// Load service from JSON and display details
+async function loadServiceProfile() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('slug');
+  
+  if (!slug) {
+    document.getElementById('provider-name').textContent = 'No service selected';
+    document.getElementById('provider-title').textContent = 'Please select a service from the main page';
     return;
   }
 
   try {
-    const [profile, services, reviews] = await Promise.all([
-      getUserDoc(providerId),
-      getProviderServices(providerId),
-      getProviderReviews(providerId),
-    ]);
+    // Fetch the services JSON
+    const response = await fetch('data/services.json');
+    const data = await response.json();
+    const service = data.services.find(s => s.slug === slug);
 
-    if (!profile) {
-      document.getElementById('provider-name').textContent = 'Provider not found';
+    if (!service) {
+      document.getElementById('provider-name').textContent = 'Service not found';
+      document.getElementById('provider-title').textContent = `Cannot find service with ID: ${slug}`;
       return;
     }
 
-    // ─ Header
-    document.title = `${profile.displayName} | PEDY Marketplace`;
-    document.getElementById('provider-name').textContent = profile.displayName || 'Provider';
-    document.getElementById('provider-title').textContent  = profile.bio?.split('\n')[0] || 'Service Provider on PEDY';
-    document.getElementById('provider-location').textContent = profile.location || 'Location not set';
-    document.getElementById('contact-header').textContent   = `Contact ${profile.displayName?.split(' ')[0] || 'Provider'}`;
-    document.getElementById('member-since').textContent     = formatDate(profile.createdAt);
-    document.getElementById('services-count-sidebar').textContent = services.length;
+    // Update page title
+    document.title = `${service.title} by ${service.providerName} | Pedy Marketplace`;
 
-    if (profile.photoURL) {
-      document.getElementById('provider-avatar').src = profile.photoURL;
-    } else {
-      document.getElementById('provider-avatar').src =
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.displayName||'P')}&background=eb4c4c&color=fff&size=128`;
+    // ─ Header Section ─
+    document.getElementById('provider-name').textContent = service.providerName;
+    document.getElementById('provider-title').textContent = service.title;
+    document.getElementById('provider-location').textContent = service.location || 'Global';
+    document.getElementById('provider-avatar').src = service.providerPhotoURL;
+    document.getElementById('contact-header').textContent = `Contact ${service.providerName.split(' ')[0]}`;
+    document.getElementById('member-since').textContent = service.experience || '5+ years';
+    document.getElementById('services-count-sidebar').textContent = '1 Service';
+
+    // Show verified badge
+    if (service.verified) {
+      document.getElementById('verified-badge')?.classList.remove('hidden');
     }
-    document.getElementById('verified-badge')?.classList.remove('hidden');
 
-    // ─ Average rating
-    const avgRating = reviews.length
-      ? (reviews.reduce((s,r) => s + (r.rating||0), 0) / reviews.length).toFixed(1)
-      : null;
-    document.getElementById('provider-rating').textContent       = avgRating || '—';
-    document.getElementById('provider-review-count').textContent = `(${reviews.length} review${reviews.length !== 1 ? 's' : ''})`;
+    // ─ Rating ─
+    document.getElementById('provider-rating').textContent = (service.rating || 0).toFixed(1);
+    document.getElementById('provider-review-count').textContent = `(${service.reviewCount} reviews)`;
 
-    // ─ Bio
+    // ─ About/Bio Section ─
     const bioEl = document.getElementById('provider-bio');
-    bioEl.innerHTML = profile.bio
-      ? profile.bio.split('\n').map(p => `<p class="mb-3">${p}</p>`).join('')
-      : '<p class="text-slate-400 italic">This provider has not added a bio yet.</p>';
+    bioEl.innerHTML = `
+      <p class="mb-3"><strong>${service.title}</strong></p>
+      <p class="mb-3">${service.description}</p>
+      <p class="mb-3"><strong>Category:</strong> ${service.category} Service</p>
+      <p><strong>Rating:</strong> ${service.rating}/5 from ${service.reviewCount} clients</p>
+    `;
 
-    // ─ Skills
+    // ─ Skills/Tags Section ─
     const skillsEl = document.getElementById('provider-skills');
-    if (profile.skills?.length) {
-      skillsEl.innerHTML = profile.skills
-        .map(s => `<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">${s}</span>`)
+    if (service.tags && service.tags.length > 0) {
+      skillsEl.innerHTML = service.tags
+        .map(tag => `<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">${tag}</span>`)
         .join('');
     }
 
-    // ─ Services
+    // ─ Services Section ─
     const svcEl = document.getElementById('provider-services');
-    if (services.length === 0) {
-      svcEl.innerHTML = '<p class="text-slate-400 italic">No services listed yet.</p>';
-    } else {
-      svcEl.innerHTML = services.map(svc => {
-        const price     = svc.priceUnit === 'per hour' ? `$${svc.price}/hr` : `$${svc.price}`;
-        const highlight = svc.id === highlightService ? 'border-brand bg-red-50' : 'border-slate-100';
-        return `
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border ${highlight} rounded-theme hover:border-brand-light transition-all group">
-          <div>
-            <h3 class="font-bold text-lg group-hover:text-brand">${svc.title}</h3>
-            <p class="text-slate-500 text-sm mt-1">${svc.description}</p>
-          </div>
-          <div class="mt-3 sm:mt-0 text-right shrink-0 ml-4">
-            <span class="text-xl font-bold text-slate-900">${price}</span>
-            <p class="text-xs text-brand font-semibold">${svc.category}</p>
-          </div>
-        </div>`;
-      }).join('');
-    }
+    const price = service.priceUnit === 'per hour' ? `$${service.price}/hr` : `$${service.price}`;
+    svcEl.innerHTML = `
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-primary/20 rounded-lg hover:border-primary transition-all group bg-primary/5">
+        <div>
+          <h3 class="font-bold text-lg group-hover:text-primary">${service.title}</h3>
+          <p class="text-slate-500 text-sm mt-1">${service.description}</p>
+        </div>
+        <div class="mt-3 sm:mt-0 text-right shrink-0 ml-4">
+          <span class="text-2xl font-bold text-primary">${price}</span>
+          <p class="text-xs text-slate-500 font-semibold mt-1">${service.category} Service</p>
+        </div>
+      </div>
+    `;
 
-    // ─ Reviews
+    // ─ Reviews/Portfolio Section ─
     const revEl = document.getElementById('provider-reviews');
-    if (reviews.length === 0) {
-      revEl.innerHTML = '<p class="text-slate-400 italic">No reviews yet. Be the first!</p>';
-    } else {
-      revEl.innerHTML = reviews.map(rev => `
-        <div class="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
-          <div class="flex items-center gap-2 mb-2">
-            <div class="flex">${stars(rev.rating)}</div>
-            <span class="text-sm font-bold text-slate-900">${rev.rating?.toFixed(1)}/5</span>
+    revEl.innerHTML = `
+      <div class="border-b border-slate-100 pb-6">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="flex">
+            ${'★'.repeat(Math.round(service.rating))}${'☆'.repeat(5 - Math.round(service.rating))}
           </div>
-          <p class="text-slate-600 text-sm italic">&ldquo;${rev.comment}&rdquo;</p>
-          <div class="mt-3 flex items-center gap-2">
-            <div class="w-6 h-6 rounded-full bg-slate-200"></div>
-            <span class="text-xs text-slate-500">${rev.clientName || 'Client'} &bull; ${formatDate(rev.createdAt)}</span>
+          <span class="text-sm font-bold text-slate-900">${service.rating}/5</span>
+        </div>
+        <p class="text-slate-600 text-sm italic">Highly rated service. ${service.reviewCount} clients have booked this service.</p>
+        <div class="mt-3 flex items-center gap-2">
+          <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">
+            ${service.providerName.charAt(0)}
           </div>
-        </div>`).join('');
-    }
+          <span class="text-xs text-slate-500">${service.providerName} • Verified Provider</span>
+        </div>
+      </div>
+    `;
 
   } catch (err) {
-    console.error(err);
-    document.getElementById('provider-name').textContent = 'Error loading profile';
+    console.error('Error loading service:', err);
+    document.getElementById('provider-name').textContent = 'Error loading service';
+    document.getElementById('provider-title').textContent = err.message;
   }
 }
 
-// ── Booking logic ─────────────────────────────────
-function showBookingForm() {
-  const user = getCurrentUser();
-  if (!user) { openAuthModal('login'); return; }
-  const wrapper = document.getElementById('booking-form-wrapper');
-  wrapper?.classList.toggle('hidden');
-}
-
-document.getElementById('send-message-btn')?.addEventListener('click', showBookingForm);
-document.getElementById('hire-now-btn')?.addEventListener('click', showBookingForm);
-
-document.getElementById('submit-booking-btn')?.addEventListener('click', async () => {
-  const user = getCurrentUser();
-  if (!user) { openAuthModal('login'); return; }
-
-  const message = document.getElementById('booking-message').value.trim();
-  const btn     = document.getElementById('submit-booking-btn');
-  const errEl   = document.getElementById('booking-error');
-  const okEl    = document.getElementById('booking-success');
-
-  if (!message) { errEl.textContent = 'Please add a message.'; errEl.classList.remove('hidden'); return; }
-
-  btn.textContent = 'Sending…';
-  btn.disabled    = true;
-  errEl.classList.add('hidden');
-  okEl.classList.add('hidden');
-
-  try {
-    await createBooking({
-      providerId,
-      clientId:   user.uid,
-      clientName: user.displayName || user.email,
-      message,
-      serviceId:  highlightService || null,
-    });
-    okEl.classList.remove('hidden');
-    document.getElementById('booking-message').value = '';
-  } catch (err) {
-    errEl.textContent = 'Failed to send request. Please try again.';
-    errEl.classList.remove('hidden');
-  } finally {
-    btn.textContent = 'Submit Request';
-    btn.disabled    = false;
+// Hire/Book button functionality
+document.getElementById('hire-now-btn')?.addEventListener('click', () => {
+  const message = document.getElementById('booking-message');
+  if (message) {
+    message.focus();
+    message.scrollIntoView({ behavior: 'smooth' });
   }
 });
 
-// ── Init ───────────────────────────────────────────
-initAuth();
-loadProfile();
+document.getElementById('send-message-btn')?.addEventListener('click', () => {
+  const message = document.getElementById('booking-message');
+  if (message) {
+    message.focus();
+    message.scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+// Handle booking submission
+document.getElementById('submit-booking-btn')?.addEventListener('click', async () => {
+  const message = document.getElementById('booking-message').value.trim();
+  const btn = document.getElementById('submit-booking-btn');
+  const errEl = document.getElementById('booking-error');
+  const okEl = document.getElementById('booking-success');
+
+  if (!message) {
+    if (errEl) {
+      errEl.textContent = 'Please describe what you need.';
+      errEl.classList.remove('hidden');
+    }
+    return;
+  }
+
+  if (btn) {
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+  }
+  if (errEl) errEl.classList.add('hidden');
+  if (okEl) okEl.classList.add('hidden');
+
+  try {
+    // Simulate booking submission
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    if (okEl) {
+      okEl.classList.remove('hidden');
+      document.getElementById('booking-message').value = '';
+    }
+  } catch (err) {
+    if (errEl) {
+      errEl.textContent = 'Failed to send request. Please try again.';
+      errEl.classList.remove('hidden');
+    }
+  } finally {
+    if (btn) {
+      btn.textContent = 'Submit Request';
+      btn.disabled = false;
+    }
+  }
+});
+
+// Initialize on page load
+loadServiceProfile();
 </script>

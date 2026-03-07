@@ -51,7 +51,6 @@
 <nav class="hidden md:flex gap-8">
 <a href="index.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Home</a>
 <a href="profile.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Find Talent</a>
-<a href="about-us.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">About Us</a>
 </nav>
 <!-- Desktop Search -->
 <div class="hidden md:flex flex-1 max-w-xl">
@@ -405,7 +404,7 @@ function renderCard(svc) {
           <span class="text-[10px] text-slate-400 uppercase font-bold">Starts from</span>
           <span class="text-lg font-bold text-primary">${price}</span>
         </div>
-        <button onclick="handleBook('${svc.id}','${svc.providerId}','${svc.title}')"
+        <button onclick="handleBook('${svc.slug}')"
           class="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">Book Now</button>
       </div>
     </div>
@@ -429,7 +428,23 @@ async function loadServices() {
     <span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>Loading…</div>`;
 
   try {
-    let services = await getServices({ category, searchTerm });
+    // Load from JSON data file
+    let services = await loadServicesFromJSON();
+    
+    // Filter by category
+    if (category !== 'all') {
+      services = services.filter(s => s.category === category);
+    }
+    
+    // Filter by search term
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      services = services.filter(s =>
+        s.title?.toLowerCase().includes(term) ||
+        s.description?.toLowerCase().includes(term) ||
+        s.tags?.join(' ').toLowerCase().includes(term)
+      );
+    }
 
     // Sort
     const sort = sortSelect?.value || 'Most Relevant';
@@ -460,12 +475,19 @@ async function loadServices() {
   }
 }
 
+// ── Load services from JSON file ────────────────────
+async function loadServicesFromJSON() {
+  const response = await fetch('data/services.json');
+  const data = await response.json();
+  return data.services || [];
+}
+
 // ── Book handler ────────────────────────────────────
-window.handleBook = function(serviceId, providerId, title) {
+window.handleBook = function(slug) {
   const user = getCurrentUser();
   if (!user) { openAuthModal('login'); return; }
-  // Redirect to profile page which has the full booking flow
-  window.location.href = `profile.html?uid=${providerId}&service=${serviceId}`;
+  // Redirect to profile page with slug parameter
+  window.location.href = `profile.html?slug=${slug}`;
 };
 
 // ── Init ────────────────────────────────────────────
@@ -496,7 +518,6 @@ searchInput?.addEventListener('input',     reload);
 <ul class="text-sm text-white/80 space-y-2">
 <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
 <li><a href="profile.html" class="hover:text-white transition-colors">Find Talent</a></li>
-<li><a href="about-us.html" class="hover:text-white transition-colors">About Us</a></li>
 </ul>
 </div>
 <div>
