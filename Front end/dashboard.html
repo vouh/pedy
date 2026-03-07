@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Provider Dashboard – PEDY</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary":          "#eb4c4c",
+          "background-light": "#f8f6f6",
+          "background-dark":  "#211111",
+        },
+        fontFamily: { "display": ["Inter"] },
+        borderRadius: {
+          "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"
+        },
+      },
+    },
+  }
+</script>
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .tab-btn.active { background-color: #eb4c4c; color: #fff; }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+
+<!-- ── Navigation ──────────────────────────────────────────────────────── -->
+<header class="sticky top-0 z-50 w-full border-b border-primary/10 bg-white/90 backdrop-blur-md dark:bg-background-dark/90 px-4 md:px-10 py-3">
+  <div class="max-w-[1280px] mx-auto flex items-center justify-between gap-4">
+    <div class="flex items-center gap-8 flex-1">
+      <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity text-primary">
+        <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+          <span class="material-symbols-outlined !text-2xl">diamond</span>
+        </div>
+        <h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight">PEDY</h2>
+      </a>
+      <nav class="hidden md:flex gap-6">
+        <a href="index.html"       class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Find Services</a>
+        <a href="marketplace.html" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">Marketplace</a>
+        <span class="text-sm font-semibold text-primary">My Dashboard</span>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- Unauthenticated: shown while loading -->
+      <button id="nav-sign-in-btn" class="hidden flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors">
+        <span class="material-symbols-outlined !text-lg">account_circle</span>
+        <span class="hidden sm:inline">Sign In</span>
+      </button>
+      <!-- Authenticated -->
+      <div id="nav-user-menu" class="hidden flex items-center gap-2">
+        <div class="flex items-center gap-2 bg-primary text-white pl-2 pr-3 py-1.5 rounded-lg font-semibold text-sm">
+          <span id="nav-user-initial" class="size-6 bg-white/20 rounded-full flex items-center justify-center text-xs font-bold">U</span>
+          <span id="nav-user-name"    class="hidden sm:inline text-sm">User</span>
+        </div>
+        <button id="nav-sign-out-btn" title="Sign out"
+          class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-red-50 text-slate-500 hover:text-primary transition-colors">
+          <span class="material-symbols-outlined !text-lg">logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── Page Body ────────────────────────────────────────────────────────── -->
+<main class="max-w-[1280px] mx-auto w-full px-4 md:px-10 py-8">
+
+  <!-- Access denied (shown if not a provider) -->
+  <div id="access-denied" class="hidden text-center py-24">
+    <span class="material-symbols-outlined !text-6xl text-slate-300 block mb-4">lock</span>
+    <h2 class="text-2xl font-bold text-slate-900">Provider Access Required</h2>
+    <p class="text-slate-500 mt-2">You need a provider account to access the dashboard.</p>
+    <div class="flex justify-center gap-3 mt-6">
+      <a href="index.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors">Browse Services</a>
+      <button id="upgrade-btn"
+        class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors">
+        Become a Provider
+      </button>
+    </div>
+  </div>
+
+  <!-- Dashboard content -->
+  <div id="dashboard-content" class="hidden">
+
+    <!-- Header row -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl font-bold">Provider Dashboard</h1>
+        <p id="dashboard-subtitle" class="text-slate-500 text-sm mt-1">Welcome back</p>
+      </div>
+      <a id="view-profile-btn" href="profile.html" class="flex items-center gap-2 bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all">
+        <span class="material-symbols-outlined !text-lg">person</span>
+        View My Profile
+      </a>
+    </div>
+
+    <!-- Stats row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Services</p>
+        <p id="stat-services" class="text-3xl font-bold text-primary mt-1">–</p>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Bookings</p>
+        <p id="stat-bookings" class="text-3xl font-bold text-primary mt-1">–</p>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Reviews</p>
+        <p id="stat-reviews" class="text-3xl font-bold text-primary mt-1">–</p>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Avg. Rating</p>
+        <p id="stat-rating" class="text-3xl font-bold text-primary mt-1">–</p>
+      </div>
+    </div>
+
+    <!-- Tab nav -->
+    <div class="flex gap-2 border-b border-slate-200 dark:border-slate-700 mb-8">
+      <button class="tab-btn active px-5 py-2.5 rounded-t-lg text-sm font-bold transition-all" data-tab="services">
+        My Services
+      </button>
+      <button class="tab-btn bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-600 px-5 py-2.5 rounded-t-lg text-sm font-bold transition-all" data-tab="create">
+        + Create Service
+      </button>
+      <button class="tab-btn bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-600 px-5 py-2.5 rounded-t-lg text-sm font-bold transition-all" data-tab="bookings">
+        Booking Requests
+      </button>
+      <button class="tab-btn bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-600 px-5 py-2.5 rounded-t-lg text-sm font-bold transition-all" data-tab="profile">
+        Edit Profile
+      </button>
+    </div>
+
+    <!-- ── Tab: My Services ──────────────────────────────────────────────── -->
+    <div id="tab-services" class="tab-pane active">
+      <div id="my-services-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div class="col-span-full flex items-center justify-center py-12 text-slate-400">
+          <span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>Loading…
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tab: Create Service ───────────────────────────────────────────── -->
+    <div id="tab-create" class="tab-pane max-w-2xl">
+      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+        <h2 class="text-xl font-bold mb-6">Create a New Service Listing</h2>
+        <form id="create-service-form" class="space-y-5" novalidate>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Service Title <span class="text-red-500">*</span></label>
+            <input id="svc-title" type="text" required placeholder="e.g. Professional Logo Design"
+              class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description <span class="text-red-500">*</span></label>
+            <textarea id="svc-description" rows="4" required placeholder="Describe what you offer, your experience, and what clients can expect…"
+              class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all resize-none"></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Price <span class="text-red-500">*</span></label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                <input id="svc-price" type="number" min="1" required placeholder="50"
+                  class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 pl-7 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Price Unit</label>
+              <select id="svc-price-unit"
+                class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all">
+                <option value="fixed">Fixed price</option>
+                <option value="per hour">Per hour</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Category <span class="text-red-500">*</span></label>
+              <select id="svc-category" required
+                class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all">
+                <option value="">Select category</option>
+                <option value="Digital">Digital</option>
+                <option value="Physical">Physical</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Location / City</label>
+              <input id="svc-location" type="text" placeholder="Nairobi, KE or Remote"
+                class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Service Image URL</label>
+            <input id="svc-image" type="url" placeholder="https://example.com/image.jpg"
+              class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+            <p class="text-xs text-slate-400 mt-1">Paste a public image URL. Leave blank to use a placeholder.</p>
+          </div>
+
+          <div id="create-svc-error"   class="hidden text-sm text-red-700 bg-red-50 rounded-lg px-4 py-2.5 border border-red-200"></div>
+          <div id="create-svc-success" class="hidden text-sm text-green-700 bg-green-50 rounded-lg px-4 py-2.5 border border-green-200">
+            ✓ Service created successfully!
+          </div>
+
+          <button type="submit" id="create-svc-btn"
+            class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined !text-lg">add_circle</span>
+            Publish Service
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── Tab: Booking Requests ─────────────────────────────────────────── -->
+    <div id="tab-bookings" class="tab-pane">
+      <div id="bookings-list" class="space-y-4">
+        <div class="flex items-center justify-center py-12 text-slate-400">
+          <span class="material-symbols-outlined mr-2 animate-spin">progress_activity</span>Loading…
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tab: Edit Profile ─────────────────────────────────────────────── -->
+    <div id="tab-profile" class="tab-pane max-w-2xl">
+      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+        <h2 class="text-xl font-bold mb-6">Edit Your Provider Profile</h2>
+        <form id="edit-profile-form" class="space-y-5" novalidate>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Display Name</label>
+            <input id="profile-name" type="text" placeholder="Your full name"
+              class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Bio / About</label>
+            <textarea id="profile-bio" rows="5" placeholder="Describe your expertise, experience, and what makes you great…"
+              class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all resize-none"></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Location</label>
+              <input id="profile-location" type="text" placeholder="Nairobi, Kenya"
+                class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Photo URL</label>
+              <input id="profile-photo" type="url" placeholder="https://…"
+                class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Skills (comma-separated)</label>
+            <input id="profile-skills" type="text" placeholder="React, Node.js, Tailwind CSS"
+              class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"/>
+          </div>
+
+          <div id="profile-error"   class="hidden text-sm text-red-700 bg-red-50 rounded-lg px-4 py-2.5 border border-red-200"></div>
+          <div id="profile-success" class="hidden text-sm text-green-700 bg-green-50 rounded-lg px-4 py-2.5 border border-green-200">
+            ✓ Profile updated successfully!
+          </div>
+
+          <button type="submit" id="save-profile-btn"
+            class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg transition-all">
+            Save Changes
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div><!-- /dashboard-content -->
+</main>
+
+<!-- ── Footer ───────────────────────────────────────────────────────────── -->
+<footer class="mt-16 border-t border-slate-200 dark:border-slate-800 py-8 bg-white dark:bg-background-dark text-center text-sm text-slate-400">
+  © 2024 PEDY Inc. All rights reserved. &nbsp;|&nbsp;
+  <a href="index.html" class="hover:text-primary">Home</a> &nbsp;·&nbsp;
+  <a href="marketplace.html" class="hover:text-primary">Marketplace</a>
+</footer>
+
+<!-- ── Module Script ─────────────────────────────────────────────────────── -->
+<script type="module">
+import { initAuth, openAuthModal, getCurrentUser, getUserProfileData } from "./js/auth-ui.js";
+import {
+  createService,
+  getProviderServices,
+  deleteService,
+  getProviderBookings,
+  getProviderReviews,
+  updateBookingStatus,
+  updateUserProfile,
+  getUserDoc
+} from "./js/db.js";
+
+// ── Tab switching ─────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600');
+    });
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    btn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600');
+    document.getElementById(`tab-${btn.dataset.tab}`)?.classList.add('active');
+  });
+});
+
+// ── Auth init & gate ──────────────────────────────────────────────────────
+initAuth({
+  requireAuth: false,
+  onAuthChange: async (user, profile) => {
+    if (!user) {
+      // Show sign-in state
+      window.location.href = 'index.html';
+      return;
+    }
+    if (profile?.role !== 'provider') {
+      document.getElementById('access-denied')?.classList.remove('hidden');
+      return;
+    }
+    // Authorised provider
+    document.getElementById('dashboard-content')?.classList.remove('hidden');
+    document.getElementById('dashboard-subtitle').textContent = `Welcome back, ${user.displayName || user.email}`;
+    document.getElementById('view-profile-btn').href = `profile.html?uid=${user.uid}`;
+
+    await loadDashboard(user.uid);
+    prefillProfileForm(profile);
+  }
+});
+
+// ── Upgrade to provider button ────────────────────────────────────────────
+document.getElementById('upgrade-btn')?.addEventListener('click', async () => {
+  const user = getCurrentUser();
+  if (!user) { openAuthModal('signup'); return; }
+  try {
+    await updateUserProfile(user.uid, { role: 'provider' });
+    window.location.reload();
+  } catch(e) {
+    alert('Failed to upgrade account. Please try again.');
+  }
+});
+
+// ── Load all dashboard data ───────────────────────────────────────────────
+async function loadDashboard(uid) {
+  const [services, bookings, reviews] = await Promise.all([
+    getProviderServices(uid),
+    getProviderBookings(uid),
+    getProviderReviews(uid),
+  ]);
+
+  // Stats
+  document.getElementById('stat-services').textContent = services.length;
+  document.getElementById('stat-bookings').textContent = bookings.filter(b => b.status === 'pending').length;
+  document.getElementById('stat-reviews').textContent  = reviews.length;
+  const avg = reviews.length
+    ? (reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviews.length).toFixed(1)
+    : '—';
+  document.getElementById('stat-rating').textContent = avg;
+
+  renderServices(services, uid);
+  renderBookings(bookings);
+}
+
+// ── Render service cards ──────────────────────────────────────────────────
+function renderServices(services, uid) {
+  const container = document.getElementById('my-services-list');
+  if (services.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full text-center py-16 text-slate-400">
+        <span class="material-symbols-outlined !text-5xl block mb-3">storefront</span>
+        <p class="font-semibold">No services yet</p>
+        <p class="text-sm mt-1">Click <strong>+ Create Service</strong> to publish your first listing</p>
+      </div>`;
+    return;
+  }
+  container.innerHTML = services.map(svc => {
+    const price = svc.priceUnit === 'per hour' ? `$${svc.price}/hr` : `$${svc.price}`;
+    const img   = svc.imageURL || `https://placehold.co/600x400/eb4c4c/ffffff?text=${encodeURIComponent(svc.title)}`;
+    return `
+    <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-all">
+      <div class="relative aspect-video overflow-hidden">
+        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${img}" alt="${svc.title}"/>
+        <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-primary">${svc.category}</div>
+      </div>
+      <div class="p-4">
+        <h3 class="font-bold text-md mb-1 group-hover:text-primary transition-colors">${svc.title}</h3>
+        <p class="text-xs text-slate-500 line-clamp-2 mb-3">${svc.description}</p>
+        <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-3">
+          <span class="font-bold text-primary">${price}</span>
+          <button onclick="handleDeleteService('${svc.id}')"
+            class="text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1 transition-colors">
+            <span class="material-symbols-outlined !text-sm">delete</span> Delete
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Delete service ────────────────────────────────────────────────────────
+window.handleDeleteService = async function(serviceId) {
+  if (!confirm('Delete this service? This cannot be undone.')) return;
+  try {
+    await deleteService(serviceId);
+    const uid = getCurrentUser()?.uid;
+    if (uid) {
+      const services = await getProviderServices(uid);
+      renderServices(services, uid);
+      document.getElementById('stat-services').textContent = services.length;
+    }
+  } catch (e) {
+    alert('Failed to delete service. Please try again.');
+  }
+};
+
+// ── Render bookings ───────────────────────────────────────────────────────
+function renderBookings(bookings) {
+  const container = document.getElementById('bookings-list');
+  if (bookings.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-16 text-slate-400">
+        <span class="material-symbols-outlined !text-5xl block mb-3">inbox</span>
+        <p class="font-semibold">No booking requests yet</p>
+        <p class="text-sm mt-1">When clients contact you they will appear here</p>
+      </div>`;
+    return;
+  }
+  container.innerHTML = bookings.map(b => {
+    const statusColor = b.status === 'accepted' ? 'text-green-700 bg-green-100' :
+                        b.status === 'declined'  ? 'text-red-700 bg-red-100' :
+                        'text-yellow-700 bg-yellow-100';
+    const date = b.createdAt?.toDate ? b.createdAt.toDate().toLocaleDateString() : '—';
+    return `
+    <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 flex flex-col sm:flex-row sm:items-start gap-4">
+      <div class="flex-1">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-sm font-bold text-slate-900">${b.clientName || 'Client'}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full font-semibold capitalize ${statusColor}">${b.status}</span>
+        </div>
+        <p class="text-sm text-slate-600 mb-2">${b.message || 'No message provided.'}</p>
+        <p class="text-xs text-slate-400">${date}</p>
+      </div>
+      ${b.status === 'pending' ? `
+      <div class="flex gap-2 shrink-0">
+        <button onclick="handleBookingStatus('${b.id}','accepted')"
+          class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">Accept</button>
+        <button onclick="handleBookingStatus('${b.id}','declined')"
+          class="bg-red-100 hover:bg-red-200 text-red-700 text-xs font-bold px-4 py-2 rounded-lg transition-colors">Decline</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+window.handleBookingStatus = async function(bookingId, status) {
+  try {
+    await updateBookingStatus(bookingId, status);
+    const uid = getCurrentUser()?.uid;
+    if (uid) {
+      const bookings = await getProviderBookings(uid);
+      renderBookings(bookings);
+      document.getElementById('stat-bookings').textContent =
+        bookings.filter(b => b.status === 'pending').length;
+    }
+  } catch(e) {
+    alert('Update failed. Try again.');
+  }
+};
+
+// ── Create service form ───────────────────────────────────────────────────
+document.getElementById('create-service-form')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const btn     = document.getElementById('create-svc-btn');
+  const errEl   = document.getElementById('create-svc-error');
+  const okEl    = document.getElementById('create-svc-success');
+  const profile = getUserProfileData();
+
+  const title       = document.getElementById('svc-title').value.trim();
+  const description = document.getElementById('svc-description').value.trim();
+  const price       = parseFloat(document.getElementById('svc-price').value);
+  const priceUnit   = document.getElementById('svc-price-unit').value;
+  const category    = document.getElementById('svc-category').value;
+  const location    = document.getElementById('svc-location').value.trim();
+  const imageURL    = document.getElementById('svc-image').value.trim();
+
+  errEl.classList.add('hidden');
+  okEl.classList.add('hidden');
+
+  if (!title || !description || !price || !category) {
+    errEl.textContent = 'Please fill in all required fields.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  btn.textContent = 'Publishing…';
+  btn.disabled    = true;
+
+  try {
+    await createService(user.uid, {
+      title,
+      description,
+      price,
+      priceUnit,
+      category,
+      location,
+      imageURL:      imageURL || null,
+      providerName:  user.displayName || user.email,
+      providerPhotoURL: profile?.photoURL || null,
+    });
+    okEl.classList.remove('hidden');
+    e.target.reset();
+    // Refresh services tab
+    const services = await getProviderServices(user.uid);
+    renderServices(services, user.uid);
+    document.getElementById('stat-services').textContent = services.length;
+  } catch (err) {
+    errEl.textContent = 'Failed to create service: ' + err.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.innerHTML = '<span class="material-symbols-outlined !text-lg">add_circle</span> Publish Service';
+    btn.disabled  = false;
+  }
+});
+
+// ── Edit profile form ─────────────────────────────────────────────────────
+function prefillProfileForm(profile) {
+  if (!profile) return;
+  document.getElementById('profile-name').value     = profile.displayName || '';
+  document.getElementById('profile-bio').value      = profile.bio         || '';
+  document.getElementById('profile-location').value = profile.location    || '';
+  document.getElementById('profile-photo').value    = profile.photoURL    || '';
+  document.getElementById('profile-skills').value   = (profile.skills || []).join(', ');
+}
+
+document.getElementById('edit-profile-form')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const btn   = document.getElementById('save-profile-btn');
+  const errEl = document.getElementById('profile-error');
+  const okEl  = document.getElementById('profile-success');
+
+  errEl.classList.add('hidden');
+  okEl.classList.add('hidden');
+
+  btn.textContent = 'Saving…';
+  btn.disabled    = true;
+
+  try {
+    const skillsRaw = document.getElementById('profile-skills').value;
+    const skills    = skillsRaw.split(',').map(s => s.trim()).filter(Boolean);
+    await updateUserProfile(user.uid, {
+      displayName: document.getElementById('profile-name').value.trim(),
+      bio:         document.getElementById('profile-bio').value.trim(),
+      location:    document.getElementById('profile-location').value.trim(),
+      photoURL:    document.getElementById('profile-photo').value.trim() || null,
+      skills,
+    });
+    okEl.classList.remove('hidden');
+  } catch (err) {
+    errEl.textContent = 'Failed to update profile: ' + err.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.textContent = 'Save Changes';
+    btn.disabled    = false;
+  }
+});
+</script>
+</body>
+</html>

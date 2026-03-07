@@ -60,8 +60,20 @@
 </nav>
 </div>
 <div class="flex items-center gap-4">
-<button class="px-4 py-2 text-slate-600 font-medium">Log In</button>
-<button class="px-5 py-2 bg-brand text-white rounded-theme font-medium hover:bg-brand-dark transition-all">Sign Up</button>
+<!-- Unauthenticated -->
+<button id="nav-sign-in-btn" class="px-4 py-2 text-slate-600 font-medium hover:text-brand transition-colors">Log In</button>
+<button id="nav-sign-up-btn" class="px-5 py-2 bg-brand text-white rounded-theme font-medium hover:bg-brand-dark transition-all">Sign Up</button>
+<!-- Authenticated (hidden until logged in) -->
+<div id="nav-user-menu" class="hidden flex items-center gap-2">
+  <a href="dashboard.html" id="nav-dashboard-btn" class="provider-only hidden text-sm font-semibold text-brand hover:opacity-80">Dashboard</a>
+  <div class="flex items-center gap-2 bg-brand text-white pl-2 pr-3 py-1.5 rounded-theme">
+    <span id="nav-user-initial" class="size-6 bg-white/20 rounded-full flex items-center justify-center text-xs font-bold">U</span>
+    <span id="nav-user-name" class="hidden sm:inline text-sm">User</span>
+  </div>
+  <button id="nav-sign-out-btn" title="Sign out" class="p-2 rounded-theme border border-slate-200 hover:bg-red-50 text-slate-500 hover:text-brand transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+  </button>
+</div>
 </div>
 </div>
 </header>
@@ -74,31 +86,31 @@
 <section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="profile-header">
 <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
 <div class="relative">
-<img alt="Alex Rivera Profile" class="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFJKU3cgaGtSnvmZeFzF7FDNFUe3NwPl1bxHEB_fjqDq0GK1v8q-RxHuR_zE59ugnKJRBuUywPfy7he5z4wCO2gy3lv-pVYx4Mru8n1QPGOLC4BzG4Ps5oAR2CXCt5mDyDLDxmTJb1o9DozQq3C0FcivWkYSqba1ymsKova9HWXQFFQiR2XNV6kHIG0AA4m2OtQ0n5kVGec3DaYWXJVOhjXEMyHu6GKbWAo9C7-e1wlU0iX1Q6MyFTvBPgAKVNZ49lJgStdt4ZFTCx"/>
-<div class="absolute bottom-1 right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-white" title="Online Now"></div>
+<img id="provider-avatar" alt="Provider profile" class="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover" src="https://ui-avatars.com/api/?name=P&background=eb4c4c&color=fff"/>
+<div id="online-indicator" class="absolute bottom-1 right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-white hidden" title="Online Now"></div>
 </div>
 <div class="text-center md:text-left flex-1">
-<div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
-<h1 class="text-3xl font-bold text-slate-900">Alex Rivera</h1>
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-<svg class="w-3 h-3 mr-1" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.64.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
-                  Verified
-                </span>
-</div>
-<p class="text-lg text-slate-600 mt-1 font-medium">Senior Full-Stack Web Developer &amp; UI Designer</p>
-<div class="flex items-center justify-center md:justify-start mt-3 gap-2">
-<div class="flex text-yellow-400">
-<svg class="w-5 h-5 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-</div>
-<span class="text-slate-900 font-bold">4.9</span>
-<span class="text-slate-500 text-sm">(128 reviews)</span>
-<span class="text-slate-300 mx-2">|</span>
-<span class="text-slate-600 text-sm">Miami, FL</span>
-</div>
+  <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+    <h1 id="provider-name" class="text-3xl font-bold text-slate-900">Loading…</h1>
+    <span id="verified-badge" class="hidden inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.64.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+      Verified
+    </span>
+  </div>
+  <p id="provider-title" class="text-lg text-slate-600 mt-1 font-medium">Service Provider</p>
+  <div class="flex items-center justify-center md:justify-start mt-3 gap-2">
+    <div class="flex text-yellow-400">
+      <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+    </div>
+    <span id="provider-rating" class="text-slate-900 font-bold">—</span>
+    <span id="provider-review-count" class="text-slate-500 text-sm">(0 reviews)</span>
+    <span class="text-slate-300 mx-2">|</span>
+    <span id="provider-location" class="text-slate-600 text-sm">—</span>
+  </div>
 </div>
 <div class="flex md:flex-col gap-2">
-<button class="bg-brand hover:bg-brand-dark text-white font-semibold py-2 px-6 rounded-theme shadow-sm transition-all">Hire Now</button>
-<button class="border border-brand text-brand hover:bg-red-50 font-semibold py-2 px-6 rounded-theme transition-all">Save Profile</button>
+  <button id="hire-now-btn" class="bg-brand hover:bg-brand-dark text-white font-semibold py-2 px-6 rounded-theme shadow-sm transition-all">Hire Now</button>
+  <button id="save-profile-btn" class="border border-brand text-brand hover:bg-red-50 font-semibold py-2 px-6 rounded-theme transition-all">Save Profile</button>
 </div>
 </div>
 </section>
@@ -106,62 +118,22 @@
 <!-- BEGIN: AboutMe -->
 <section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="about-me">
 <h2 class="text-xl font-bold text-slate-900 mb-4">About Me</h2>
-<div class="prose prose-slate max-w-none text-slate-600 leading-relaxed">
-<p>
-              I am a dedicated Full-stack Web Developer with over 8 years of experience in crafting high-performance, responsive web applications. I specialize in the modern MERN stack, Tailwind CSS, and headless architectures. 
-            </p>
-<p class="mt-4">
-              My philosophy is simple: build clean, maintainable code that delivers an exceptional user experience. I bridge the gap between complex backend logic and intuitive frontend design to help businesses scale their digital presence.
-            </p>
+<div id="provider-bio" class="prose prose-slate max-w-none text-slate-600 leading-relaxed">
+  <p class="text-slate-400 animate-pulse">Loading bio…</p>
 </div>
-<div class="mt-6 flex flex-wrap gap-2">
-<!-- Skill Tags -->
-<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">React.js</span>
-<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">Next.js</span>
-<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">Node.js</span>
-<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">TypeScript</span>
-<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">Tailwind CSS</span>
-<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">PostgreSQL</span>
+<div id="provider-skills" class="mt-6 flex flex-wrap gap-2">
+  <!-- Skills rendered dynamically -->
 </div>
 </section>
 <!-- END: AboutMe -->
 <!-- BEGIN: Services -->
 <section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="services">
 <h2 class="text-xl font-bold text-slate-900 mb-6">Services</h2>
-<div class="space-y-4">
-<!-- Service Item 1 -->
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-slate-100 rounded-theme hover:border-brand-light transition-all cursor-pointer group">
-<div>
-<h3 class="font-bold text-lg group-hover:text-brand">Full-stack Web App Development</h3>
-<p class="text-slate-500 text-sm mt-1">Complete custom solution from design to deployment.</p>
-</div>
-<div class="mt-3 sm:mt-0 text-right">
-<span class="text-xl font-bold text-slate-900">Starts at $500</span>
-<p class="text-xs text-brand font-semibold">Delivery in 14 days</p>
-</div>
-</div>
-<!-- Service Item 2 -->
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-slate-100 rounded-theme hover:border-brand-light transition-all cursor-pointer group">
-<div>
-<h3 class="font-bold text-lg group-hover:text-brand">UI/UX Design Consultation</h3>
-<p class="text-slate-500 text-sm mt-1">Reviewing your current UI and providing high-fidelity mockups.</p>
-</div>
-<div class="mt-3 sm:mt-0 text-right">
-<span class="text-xl font-bold text-slate-900">$50/hr</span>
-<p class="text-xs text-slate-400 font-semibold">Flexible schedule</p>
-</div>
-</div>
-<!-- Service Item 3 -->
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-slate-100 rounded-theme hover:border-brand-light transition-all cursor-pointer group">
-<div>
-<h3 class="font-bold text-lg group-hover:text-brand">Landing Page Optimization</h3>
-<p class="text-slate-500 text-sm mt-1">Improve conversions with high-speed, SEO-ready code.</p>
-</div>
-<div class="mt-3 sm:mt-0 text-right">
-<span class="text-xl font-bold text-slate-900">$200</span>
-<p class="text-xs text-brand font-semibold">Delivery in 3 days</p>
-</div>
-</div>
+<div id="provider-services" class="space-y-4">
+  <div class="flex items-center text-slate-400 animate-pulse gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/></svg>
+    Loading services…
+  </div>
 </div>
 </section>
 <!-- END: Services -->
@@ -190,78 +162,51 @@
 <!-- BEGIN: Reviews -->
 <section class="bg-white p-8 rounded-theme border border-slate-200 shadow-sm" data-purpose="reviews">
 <h2 class="text-xl font-bold text-slate-900 mb-6">Reviews</h2>
-<div class="space-y-6">
-<!-- Review 1 -->
-<div class="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
-<div class="flex items-center gap-2 mb-2">
-<div class="flex text-yellow-400">
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-</div>
-<span class="text-sm font-bold text-slate-900">Great experience!</span>
-</div>
-<p class="text-slate-600 text-sm italic">"Alex delivered a top-tier React application ahead of schedule. The code was clean, documented, and exactly what we needed. Communication was 10/10."</p>
-<div class="mt-3 flex items-center gap-2">
-<div class="w-6 h-6 rounded-full bg-slate-200"></div>
-<span class="text-xs text-slate-500">Sarah J., CEO at TechFlow</span>
-</div>
-</div>
-<!-- Review 2 -->
-<div class="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
-<div class="flex items-center gap-2 mb-2">
-<div class="flex text-yellow-400">
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-<svg class="w-4 h-4 fill-current text-slate-200" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-</div>
-<span class="text-sm font-bold text-slate-900">Highly professional</span>
-</div>
-<p class="text-slate-600 text-sm italic">"Helped us redesign our landing page. Very attentive to detail and understood our brand vision immediately."</p>
-<div class="mt-3 flex items-center gap-2">
-<div class="w-6 h-6 rounded-full bg-slate-200"></div>
-<span class="text-xs text-slate-500">Michael R., Marketing Manager</span>
-</div>
-</div>
+<div id="provider-reviews" class="space-y-6">
+  <div class="flex items-center text-slate-400 animate-pulse gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/></svg>
+    Loading reviews…
+  </div>
 </div>
 </section>
 <!-- END: Reviews -->
-</div>
 <!-- Right Column: Sidebar -->
 <aside class="lg:col-span-4">
 <div class="sticky-sidebar space-y-6">
 <!-- BEGIN: ContactCard -->
 <div class="bg-white p-6 rounded-theme border border-slate-200 shadow-sm" data-purpose="contact-card">
-<h3 class="text-lg font-bold text-slate-900 mb-4">Contact Alex</h3>
-<button class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded-theme flex items-center justify-center gap-2 transition-all">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-              Send Message
-            </button>
+<h3 id="contact-header" class="text-lg font-bold text-slate-900 mb-4">Contact Provider</h3>
+<button id="send-message-btn"
+  class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded-theme flex items-center justify-center gap-2 transition-all">
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+  Send Message
+</button>
 <div class="mt-6 space-y-4">
-<div class="flex items-center justify-between text-sm">
-<span class="text-slate-500">Response time</span>
-<span class="text-slate-900 font-semibold">~ 1 hour</span>
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-slate-500">Response time</span>
+    <span id="response-time" class="text-slate-900 font-semibold">~1 hour</span>
+  </div>
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-slate-500">Member since</span>
+    <span id="member-since" class="text-slate-900 font-semibold">—</span>
+  </div>
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-slate-500">Services offered</span>
+    <span id="services-count-sidebar" class="text-slate-900 font-semibold">—</span>
+  </div>
 </div>
-<div class="flex items-center justify-between text-sm">
-<span class="text-slate-500">Last active</span>
-<span class="text-slate-900 font-semibold">20 mins ago</span>
-</div>
-<div class="flex items-center justify-between text-sm">
-<span class="text-slate-500">Member since</span>
-<span class="text-slate-900 font-semibold">Jan 2021</span>
-</div>
-<div class="flex items-center justify-between text-sm">
-<span class="text-slate-500">Completed Projects</span>
-<span class="text-slate-900 font-semibold">47</span>
-</div>
-</div>
-<div class="mt-6 pt-6 border-t border-slate-100 text-center">
-<p class="text-sm text-slate-500 mb-4 italic">"I'm currently accepting new projects for Q3."</p>
-<button class="text-brand text-sm font-bold hover:underline">View Availability Calendar</button>
+
+<!-- Booking Request Form (hidden by default) -->
+<div id="booking-form-wrapper" class="mt-6 pt-6 border-t border-slate-100 hidden">
+  <h4 class="text-sm font-bold text-slate-900 mb-3">Request a Booking</h4>
+  <textarea id="booking-message" rows="3" placeholder="Describe what you need…"
+    class="w-full rounded-theme border border-slate-200 px-3 py-2 text-sm focus:ring-1 focus:ring-brand outline-none resize-none"></textarea>
+  <button id="submit-booking-btn"
+    class="mt-3 w-full bg-brand hover:bg-brand-dark text-white font-bold py-2 px-4 rounded-theme text-sm transition-all">
+    Submit Request
+  </button>
+  <p id="booking-success" class="hidden mt-2 text-sm text-green-600 font-medium text-center">✓ Request sent! The provider will be in touch.</p>
+  <p id="booking-error" class="hidden mt-2 text-sm text-red-600 text-center"></p>
 </div>
 </div>
 <!-- END: ContactCard -->
@@ -333,4 +278,185 @@
 </div>
 </footer>
 <!-- END: Footer -->
-</body></html>
+<script type="module">
+import { initAuth, openAuthModal, getCurrentUser } from "./js/auth-ui.js";
+import { getUserDoc, getProviderServices, getProviderReviews, createBooking } from "./js/db.js";
+
+const params     = new URLSearchParams(window.location.search);
+const providerId = params.get('uid');
+const highlightService = params.get('service');
+
+// ── Helpers ───────────────────────────────────────
+function stars(rating) {
+  const full  = Math.round(rating || 0);
+  const empty = 5 - full;
+  const svg   = (filled) => `<svg class="w-4 h-4 fill-current ${filled ? 'text-yellow-400' : 'text-slate-200'}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
+  return Array(full).fill(svg(true)).join('') + Array(empty).fill(svg(false)).join('');
+}
+
+function formatDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+
+// ── Load provider profile ───────────────────────────
+async function loadProfile() {
+  if (!providerId) {
+    // Show current user's own profile if no UID given
+    const user = getCurrentUser();
+    if (user) {
+      window.location.search = `?uid=${user.uid}`;
+    } else {
+      document.getElementById('provider-name').textContent = 'Profile not found';
+    }
+    return;
+  }
+
+  try {
+    const [profile, services, reviews] = await Promise.all([
+      getUserDoc(providerId),
+      getProviderServices(providerId),
+      getProviderReviews(providerId),
+    ]);
+
+    if (!profile) {
+      document.getElementById('provider-name').textContent = 'Provider not found';
+      return;
+    }
+
+    // ─ Header
+    document.title = `${profile.displayName} | PEDY Marketplace`;
+    document.getElementById('provider-name').textContent = profile.displayName || 'Provider';
+    document.getElementById('provider-title').textContent  = profile.bio?.split('\n')[0] || 'Service Provider on PEDY';
+    document.getElementById('provider-location').textContent = profile.location || 'Location not set';
+    document.getElementById('contact-header').textContent   = `Contact ${profile.displayName?.split(' ')[0] || 'Provider'}`;
+    document.getElementById('member-since').textContent     = formatDate(profile.createdAt);
+    document.getElementById('services-count-sidebar').textContent = services.length;
+
+    if (profile.photoURL) {
+      document.getElementById('provider-avatar').src = profile.photoURL;
+    } else {
+      document.getElementById('provider-avatar').src =
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.displayName||'P')}&background=eb4c4c&color=fff&size=128`;
+    }
+    document.getElementById('verified-badge')?.classList.remove('hidden');
+
+    // ─ Average rating
+    const avgRating = reviews.length
+      ? (reviews.reduce((s,r) => s + (r.rating||0), 0) / reviews.length).toFixed(1)
+      : null;
+    document.getElementById('provider-rating').textContent       = avgRating || '—';
+    document.getElementById('provider-review-count').textContent = `(${reviews.length} review${reviews.length !== 1 ? 's' : ''})`;
+
+    // ─ Bio
+    const bioEl = document.getElementById('provider-bio');
+    bioEl.innerHTML = profile.bio
+      ? profile.bio.split('\n').map(p => `<p class="mb-3">${p}</p>`).join('')
+      : '<p class="text-slate-400 italic">This provider has not added a bio yet.</p>';
+
+    // ─ Skills
+    const skillsEl = document.getElementById('provider-skills');
+    if (profile.skills?.length) {
+      skillsEl.innerHTML = profile.skills
+        .map(s => `<span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-full">${s}</span>`)
+        .join('');
+    }
+
+    // ─ Services
+    const svcEl = document.getElementById('provider-services');
+    if (services.length === 0) {
+      svcEl.innerHTML = '<p class="text-slate-400 italic">No services listed yet.</p>';
+    } else {
+      svcEl.innerHTML = services.map(svc => {
+        const price     = svc.priceUnit === 'per hour' ? `$${svc.price}/hr` : `$${svc.price}`;
+        const highlight = svc.id === highlightService ? 'border-brand bg-red-50' : 'border-slate-100';
+        return `
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border ${highlight} rounded-theme hover:border-brand-light transition-all group">
+          <div>
+            <h3 class="font-bold text-lg group-hover:text-brand">${svc.title}</h3>
+            <p class="text-slate-500 text-sm mt-1">${svc.description}</p>
+          </div>
+          <div class="mt-3 sm:mt-0 text-right shrink-0 ml-4">
+            <span class="text-xl font-bold text-slate-900">${price}</span>
+            <p class="text-xs text-brand font-semibold">${svc.category}</p>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ─ Reviews
+    const revEl = document.getElementById('provider-reviews');
+    if (reviews.length === 0) {
+      revEl.innerHTML = '<p class="text-slate-400 italic">No reviews yet. Be the first!</p>';
+    } else {
+      revEl.innerHTML = reviews.map(rev => `
+        <div class="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="flex">${stars(rev.rating)}</div>
+            <span class="text-sm font-bold text-slate-900">${rev.rating?.toFixed(1)}/5</span>
+          </div>
+          <p class="text-slate-600 text-sm italic">&ldquo;${rev.comment}&rdquo;</p>
+          <div class="mt-3 flex items-center gap-2">
+            <div class="w-6 h-6 rounded-full bg-slate-200"></div>
+            <span class="text-xs text-slate-500">${rev.clientName || 'Client'} &bull; ${formatDate(rev.createdAt)}</span>
+          </div>
+        </div>`).join('');
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('provider-name').textContent = 'Error loading profile';
+  }
+}
+
+// ── Booking logic ─────────────────────────────────
+function showBookingForm() {
+  const user = getCurrentUser();
+  if (!user) { openAuthModal('login'); return; }
+  const wrapper = document.getElementById('booking-form-wrapper');
+  wrapper?.classList.toggle('hidden');
+}
+
+document.getElementById('send-message-btn')?.addEventListener('click', showBookingForm);
+document.getElementById('hire-now-btn')?.addEventListener('click', showBookingForm);
+
+document.getElementById('submit-booking-btn')?.addEventListener('click', async () => {
+  const user = getCurrentUser();
+  if (!user) { openAuthModal('login'); return; }
+
+  const message = document.getElementById('booking-message').value.trim();
+  const btn     = document.getElementById('submit-booking-btn');
+  const errEl   = document.getElementById('booking-error');
+  const okEl    = document.getElementById('booking-success');
+
+  if (!message) { errEl.textContent = 'Please add a message.'; errEl.classList.remove('hidden'); return; }
+
+  btn.textContent = 'Sending…';
+  btn.disabled    = true;
+  errEl.classList.add('hidden');
+  okEl.classList.add('hidden');
+
+  try {
+    await createBooking({
+      providerId,
+      clientId:   user.uid,
+      clientName: user.displayName || user.email,
+      message,
+      serviceId:  highlightService || null,
+    });
+    okEl.classList.remove('hidden');
+    document.getElementById('booking-message').value = '';
+  } catch (err) {
+    errEl.textContent = 'Failed to send request. Please try again.';
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.textContent = 'Submit Request';
+    btn.disabled    = false;
+  }
+});
+
+// ── Init ───────────────────────────────────────────
+initAuth();
+loadProfile();
+</script>

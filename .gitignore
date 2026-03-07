@@ -1,0 +1,30 @@
+# ── Firebase / Environment Secrets ──────────────────────────────────────────
+# Copy env.example.js → env.js and fill in your Firebase credentials
+Front end/env.js
+
+# Admin dashboard Firebase credentials
+pedy-admin/env.js
+
+# Backend secrets
+pedy-backend/.env
+pedy-backend/service-account.json
+
+# ── OS & Editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+
+# ── Node (for backend / future build tools) ──────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# ── Build outputs ────────────────────────────────────────────────────────────
+dist/
+.next/
+out/
+
+# ── Local env files (generic) ────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
