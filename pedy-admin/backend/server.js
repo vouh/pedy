@@ -6,6 +6,13 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const serviceRoutes = require("./routes/services");
 const paymentRoutes = require("./routes/payments");
+const reviewRoutes = require("./routes/reviews");
+const notifRoutes = require("./routes/notifications");
+const bookingRoutes = require("./routes/bookings");
+const settingsRoutes = require("./routes/settings");
+const analyticsRoutes = require("./routes/analytics");
+const adminRoutes = require("./routes/admins");
+const auditlogRoutes = require("./routes/auditlog");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -37,6 +44,13 @@ app.use("/api/admin/auth", authRoutes);
 app.use("/api/admin/users", userRoutes);
 app.use("/api/admin/services", serviceRoutes);
 app.use("/api/admin/payments", paymentRoutes);
+app.use("/api/admin/reviews", reviewRoutes);
+app.use("/api/admin/notifications", notifRoutes);
+app.use("/api/admin/bookings", bookingRoutes);
+app.use("/api/admin/settings", settingsRoutes);
+app.use("/api/admin/analytics", analyticsRoutes);
+app.use("/api/admin/admins", adminRoutes);
+app.use("/api/admin/auditlog", auditlogRoutes);
 
 // ─── 404 fallback ─────────────────────────────────────────────────────────────
 app.use((req, res) => {
