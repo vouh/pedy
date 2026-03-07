@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>PEDY Admin – Services</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: { "primary": "#eb4c4c", "background-light": "#f8f6f6", "background-dark": "#211111" },
+          fontFamily: { "display": ["Inter"] },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .filled { font-variation-settings: 'FILL' 1; }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+  <div id="sidebarContainer"></div>
+  <div class="lg:pl-64 min-h-screen flex flex-col">
+    <div id="topbarContainer"></div>
+
+    <main class="flex-1 px-6 py-8 max-w-[1200px] w-full mx-auto">
+
+      <!-- Toolbar -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+        <div class="relative flex-1 max-w-sm">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 !text-lg">search</span>
+          <input type="text" id="searchInput" oninput="filterServices()" placeholder="Search services..."
+            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none"/>
+        </div>
+        <div class="flex items-center gap-2">
+          <select id="filterType" onchange="filterServices()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none">
+            <option value="">All Types</option>
+            <option value="digital">Digital</option>
+            <option value="physical">Physical</option>
+          </select>
+          <select id="filterStatus" onchange="filterServices()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-primary">1,284</p>
+          <p class="text-xs text-slate-500 mt-1">Total Services</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-yellow-600">8</p>
+          <p class="text-xs text-slate-500 mt-1">Pending Review</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-green-600">1,251</p>
+          <p class="text-xs text-slate-500 mt-1">Approved</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-red-600">25</p>
+          <p class="text-xs text-slate-500 mt-1">Rejected</p>
+        </div>
+      </div>
+
+      <!-- Services Table -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+          <h3 class="font-bold">Service Listings</h3>
+          <span id="serviceCount" class="text-xs text-slate-400 font-medium"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-xs text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
+                <th class="text-left py-3 px-6 font-semibold">Service</th>
+                <th class="text-left py-3 px-4 font-semibold">Provider</th>
+                <th class="text-left py-3 px-4 font-semibold">Type</th>
+                <th class="text-left py-3 px-4 font-semibold">Price</th>
+                <th class="text-left py-3 px-4 font-semibold">Status</th>
+                <th class="text-left py-3 px-4 font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="servicesBody" class="divide-y divide-slate-100 dark:divide-slate-700">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Action Modal -->
+  <div id="actionModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
+      <h3 id="modalTitle" class="text-lg font-bold mb-2"></h3>
+      <p id="modalBody" class="text-sm text-slate-500 mb-6"></p>
+      <div id="reasonWrap" class="mb-4 hidden">
+        <label class="text-xs font-semibold text-slate-500 block mb-1">Reason (optional)</label>
+        <textarea id="rejectReason" rows="2" placeholder="e.g. Violates marketplace guidelines..."
+          class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-primary/40 outline-none"></textarea>
+      </div>
+      <div class="flex gap-3 justify-end">
+        <button onclick="closeModal()" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Cancel</button>
+        <button id="modalConfirm" class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script>
+    const user = requireAuth();
+    if (!can(user, "services")) { window.location.href = "dashboard.html"; }
+
+    document.getElementById("sidebarContainer").innerHTML = buildSidebar(user, "services");
+    document.getElementById("topbarContainer").innerHTML = buildTopbar("Service Moderation", "Review, approve, and remove service listings");
+
+    const SERVICES = [
+      { id: 1, title: "Modern Web Development",   provider: "Alex Rivera",   type: "digital",   price: "$199", status: "approved" },
+      { id: 2, title: "Professional Home Cleaning", provider: "Sarah Jenkins", type: "physical",  price: "$45",  status: "approved" },
+      { id: 3, title: "Brand Photography",         provider: "Marcus Thorne", type: "physical",  price: "$120", status: "pending"  },
+      { id: 4, title: "Cybersecurity Audit",       provider: "David Kim",     type: "digital",   price: "$350", status: "approved" },
+      { id: 5, title: "Fake Logo Design",          provider: "spammer_01",    type: "digital",   price: "$5",   status: "pending"  },
+      { id: 6, title: "Personal Training",         provider: "Chris Evans",   type: "physical",  price: "$60",  status: "approved" },
+      { id: 7, title: "Virtual Interior Design",   provider: "Eliza Grant",   type: "digital",   price: "$150", status: "pending"  },
+      { id: 8, title: "Hair Braiding",             provider: "Grace Njeri",   type: "physical",  price: "KES 1500", status: "pending" },
+    ];
+
+    const statusColors = {
+      approved: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+      pending:  "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500",
+      rejected: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+    };
+
+    function renderServices(list) {
+      document.getElementById("serviceCount").textContent = list.length + " services";
+      document.getElementById("servicesBody").innerHTML = list.map(s => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
+          <td class="py-4 px-6">
+            <p class="font-medium">${s.title}</p>
+            <p class="text-xs text-slate-400">#SVC-${String(s.id).padStart(4,"0")}</p>
+          </td>
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-2">
+              <div class="size-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">${s.provider.charAt(0)}</div>
+              <span class="text-sm">${s.provider}</span>
+            </div>
+          </td>
+          <td class="py-4 px-4">
+            <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full ${s.type === "digital" ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400" : "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"}">${s.type}</span>
+          </td>
+          <td class="py-4 px-4 font-semibold text-primary">${s.price}</td>
+          <td class="py-4 px-4">
+            <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full ${statusColors[s.status]}">${s.status}</span>
+          </td>
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-1">
+              ${s.status === "pending" ? `<button onclick="openModal('approve', ${s.id})" class="px-2 py-1 rounded text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 transition-colors">Approve</button>` : ""}
+              ${s.status !== "rejected" ? `<button onclick="openModal('reject', ${s.id})" class="px-2 py-1 rounded text-xs font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 hover:bg-red-200 transition-colors">Reject</button>` : ""}
+              ${s.status === "approved" ? `<button onclick="openModal('remove', ${s.id})" class="px-2 py-1 rounded text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-colors">Remove</button>` : ""}
+            </div>
+          </td>
+        </tr>`).join("");
+    }
+
+    function filterServices() {
+      const query  = document.getElementById("searchInput").value.toLowerCase();
+      const type   = document.getElementById("filterType").value;
+      const status = document.getElementById("filterStatus").value;
+      const filtered = SERVICES.filter(s =>
+        (!query  || s.title.toLowerCase().includes(query) || s.provider.toLowerCase().includes(query)) &&
+        (!type   || s.type === type) &&
+        (!status || s.status === status)
+      );
+      renderServices(filtered);
+    }
+
+    let pendingAction = null;
+    function openModal(action, serviceId) {
+      const s = SERVICES.find(x => x.id === serviceId);
+      const labels = { approve: "Approve Service", reject: "Reject Service", remove: "Remove Service" };
+      const descs  = {
+        approve: `Approve <strong>${s.title}</strong> by ${s.provider}. It will become visible on the marketplace.`,
+        reject:  `Reject <strong>${s.title}</strong> by ${s.provider}. The provider will be notified.`,
+        remove:  `Remove <strong>${s.title}</strong> from the marketplace. This will hide it from clients.`,
+      };
+      document.getElementById("modalTitle").textContent = labels[action];
+      document.getElementById("modalBody").innerHTML = descs[action];
+      document.getElementById("reasonWrap").classList.toggle("hidden", action !== "reject");
+      pendingAction = { action, serviceId };
+      document.getElementById("actionModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("actionModal").classList.add("hidden");
+      pendingAction = null;
+    }
+
+    document.getElementById("modalConfirm").addEventListener("click", () => {
+      if (!pendingAction) return;
+      const { action, serviceId } = pendingAction;
+      const s = SERVICES.find(x => x.id === serviceId);
+      if (action === "approve") s.status = "approved";
+      else if (action === "reject") s.status = "rejected";
+      else if (action === "remove") s.status = "rejected";
+      closeModal();
+      filterServices();
+    });
+
+    renderServices(SERVICES);
+  </script>
+</body>
+</html>
