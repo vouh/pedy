@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>PEDY Admin – Payments</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: { "primary": "#eb4c4c", "background-light": "#f8f6f6", "background-dark": "#211111" },
+          fontFamily: { "display": ["Inter"] },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .filled { font-variation-settings: 'FILL' 1; }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+  <div id="sidebarContainer"></div>
+  <div class="lg:pl-64 min-h-screen flex flex-col">
+    <div id="topbarContainer"></div>
+
+    <main class="flex-1 px-6 py-8 max-w-[1200px] w-full mx-auto">
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-primary">$48,920</p>
+          <p class="text-xs text-slate-500 mt-1">Total Revenue</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-green-600">9,203</p>
+          <p class="text-xs text-slate-500 mt-1">Transactions</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-yellow-600">3</p>
+          <p class="text-xs text-slate-500 mt-1">Open Disputes</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
+          <p class="text-2xl font-bold text-red-600">2</p>
+          <p class="text-xs text-slate-500 mt-1">Flagged Txns</p>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+        <div class="relative flex-1 max-w-sm">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 !text-lg">search</span>
+          <input type="text" id="searchInput" oninput="filterPayments()" placeholder="Search transaction ID, user..."
+            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none"/>
+        </div>
+        <div class="flex items-center gap-2">
+          <select id="filterMethod" onchange="filterPayments()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none">
+            <option value="">All Methods</option>
+            <option value="mpesa">M-Pesa</option>
+            <option value="card">Card</option>
+          </select>
+          <select id="filterStatus" onchange="filterPayments()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm py-2.5 px-3 focus:ring-primary focus:border-primary outline-none">
+            <option value="">All Status</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="disputed">Disputed</option>
+            <option value="refunded">Refunded</option>
+            <option value="flagged">Flagged</option>
+          </select>
+          <button onclick="exportReport()" class="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">
+            <span class="material-symbols-outlined !text-base">download</span>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+          <h3 class="font-bold">Transactions</h3>
+          <span id="txnCount" class="text-xs text-slate-400 font-medium"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-xs text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
+                <th class="text-left py-3 px-6 font-semibold">Txn ID</th>
+                <th class="text-left py-3 px-4 font-semibold">Client</th>
+                <th class="text-left py-3 px-4 font-semibold">Service</th>
+                <th class="text-left py-3 px-4 font-semibold">Amount</th>
+                <th class="text-left py-3 px-4 font-semibold">Method</th>
+                <th class="text-left py-3 px-4 font-semibold">Status</th>
+                <th class="text-left py-3 px-4 font-semibold">Date</th>
+                <th class="text-left py-3 px-4 font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsBody" class="divide-y divide-slate-100 dark:divide-slate-700">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Action Modal -->
+  <div id="actionModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
+      <h3 id="modalTitle" class="text-lg font-bold mb-2"></h3>
+      <p id="modalBody" class="text-sm text-slate-500 mb-6"></p>
+      <div id="noteWrap" class="mb-4 hidden">
+        <label class="text-xs font-semibold text-slate-500 block mb-1">Note (optional)</label>
+        <textarea id="actionNote" rows="2" placeholder="Add a note for this action..."
+          class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-primary/40 outline-none"></textarea>
+      </div>
+      <div class="flex gap-3 justify-end">
+        <button onclick="closeModal()" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Cancel</button>
+        <button id="modalConfirm" class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script>
+    const user = requireAuth();
+    if (!can(user, "payments")) { window.location.href = "dashboard.html"; }
+
+    document.getElementById("sidebarContainer").innerHTML = buildSidebar(user, "payments");
+    document.getElementById("topbarContainer").innerHTML = buildTopbar("Payments", "Monitor transactions, resolve disputes, and issue refunds");
+
+    const PAYMENTS = [
+      { id: "TXN-8821", client: "Daniel Mwangi",  service: "Home Cleaning",       amount: "$45",       method: "mpesa",  status: "refunded",   date: "Mar 7, 2026" },
+      { id: "TXN-8820", client: "Brian Kipchoge",  service: "Web Development",     amount: "$199",      method: "card",   status: "completed",  date: "Mar 7, 2026" },
+      { id: "TXN-8819", client: "Amina Hassan",    service: "Brand Photography",   amount: "$120",      method: "card",   status: "disputed",   date: "Mar 6, 2026" },
+      { id: "TXN-8818", client: "Michael Otieno",  service: "Personal Training",   amount: "$60",       method: "mpesa",  status: "completed",  date: "Mar 6, 2026" },
+      { id: "TXN-8817", client: "Jane Wanjiku",    service: "Cybersecurity Audit", amount: "$350",      method: "card",   status: "flagged",    date: "Mar 5, 2026" },
+      { id: "TXN-8816", client: "Grace Njeri",     service: "Hair Braiding",       amount: "KES 1500",  method: "mpesa",  status: "completed",  date: "Mar 5, 2026" },
+      { id: "TXN-8815", client: "Fatuma Ali",      service: "Interior Design",     amount: "$150",      method: "card",   status: "pending",    date: "Mar 4, 2026" },
+      { id: "TXN-8814", client: "David Kim",       service: "Logo Design",         amount: "$80",       method: "card",   status: "flagged",    date: "Mar 4, 2026" },
+      { id: "TXN-8813", client: "Daniel Mwangi",   service: "Brand Photography",   amount: "$120",      method: "mpesa",  status: "disputed",   date: "Mar 3, 2026" },
+      { id: "TXN-8812", client: "Brian Kipchoge",  service: "Personal Training",   amount: "$60",       method: "mpesa",  status: "completed",  date: "Mar 3, 2026" },
+    ];
+
+    const statusColors = {
+      completed: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+      pending:   "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500",
+      disputed:  "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400",
+      refunded:  "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
+      flagged:   "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+    };
+
+    const methodIcons = { mpesa: "phone_android", card: "credit_card" };
+
+    function renderPayments(list) {
+      document.getElementById("txnCount").textContent = list.length + " transactions";
+      document.getElementById("paymentsBody").innerHTML = list.map(t => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
+          <td class="py-4 px-6 font-mono text-xs font-bold text-slate-500">${t.id}</td>
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-2">
+              <div class="size-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">${t.client.charAt(0)}</div>
+              <span class="text-sm">${t.client}</span>
+            </div>
+          </td>
+          <td class="py-4 px-4 text-sm text-slate-500">${t.service}</td>
+          <td class="py-4 px-4 font-bold text-primary">${t.amount}</td>
+          <td class="py-4 px-4">
+            <span class="flex items-center gap-1 text-xs font-semibold text-slate-500">
+              <span class="material-symbols-outlined !text-sm">${methodIcons[t.method]}</span>
+              ${t.method === "mpesa" ? "M-Pesa" : "Card"}
+            </span>
+          </td>
+          <td class="py-4 px-4">
+            <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full ${statusColors[t.status]}">${t.status}</span>
+          </td>
+          <td class="py-4 px-4 text-xs text-slate-400">${t.date}</td>
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-1">
+              ${(t.status === "disputed" || t.status === "flagged") ? `<button onclick="openModal('refund', '${t.id}')" class="px-2 py-1 rounded text-xs font-semibold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-200 transition-colors">Refund</button>` : ""}
+              ${t.status === "flagged" ? `<button onclick="openModal('clear', '${t.id}')" class="px-2 py-1 rounded text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 transition-colors">Clear</button>` : ""}
+              ${(t.status === "pending" || t.status === "disputed") ? `<button onclick="openModal('resolve', '${t.id}')" class="px-2 py-1 rounded text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-colors">Resolve</button>` : ""}
+            </div>
+          </td>
+        </tr>`).join("");
+    }
+
+    function filterPayments() {
+      const query  = document.getElementById("searchInput").value.toLowerCase();
+      const method = document.getElementById("filterMethod").value;
+      const status = document.getElementById("filterStatus").value;
+      const filtered = PAYMENTS.filter(t =>
+        (!query  || t.id.toLowerCase().includes(query) || t.client.toLowerCase().includes(query) || t.service.toLowerCase().includes(query)) &&
+        (!method || t.method === method) &&
+        (!status || t.status === status)
+      );
+      renderPayments(filtered);
+    }
+
+    let pendingAction = null;
+    function openModal(action, txnId) {
+      const t = PAYMENTS.find(x => x.id === txnId);
+      const labels  = { refund: "Issue Refund", clear: "Clear Flag", resolve: "Resolve Dispute" };
+      const descs   = {
+        refund:  `Refund <strong>${t.amount}</strong> to <strong>${t.client}</strong> for transaction <strong>${t.id}</strong>.`,
+        clear:   `Clear the fraud flag on transaction <strong>${t.id}</strong>. Mark it as completed.`,
+        resolve: `Mark transaction <strong>${t.id}</strong> as resolved. Dispute will be closed.`,
+      };
+      document.getElementById("modalTitle").textContent = labels[action];
+      document.getElementById("modalBody").innerHTML = descs[action];
+      document.getElementById("noteWrap").classList.remove("hidden");
+      pendingAction = { action, txnId };
+      document.getElementById("actionModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("actionModal").classList.add("hidden");
+      pendingAction = null;
+    }
+
+    document.getElementById("modalConfirm").addEventListener("click", () => {
+      if (!pendingAction) return;
+      const { action, txnId } = pendingAction;
+      const t = PAYMENTS.find(x => x.id === txnId);
+      if (action === "refund") t.status = "refunded";
+      else if (action === "clear" || action === "resolve") t.status = "completed";
+      closeModal();
+      filterPayments();
+    });
+
+    function exportReport() {
+      const rows = [["Txn ID","Client","Service","Amount","Method","Status","Date"],
+        ...PAYMENTS.map(t => [t.id, t.client, t.service, t.amount, t.method, t.status, t.date])];
+      const csv = rows.map(r => r.join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "pedy_payments_report.csv";
+      a.click();
+    }
+
+    renderPayments(PAYMENTS);
+  </script>
+</body>
+</html>
