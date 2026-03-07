@@ -1,143 +1,105 @@
+﻿/**
+ * Admin Services Routes
+ *
+ * All service documents live in Firestore: services/{id}
+ * Document shape (created by the user-facing front end via db.js):
+ *   { title, description, price, category, providerId, providerName,
+ *     rating, reviewCount, status?, createdAt }
+ *
+ * The `status` field defaults to "pending" (new listings need admin approval).
+ * The `type` field (digital/physical) is set by admin or inferred from category.
+ */
+
 const router = require("express").Router();
 const { authenticate, authorize } = require("../middleware/rbac");
+const { db } = require("../config/firebase");
 
-// ─── Mock data (replace with Supabase queries) ────────────────────────────────
-let SERVICES = [
-  {
-    id: 1,
-    title: "Modern Web Development",
-    provider: "Alex Rivera",
-    type: "digital",
-    price: 199,
-    currency: "USD",
-    status: "approved",
-  },
-  {
-    id: 2,
-    title: "Professional Home Cleaning",
-    provider: "Sarah Jenkins",
-    type: "physical",
-    price: 45,
-    currency: "USD",
-    status: "approved",
-  },
-  {
-    id: 3,
-    title: "Brand Photography",
-    provider: "Marcus Thorne",
-    type: "physical",
-    price: 120,
-    currency: "USD",
-    status: "pending",
-  },
-  {
-    id: 4,
-    title: "Cybersecurity Audit",
-    provider: "David Kim",
-    type: "digital",
-    price: 350,
-    currency: "USD",
-    status: "approved",
-  },
-  {
-    id: 5,
-    title: "Fake Logo Design",
-    provider: "spammer_01",
-    type: "digital",
-    price: 5,
-    currency: "USD",
-    status: "pending",
-  },
-  {
-    id: 6,
-    title: "Personal Training",
-    provider: "Chris Evans",
-    type: "physical",
-    price: 60,
-    currency: "USD",
-    status: "approved",
-  },
-  {
-    id: 7,
-    title: "Virtual Interior Design",
-    provider: "Eliza Grant",
-    type: "digital",
-    price: 150,
-    currency: "USD",
-    status: "pending",
-  },
-  {
-    id: 8,
-    title: "Hair Braiding",
-    provider: "Grace Njeri",
-    type: "physical",
-    price: 1500,
-    currency: "KES",
-    status: "pending",
-  },
-];
+// Helper: normalize a Firestore service doc
+function normalize(id, data) {
+  return {
+    id,
+    title:    data.title    || "Untitled",
+    provider: data.providerName || data.providerId || "Unknown",
+    category: data.category || "",
+    type:     data.type     || "",
+    price:    data.price    || 0,
+    currency: data.currency || "USD",
+    status:   data.status   || "pending",
+  };
+}
 
-// ─── GET /api/admin/services ──────────────────────────────────────────────────
-router.get("/", authenticate, authorize("services", "read"), (req, res) => {
-  const { type, status, q } = req.query;
-  let result = [...SERVICES];
-  if (type) result = result.filter((s) => s.type === type);
-  if (status) result = result.filter((s) => s.status === status);
-  if (q)
-    result = result.filter(
-      (s) =>
-        s.title.toLowerCase().includes(q.toLowerCase()) ||
-        s.provider.toLowerCase().includes(q.toLowerCase()),
-    );
-  res.json({ total: result.length, services: result });
+// GET /api/admin/services
+router.get("/", authenticate, authorize("services", "read"), async (req, res) => {
+  try {
+    const { type, status, q } = req.query;
+    const snap = await db.collection("services").orderBy("createdAt", "desc").get();
+    let services = snap.docs.map((d) => normalize(d.id, d.data()));
+    if (type)   services = services.filter((s) => s.type === type || s.category === type);
+    if (status) services = services.filter((s) => s.status === status);
+    if (q) {
+      const term = q.toLowerCase();
+      services = services.filter((s) =>
+        s.title.toLowerCase().includes(term) ||
+        s.provider.toLowerCase().includes(term) ||
+        s.category.toLowerCase().includes(term));
+    }
+    res.json({ total: services.length, services });
+  } catch (err) {
+    console.error("[services GET /]", err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// ─── GET /api/admin/services/:id ─────────────────────────────────────────────
-router.get("/:id", authenticate, authorize("services", "read"), (req, res) => {
-  const service = SERVICES.find((s) => s.id === parseInt(req.params.id));
-  if (!service) return res.status(404).json({ error: "Service not found" });
-  res.json(service);
+// GET /api/admin/services/:id
+router.get("/:id", authenticate, authorize("services", "read"), async (req, res) => {
+  try {
+    const snap = await db.collection("services").doc(req.params.id).get();
+    if (!snap.exists) return res.status(404).json({ error: "Service not found" });
+    res.json(normalize(snap.id, snap.data()));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// ─── PATCH /api/admin/services/:id/approve ───────────────────────────────────
-router.patch(
-  "/:id/approve",
-  authenticate,
-  authorize("services", "approve"),
-  (req, res) => {
-    const service = SERVICES.find((s) => s.id === parseInt(req.params.id));
-    if (!service) return res.status(404).json({ error: "Service not found" });
-    service.status = "approved";
-    res.json({ message: "Service approved", service });
-  },
-);
+// PATCH /api/admin/services/:id/approve
+router.patch("/:id/approve", authenticate, authorize("services", "approve"), async (req, res) => {
+  try {
+    const ref  = db.collection("services").doc(req.params.id);
+    const snap = await ref.get();
+    if (!snap.exists) return res.status(404).json({ error: "Service not found" });
+    await ref.update({ status: "approved" });
+    res.json({ message: "Service approved", service: normalize(snap.id, { ...snap.data(), status: "approved" }) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// ─── PATCH /api/admin/services/:id/reject ────────────────────────────────────
-router.patch(
-  "/:id/reject",
-  authenticate,
-  authorize("services", "reject"),
-  (req, res) => {
-    const service = SERVICES.find((s) => s.id === parseInt(req.params.id));
-    if (!service) return res.status(404).json({ error: "Service not found" });
+// PATCH /api/admin/services/:id/reject
+router.patch("/:id/reject", authenticate, authorize("services", "reject"), async (req, res) => {
+  try {
+    const ref  = db.collection("services").doc(req.params.id);
+    const snap = await ref.get();
+    if (!snap.exists) return res.status(404).json({ error: "Service not found" });
     const { reason } = req.body;
-    service.status = "rejected";
-    if (reason) service.rejectReason = reason;
-    res.json({ message: "Service rejected", service });
-  },
-);
+    await ref.update({ status: "rejected", rejectReason: reason || null });
+    res.json({ message: "Service rejected", service: normalize(snap.id, { ...snap.data(), status: "rejected" }) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// ─── DELETE /api/admin/services/:id ──────────────────────────────────────────
-router.delete(
-  "/:id",
-  authenticate,
-  authorize("services", "remove"),
-  (req, res) => {
-    const idx = SERVICES.findIndex((s) => s.id === parseInt(req.params.id));
-    if (idx === -1) return res.status(404).json({ error: "Service not found" });
-    const [removed] = SERVICES.splice(idx, 1);
-    res.json({ message: "Service removed", service: removed });
-  },
-);
+// DELETE /api/admin/services/:id
+router.delete("/:id", authenticate, authorize("services", "remove"), async (req, res) => {
+  try {
+    const ref  = db.collection("services").doc(req.params.id);
+    const snap = await ref.get();
+    if (!snap.exists) return res.status(404).json({ error: "Service not found" });
+    const serviceData = normalize(snap.id, snap.data());
+    await ref.delete();
+    res.json({ message: "Service removed", service: serviceData });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;

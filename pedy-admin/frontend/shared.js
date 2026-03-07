@@ -2,10 +2,18 @@
 const API_BASE = "http://localhost:4000/api/admin";
 
 /**
- * Authenticated fetch wrapper – attaches JWT from sessionStorage.
+ * Authenticated fetch wrapper.
+ * Prefers window.getCurrentIdToken() (provided by firebase-admin-init.js) so
+ * that the Firebase ID token is always fresh.  Falls back to sessionStorage.
  */
 async function apiFetch(path, options = {}) {
-  const token = sessionStorage.getItem("pedy_token");
+  let token;
+  if (typeof window.getCurrentIdToken === "function") {
+    token = await window.getCurrentIdToken();
+  } else {
+    token = sessionStorage.getItem("pedy_token");
+  }
+
   const res = await fetch(API_BASE + path, {
     ...options,
     headers: {
@@ -32,9 +40,13 @@ function requireAuth() {
 }
 
 function logout() {
-  sessionStorage.removeItem("pedy_admin");
-  sessionStorage.removeItem("pedy_token");
-  window.location.href = "index.html";
+  if (typeof window.firebaseSignOut === "function") {
+    window.firebaseSignOut(); // handles Firebase sign-out + sessionStorage clear
+  } else {
+    sessionStorage.removeItem("pedy_admin");
+    sessionStorage.removeItem("pedy_token");
+    window.location.href = "index.html";
+  }
 }
 
 // ─── Role Permissions ────────────────────────────────────────────────────────

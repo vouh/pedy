@@ -184,48 +184,46 @@
       </p>
     </div>
 
-    <script>
-      const API_BASE = "http://localhost:4000/api/admin";
+    <script type="module" src="firebase-admin-init.js"></script>
+    <script type="module">
+      // ── Redirect if already authenticated ─────────────────────────────────
+      if (
+        sessionStorage.getItem("pedy_admin") &&
+        sessionStorage.getItem("pedy_token")
+      ) {
+        window.location.href = "dashboard.html";
+      }
 
-      async function handleLogin(e) {
+      // ── Expose handleLogin globally so the form's onsubmit can call it ────
+      window.handleLogin = async function (e) {
         e.preventDefault();
-        const email = document.getElementById("email").value.trim();
+        const email    = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
-        const btn = document.getElementById("submitBtn");
-        const errorMsg = document.getElementById("errorMsg");
+        const btn      = document.getElementById("submitBtn");
+        const errorDiv = document.getElementById("errorMsg");
+        const errorTxt = document.getElementById("errorText");
 
         btn.disabled = true;
         btn.innerHTML =
           '<span class="material-symbols-outlined !text-lg">progress_activity</span> Signing in...';
-        errorMsg.classList.add("hidden");
+        errorDiv.classList.add("hidden");
 
         try {
-          const res = await fetch(API_BASE + "/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          });
-          const data = await res.json();
-
-          if (res.ok) {
-            sessionStorage.setItem("pedy_admin", JSON.stringify(data.admin));
-            sessionStorage.setItem("pedy_token", data.token);
-            window.location.href = "dashboard.html";
-          } else {
-            throw new Error(data.error || "Invalid credentials");
-          }
+          // firebaseSignIn is provided by firebase-admin-init.js
+          await window.firebaseSignIn(email, password);
+          window.location.href = "dashboard.html";
         } catch (err) {
-          errorMsg.classList.remove("hidden");
-          document.getElementById("errorText").textContent = err.message;
+          errorDiv.classList.remove("hidden");
+          errorTxt.textContent = err.message || "Invalid credentials";
           btn.disabled = false;
           btn.innerHTML =
             '<span class="material-symbols-outlined !text-lg">login</span> Sign In';
         }
-      }
+      };
 
-      function togglePassword() {
+      window.togglePassword = function () {
         const input = document.getElementById("password");
-        const icon = document.getElementById("eyeIcon");
+        const icon  = document.getElementById("eyeIcon");
         if (input.type === "password") {
           input.type = "text";
           icon.textContent = "visibility";
@@ -233,15 +231,7 @@
           input.type = "password";
           icon.textContent = "visibility_off";
         }
-      }
-
-      // Redirect if already logged in
-      if (
-        sessionStorage.getItem("pedy_admin") &&
-        sessionStorage.getItem("pedy_token")
-      ) {
-        window.location.href = "dashboard.html";
-      }
+      };
     </script>
   </body>
 </html>
